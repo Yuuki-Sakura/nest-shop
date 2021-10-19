@@ -1,0 +1,102 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:8.0.22
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+    restart: always
+    volumes:
+    - db-data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=nest_blog
+      - MYSQL_ROOT_PASSWORD='root'
+      - MYSQL_ROOT_HOST=172.*.*.*
+#    expose:
+#      - 3306
+    ports:
+      - 3306:3306
+    networks:
+      - private
+  redis:
+    image: redis
+    volumes:
+      - ./config/redis/:/etc/redis/
+    ports:
+      - 6379:6379
+    networks:
+      - private
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
+    deploy:
+      resources:
+        limits:
+          memory: 1048M
+        reservations:
+          memory: 256M
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms256m -Xmx1024m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - private
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.13.0
+    volumes:
+      - ./config/logstash/config/:/usr/share/logstash/config/
+      - ./config/logstash/pipeline/:/usr/share/logstash/pipeline/
+    ports:
+      - 9100:9100
+    networks:
+      - private
+  nest-blog:
+    image: yuukisakura/nest-blog:latest
+    build:
+      context: .
+    ports:
+      - 3000:3000
+      - 4000:4000
+    depends_on:
+      - mysql
+      - redis
+      - es
+      - logstash
+    links:
+      - redis:redis
+      - mysql:mysql
+      - es:elasticsearch
+      - logstash:logstash
+    networks:
+      - private
+      - public
+  nginx:
+    image: nginx:stable-alpine
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - nest-blog:blog
+    volumes:
+      - ./config/nginx/:/etc/nginx/conf.d/
+      - ./log:/var/log/nginx
+    networks:
+      - private
+      - public
+volumes:
+  db-data:
+  es-data:
+  redis-data:
+networks:
+  public:
+  private:

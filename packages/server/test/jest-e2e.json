@@ -1,0 +1,19 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "@lib/nest-log4js/(.*)": "<rootDir>/../libs/nest-log4js/src/$1",
+    "@lib/nest-log4js": "<rootDir>/../libs/nest-log4js/src",
+    "@lib/log4js/(.*)": "<rootDir>/../libs/log4js/src/$1",
+    "@lib/log4js": "<rootDir>/../libs/log4js/src"
+  }
+}
