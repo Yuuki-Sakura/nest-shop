@@ -1,14 +1,15 @@
 import { BaseEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Permission } from '@/permission';
-import { UserEntity } from '@/user/entity/user.entity';
-import { Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import { UserEntity } from '@/user';
+import { Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 
 @Entity('user_permission')
 @ObjectType()
 export default class UserPermission extends BaseEntity {
-  @Field(() => [UserEntity])
+  @Field(() => UserEntity)
   @ManyToOne(() => UserEntity, (user) => user.permissions)
+  @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
   @Field(() => [Permission])

@@ -1,7 +1,7 @@
 import { BaseEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
 import { nanoid } from '@adachi-sakura/nest-shop-common';
 import { Field, registerEnumType } from '@nestjs/graphql';
-import DeviceEntity from '@/user/entity/device.entity';
+import UserDeviceEntity from '@/user/entity/user-device.entity';
 import UserPermission from '@/user/entity/user-permission.entity';
 import UserRole from '@/user/entity/user-role.entity';
 import { Exclude } from 'class-transformer';
@@ -91,15 +91,17 @@ export class UserEntity extends BaseEntity {
   })
   lastLoginAt?: Date;
 
-  @Field(() => [DeviceEntity])
-  @OneToMany(() => DeviceEntity, (device) => device.user)
-  devices: DeviceEntity[];
+  @Field(() => [UserDeviceEntity])
+  @OneToMany(() => UserDeviceEntity, (device) => device.user, { cascade: true })
+  devices: UserDeviceEntity[];
 
   @Field(() => [UserRole])
-  @OneToMany(() => UserRole, (role) => role.user)
+  @OneToMany(() => UserRole, (role) => role.user, { cascade: true })
   roles: UserRole[];
 
   @Field(() => [UserPermission])
-  @OneToMany(() => UserPermission, (permission) => permission.user)
+  @OneToMany(() => UserPermission, (permission) => permission.user, {
+    cascade: true,
+  })
   permissions: UserPermission[];
 }

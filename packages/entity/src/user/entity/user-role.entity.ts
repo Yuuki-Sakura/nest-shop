@@ -1,17 +1,18 @@
 import { BaseEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Role } from '@/role';
-import { UserEntity } from '@/user/entity/user.entity';
-import { Entity, ManyToOne } from 'typeorm';
+import { UserEntity } from '@/user';
+import { Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity('user_role')
 @ObjectType()
 export default class UserRole extends BaseEntity {
-  @Field(() => [UserEntity])
+  @Field(() => UserEntity)
   @ManyToOne(() => UserEntity, (user) => user.roles)
+  @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
-  @Field(() => [Role])
+  @Field(() => Role)
   @ManyToOne(() => Role)
   role: Role;
 

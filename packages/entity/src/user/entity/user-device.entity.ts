@@ -1,11 +1,11 @@
 import { BaseEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { UserEntity } from '@/user/entity/user.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { UserEntity } from '@/user';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity('user_device')
 @ObjectType()
-export default class DeviceEntity extends BaseEntity {
+export default class UserDeviceEntity extends BaseEntity {
   @Field()
   @Column()
   name: string;
@@ -27,5 +27,6 @@ export default class DeviceEntity extends BaseEntity {
 
   @Field(() => [UserEntity])
   @ManyToOne(() => UserEntity, (user) => user.devices)
+  @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 }

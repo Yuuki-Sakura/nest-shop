@@ -1,5 +1,5 @@
 import { Role } from '@adachi-sakura/nest-shop-entity';
-import { UserEntity } from '@adachi-sakura/nest-shop-entity/src/user/entity/user.entity';
+import { UserEntity } from '@adachi-sakura/nest-shop-entity';
 import {
   applyDecorators,
   createParamDecorator,
@@ -41,7 +41,7 @@ export function hasPermission(resource: string, user: UserEntity | Role[]) {
   if (!resource) return false;
   let roles: Role[];
   if (user instanceof UserEntity) {
-    roles = user.roles;
+    // roles = user.roles;
   } else {
     roles = user;
   }

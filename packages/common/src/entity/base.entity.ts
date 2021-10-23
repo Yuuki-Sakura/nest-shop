@@ -1,5 +1,6 @@
 import { nanoid } from '@/utils/nanoid';
 import {
+  Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
@@ -20,7 +21,9 @@ export class BaseEntity {
   })
   id: string;
 
-  @Field()
+  @Field({
+    description: '创建时间',
+  })
   @ApiProperty()
   @CreateDateColumn({
     type: 'timestamp',
@@ -30,7 +33,9 @@ export class BaseEntity {
   @Timestamp()
   createAt: Date;
 
-  @Field()
+  @Field({
+    description: '更新时间',
+  })
   @ApiProperty()
   @UpdateDateColumn({
     type: 'timestamp',
@@ -40,6 +45,10 @@ export class BaseEntity {
   @Timestamp()
   updateAt: Date;
 
+  @Field({
+    description: '删除时间',
+  })
+  @ApiProperty()
   @DeleteDateColumn({
     type: 'timestamp',
     comment: '删除时间',
@@ -47,4 +56,18 @@ export class BaseEntity {
   })
   @Timestamp()
   deleteAt: Date;
+
+  @Field({
+    description: '排序编号',
+  })
+  @ApiProperty()
+  @Column({ default: 0 })
+  sort: number;
+
+  @Field({
+    description: '是否隐藏',
+  })
+  @ApiProperty()
+  @Column('boolean', { default: false })
+  hidden: boolean;
 }

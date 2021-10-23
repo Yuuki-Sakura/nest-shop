@@ -1,5 +1,5 @@
 import { HttpUnauthorizedException } from '@adachi-sakura/nest-shop-common';
-import { UserEntity } from '@adachi-sakura/nest-shop-entity/src/user/entity/user.entity';
+import { UserEntity } from '@adachi-sakura/nest-shop-entity';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';

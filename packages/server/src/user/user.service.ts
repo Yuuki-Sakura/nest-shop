@@ -52,7 +52,7 @@ export class UserService {
       if (!user1.roles) user1.roles = [];
       if (user.roleIds) {
         const roles = await this.roleService.findByIds(user.roleIds);
-        user1.roles.push(...roles);
+        // user1.roles.push(...roles);
         await this.redisService.set(id + '-roles', user1.roles);
       }
     }

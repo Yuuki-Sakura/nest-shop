@@ -1,7 +1,7 @@
 import { BaseEntity } from '@adachi-sakura/nest-shop-common';
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Permission } from '@/permission/permission.entity';
+import { Permission } from '@/permission';
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @Entity('role')
