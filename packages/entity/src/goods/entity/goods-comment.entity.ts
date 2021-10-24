@@ -37,21 +37,21 @@ export default class GoodsCommentEntity extends BaseEntity {
   @Field(() => GoodsSkuEntity, {
     description: '评论关联SKU',
   })
-  @ManyToOne(() => GoodsSkuEntity)
+  @ManyToOne(() => GoodsSkuEntity, (sku) => sku.id)
   @JoinColumn({ name: 'sku_id' })
   sku: GoodsSkuEntity;
 
   @Field(() => GoodsSpuEntity, {
     description: '评论关联SPU',
   })
-  @ManyToOne(() => GoodsSpuEntity)
+  @ManyToOne(() => GoodsSpuEntity, (spu) => spu.id)
   @JoinColumn({ name: 'spu_id' })
   spu: GoodsSpuEntity;
 
   @Field(() => UserEntity, {
     description: '评论关联用户',
   })
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, (user) => user.id)
   @JoinColumn({
     name: 'user_id',
   })

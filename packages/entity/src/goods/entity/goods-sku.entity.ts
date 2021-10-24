@@ -2,13 +2,16 @@ import GoodsCommentEntity from '@/goods/entity/goods-comment.entity';
 import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
-  BaseEntity,
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
 } from 'typeorm';
+import GoodsAttributesEntity from '@/goods/entity/goods-attributes.entity';
+import { BaseEntity } from '@adachi-sakura/nest-shop-common';
 
 @Entity('goods_sku')
 @ObjectType('GoodsSku', {
@@ -116,6 +119,13 @@ export default class GoodsSkuEntity extends BaseEntity {
     comment: '商品介绍',
   })
   content: string;
+
+  @Field(() => [GoodsAttributesEntity], {
+    description: '商品SKU属性',
+  })
+  @ManyToMany(() => GoodsAttributesEntity)
+  @JoinTable()
+  attributes: GoodsAttributesEntity[];
 
   @Field(() => GoodsCommentEntity, {
     description: '商品评论',

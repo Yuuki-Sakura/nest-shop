@@ -1,6 +1,14 @@
 import { BaseEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
+import GoodsAttributesTemplateEntity from '@/goods/entity/goods-attributes-template.entity';
 
 @Entity('goods_category')
 @ObjectType('GoodsCategory', {
@@ -15,7 +23,7 @@ export default class GoodsCategoryEntity extends BaseEntity {
   })
   name: string;
 
-  @Field(() => [GoodsCategoryEntity], {
+  @Field(() => GoodsCategoryEntity, {
     description: '商品父分类',
   })
   @ManyToOne(() => GoodsCategoryEntity, (category) => category.children, {
@@ -32,4 +40,10 @@ export default class GoodsCategoryEntity extends BaseEntity {
     eager: true,
   })
   children: GoodsCategoryEntity[];
+
+  @OneToOne(() => GoodsAttributesTemplateEntity)
+  @JoinColumn({
+    name: 'attributes_template_id',
+  })
+  attributesTemplate: GoodsAttributesTemplateEntity;
 }
