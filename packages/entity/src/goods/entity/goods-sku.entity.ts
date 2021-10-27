@@ -1,6 +1,7 @@
 import GoodsCommentEntity from '@/goods/entity/goods-comment.entity';
 import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   Entity,
@@ -18,6 +19,7 @@ import { BaseEntity } from '@adachi-sakura/nest-shop-common';
   description: '商品SKU',
 })
 export default class GoodsSkuEntity extends BaseEntity {
+  @ApiProperty()
   @Field(() => Int, {
     description: '商品SKU编号',
   })
@@ -28,6 +30,7 @@ export default class GoodsSkuEntity extends BaseEntity {
   })
   sn: number;
 
+  @ApiProperty({ type: () => GoodsSpuEntity })
   @Field(() => GoodsSpuEntity, {
     description: '商品SKU关联SPU',
   })
@@ -37,6 +40,7 @@ export default class GoodsSkuEntity extends BaseEntity {
   })
   spu: GoodsSpuEntity;
 
+  @ApiProperty()
   @Field({
     description: '商品名称',
   })
@@ -45,6 +49,7 @@ export default class GoodsSkuEntity extends BaseEntity {
   })
   name: string;
 
+  @ApiProperty()
   @Field({
     description: '商品主图',
   })
@@ -53,6 +58,7 @@ export default class GoodsSkuEntity extends BaseEntity {
   })
   image: string;
 
+  @ApiProperty()
   @Field({
     description: '商品轮播图',
   })
@@ -61,6 +67,7 @@ export default class GoodsSkuEntity extends BaseEntity {
   })
   images: string[];
 
+  @ApiProperty()
   @Field({
     description: '商品视频',
     nullable: true,
@@ -71,6 +78,7 @@ export default class GoodsSkuEntity extends BaseEntity {
   })
   video: string;
 
+  @ApiProperty()
   @Field({
     description: '商品价格',
   })
@@ -82,6 +90,7 @@ export default class GoodsSkuEntity extends BaseEntity {
   })
   price: string;
 
+  @ApiProperty()
   @Field({
     description: '商品原价',
   })
@@ -94,7 +103,8 @@ export default class GoodsSkuEntity extends BaseEntity {
   })
   linePrice: string;
 
-  @Field({
+  @ApiProperty()
+  @Field(() => Int, {
     description: '商品库存',
   })
   @Column('int', {
@@ -103,7 +113,8 @@ export default class GoodsSkuEntity extends BaseEntity {
   })
   stock: number;
 
-  @Field({
+  @ApiProperty()
+  @Field(() => Int, {
     description: '商品销量',
   })
   @Column('int', {
@@ -112,6 +123,7 @@ export default class GoodsSkuEntity extends BaseEntity {
   })
   sales: number;
 
+  @ApiProperty()
   @Field({
     description: '商品介绍',
   })
@@ -120,6 +132,7 @@ export default class GoodsSkuEntity extends BaseEntity {
   })
   content: string;
 
+  @ApiProperty({ type: () => [GoodsAttributesEntity] })
   @Field(() => [GoodsAttributesEntity], {
     description: '商品SKU属性',
   })
@@ -127,7 +140,8 @@ export default class GoodsSkuEntity extends BaseEntity {
   @JoinTable()
   attributes: GoodsAttributesEntity[];
 
-  @Field(() => GoodsCommentEntity, {
+  @ApiProperty({ type: () => [GoodsCommentEntity] })
+  @Field(() => [GoodsCommentEntity], {
     description: '商品评论',
   })
   @OneToMany(() => GoodsCommentEntity, (comment) => comment.sku)

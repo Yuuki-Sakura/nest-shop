@@ -1,6 +1,6 @@
 import { BaseEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
 import { nanoid } from '@adachi-sakura/nest-shop-common';
-import { Field, registerEnumType } from '@nestjs/graphql';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import UserDeviceEntity from '@/user/entity/user-device.entity';
 import UserPermission from '@/user/entity/user-permission.entity';
 import UserRole from '@/user/entity/user-role.entity';
@@ -28,6 +28,9 @@ registerEnumType(UserStatus, {
 });
 
 @Entity('user')
+@ObjectType('User', {
+  description: '用户信息',
+})
 export class UserEntity extends BaseEntity {
   @Field()
   @Column({
@@ -90,6 +93,13 @@ export class UserEntity extends BaseEntity {
     nullable: true,
   })
   lastLoginAt?: Date;
+
+  @Field()
+  @Timestamp({
+    name: 'last_login_ip',
+    comment: '上次登陆IP',
+  })
+  lastLoginIp: string;
 
   @Field(() => [UserDeviceEntity])
   @OneToMany(() => UserDeviceEntity, (device) => device.user, { cascade: true })

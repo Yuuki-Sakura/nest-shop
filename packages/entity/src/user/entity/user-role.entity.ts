@@ -5,7 +5,9 @@ import { UserEntity } from '@/user';
 import { Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity('user_role')
-@ObjectType()
+@ObjectType({
+  description: '用户角色关联信息',
+})
 export default class UserRole extends BaseEntity {
   @Field(() => UserEntity)
   @ManyToOne(() => UserEntity, (user) => user.roles)

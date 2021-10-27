@@ -30,6 +30,13 @@ import { UserModule } from '@/user/user.module';
       synchronize: true,
       autoLoadEntities: true,
       logging: !isProdMode,
+      cache: {
+        type: 'ioredis',
+        options: {
+          host: process.env.REDIS_HOST,
+          port: +process.env.REDIS_PORT,
+        },
+      },
     }),
     GraphQLModule.forRoot({
       debug: true,
