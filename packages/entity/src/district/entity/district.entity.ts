@@ -1,12 +1,12 @@
-import { nanoid } from '@adachi-sakura/nest-shop-common';
-import { Field, ID, Int, registerEnumType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
+  Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 export enum DistrictLevel {
@@ -19,14 +19,15 @@ export enum DistrictLevel {
 registerEnumType(DistrictLevel, {
   name: 'DistrictLevel',
 });
-
+@Entity('district')
+@ObjectType('District', {
+  description: '地区信息列表',
+})
 export default class DistrictEntity {
   @Field(() => ID)
   @ApiProperty()
-  @PrimaryColumn({
-    default: () => nanoid(10),
-  })
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Field(() => Int)
   @Column('int')

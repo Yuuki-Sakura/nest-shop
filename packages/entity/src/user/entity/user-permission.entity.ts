@@ -21,6 +21,12 @@ export default class UserPermission extends BaseEntity {
   @ManyToMany(() => Permission)
   @JoinTable({
     name: 'user_permission_permissions',
+    joinColumn: {
+      name: 'user_permission_id',
+    },
+    inverseJoinColumn: {
+      name: 'permission_id',
+    },
   })
   permissions: Permission[];
 

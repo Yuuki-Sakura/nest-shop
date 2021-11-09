@@ -1,4 +1,4 @@
-import { RedisService } from '@adachi-sakura/nest-shop-common';
+// import { RedisService } from '@adachi-sakura/nest-shop-common';
 import { Role } from '@adachi-sakura/nest-shop-entity';
 import {
   CanActivate,
@@ -15,8 +15,7 @@ export class PermissionGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     @Inject(RoleService)
-    private readonly roleService: RoleService,
-    private readonly redisService: RedisService,
+    private readonly roleService: RoleService, // private readonly redisService: RedisService,
   ) {}
 
   async canActivate(context: ExecutionContext) {
@@ -26,13 +25,13 @@ export class PermissionGuard implements CanActivate {
       context.getHandler(),
     );
     // 无权限标识的接口，直接通过
-    if (permission) {
-      // 获取用户角色
-      const roles =
-        (await this.redisService.get<Role[]>(request.user.id + '-roles')) ||
-        (await this.roleService.findByUser(request.user.id));
-      return hasPermission(permission, roles);
-    }
+    // if (permission) {
+    //   // 获取用户角色
+    //   const roles =
+    //     (await this.redisService.get<Role[]>(request.user.id + '-roles')) ||
+    //     (await this.roleService.findByUser(request.user.id));
+    //   return hasPermission(permission, roles);
+    // }
     return true;
   }
 }

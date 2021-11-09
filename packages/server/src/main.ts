@@ -1,5 +1,5 @@
-import { NestApplication, NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from '@/app.module';
+import { NestApplication, NestFactory, Reflector } from '@nestjs/core';
 import { environment } from '@/app.environment';
 import { TransformInterceptor } from '@/common/interceptors/transform.interceptor';
 import helmet from 'helmet';

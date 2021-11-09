@@ -21,7 +21,7 @@ export default class GoodsCommentEntity extends BaseEntity {
   @Field({
     description: '评论图片',
   })
-  @Column({
+  @Column('simple-json', {
     comment: '评论图片',
   })
   images: string[];

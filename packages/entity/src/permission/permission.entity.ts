@@ -35,6 +35,6 @@ export class Permission extends BaseEntity {
   route: string;
 
   @Field(() => HttpMethod, { nullable: true })
-  @Column({ comment: '方法', nullable: true, enum: HttpMethod })
+  @Column('simple-enum', { comment: '方法', nullable: true, enum: HttpMethod })
   method: HttpMethod;
 }

@@ -1,4 +1,3 @@
-import { RedisService } from '@adachi-sakura/nest-shop-common';
 import {
   UserEntity,
   UserRegisterDto,
@@ -17,7 +16,6 @@ export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly roleService: RoleService,
-    private readonly redisService: RedisService,
   ) {}
 
   async findAll() {
@@ -53,20 +51,20 @@ export class UserService {
       if (user.roleIds) {
         const roles = await this.roleService.findByIds(user.roleIds);
         // user1.roles.push(...roles);
-        await this.redisService.set(id + '-roles', user1.roles);
+        // await this.redisService.set(id + '-roles', user1.roles);
       }
     }
     return await this.userRepository.save(user);
   }
 
   logout(user: UserEntity, token: string) {
-    return this.redisService
-      .getClient()
-      .set(
-        'expired-token-' + createHash('sha1').update(token).digest('hex'),
-        token,
-        'EX',
-        +process.env.JWT_EXPIRES,
-      );
+    // return this.redisService
+    //   .getClient()
+    //   .set(
+    //     'expired-token-' + createHash('sha1').update(token).digest('hex'),
+    //     token,
+    //     'EX',
+    //     +process.env.JWT_EXPIRES,
+    //   );
   }
 }

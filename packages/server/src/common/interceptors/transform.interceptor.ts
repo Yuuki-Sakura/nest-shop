@@ -14,8 +14,8 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import * as META from '@adachi-sakura/nest-shop-common/src/constants/meta.constant';
-import * as TEXT from '@adachi-sakura/nest-shop-common/src/constants/text.constant';
+import * as META from '@adachi-sakura/nest-shop-common/dist/constants/meta.constant';
+import * as TEXT from '@adachi-sakura/nest-shop-common/dist/constants/text.constant';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
 type TResponse<T> = {

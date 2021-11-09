@@ -19,7 +19,14 @@ export class Role extends BaseEntity {
     description: '角色包含权限',
   })
   @ManyToMany(() => Permission)
-  @JoinTable()
+  @JoinTable({
+    joinColumn: {
+      name: 'role_id',
+    },
+    inverseJoinColumn: {
+      name: 'permission_id',
+    },
+  })
   permissions: Permission[];
 
   @ApiProperty({ type: () => [Role] })
@@ -27,6 +34,13 @@ export class Role extends BaseEntity {
     description: '继承角色',
   })
   @ManyToMany(() => Role, { eager: true })
-  @JoinTable()
+  @JoinTable({
+    joinColumn: {
+      name: 'parent_role_id',
+    },
+    inverseJoinColumn: {
+      name: 'role_id',
+    },
+  })
   extends: Role[];
 }

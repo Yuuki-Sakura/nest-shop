@@ -26,9 +26,7 @@ export default class GoodsCategoryEntity extends BaseEntity {
   @Field(() => GoodsCategoryEntity, {
     description: '商品父分类',
   })
-  @ManyToOne(() => GoodsCategoryEntity, (category) => category.children, {
-    cascade: true,
-  })
+  @ManyToOne(() => GoodsCategoryEntity, (category) => category.children)
   @JoinColumn({ name: 'parent_id' })
   parent: GoodsCategoryEntity;
 

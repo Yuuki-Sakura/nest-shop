@@ -1,6 +1,7 @@
 import GoodsCategoryEntity from '@/goods/entity/goods-category.entity';
 import GoodsCommentEntity from '@/goods/entity/goods-comment.entity';
 import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
+import MerchantEntity from '@/merchant/entity/merchant.entity';
 import { BaseEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
@@ -11,6 +12,12 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
   description: '商品SPU',
 })
 export default class GoodsSpuEntity extends BaseEntity {
+  @ManyToOne(() => MerchantEntity, (merchant) => merchant.id)
+  @JoinColumn({
+    name: 'merchant_id',
+  })
+  merchant: MerchantEntity;
+
   @ApiProperty({ type: () => GoodsCategoryEntity })
   @Field(() => GoodsCategoryEntity, {
     description: 'SPU关联分类',
@@ -43,6 +50,7 @@ export default class GoodsSpuEntity extends BaseEntity {
   @Column('int', {
     unsigned: true,
     comment: '商品销量',
+    default: 0,
   })
   sales: number;
 

@@ -1,4 +1,4 @@
-import DistrictEntity from '@/district/district.entity';
+import DistrictEntity from '@/district/entity/district.entity';
 import { UserEntity } from '@/user';
 import { BaseEntity } from '@adachi-sakura/nest-shop-common';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';

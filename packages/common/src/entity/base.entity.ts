@@ -17,9 +17,10 @@ export class BaseEntity {
   @Field(() => ID)
   @ApiProperty()
   @PrimaryColumn({
-    default: () => nanoid(10),
+    type: 'varchar',
+    length: '11',
   })
-  id: string;
+  id: string = nanoid(10);
 
   @Field({
     description: '创建时间',
@@ -61,13 +62,13 @@ export class BaseEntity {
     description: '排序编号',
   })
   @ApiProperty()
-  @Column({ default: 0 })
+  @Column({ default: 0, comment: '排序编号' })
   sort: number;
 
   @Field({
     description: '是否隐藏',
   })
   @ApiProperty()
-  @Column('boolean', { default: false })
-  hidden: boolean;
+  @Column('boolean', { default: false, name: 'is_hidden', comment: '是否隐藏' })
+  isHidden: boolean;
 }

@@ -16,6 +16,7 @@ export default class UserRole extends BaseEntity {
 
   @Field(() => Role)
   @ManyToOne(() => Role)
+  @JoinColumn({ name: 'role_id' })
   role: Role;
 
   @Field()

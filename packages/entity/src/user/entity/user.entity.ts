@@ -1,3 +1,4 @@
+import UserAddressEntity from '@/address/entity/user-address.entity';
 import { BaseEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
 import { nanoid } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
@@ -37,9 +38,8 @@ export class UserEntity extends BaseEntity {
     length: 500,
     comment: '用户名',
     unique: true,
-    default: () => nanoid(10),
   })
-  username: string;
+  username: string = nanoid(10);
 
   @Field()
   @Column({ length: 500, comment: '用户昵称' })
@@ -47,23 +47,28 @@ export class UserEntity extends BaseEntity {
 
   @Field()
   @IsEmail()
-  @Column({ length: 50, comment: '邮箱', unique: true })
+  @Column({ length: 50, nullable: true, comment: '邮箱' })
   email: string;
 
-  @Field({ nullable: true })
-  @Column({ comment: '手机号', nullable: true, unique: true })
+  @Field()
+  @Column({ comment: '手机号', unique: true })
   phone: string;
 
   @Column({ length: 256, comment: '密码' })
   @Exclude()
   password: string;
 
-  @Column({ length: 256, comment: '支付密码', name: 'pay_password' })
+  @Column({
+    length: 256,
+    comment: '支付密码',
+    name: 'pay_password',
+    nullable: true,
+  })
   @Exclude()
   payPassword: string;
 
-  @Field({ nullable: true })
-  @Column({ length: 500, nullable: true, default: null, comment: '头像' })
+  @Field()
+  @Column({ length: 500, default: '', comment: '头像' })
   avatar: string;
 
   @Field(() => Gender)
@@ -114,4 +119,10 @@ export class UserEntity extends BaseEntity {
     cascade: true,
   })
   permissions: UserPermission[];
+
+  @Field(() => [UserAddressEntity])
+  @OneToMany(() => UserAddressEntity, (address) => address.user, {
+    cascade: true,
+  })
+  addresses: UserAddressEntity[];
 }

@@ -60,7 +60,7 @@ export default class GoodsAttributesTemplateAttributesEntity extends BaseEntity 
   @Field({
     description: '属性可选值',
   })
-  @Column('simple-array', {
+  @Column('simple-json', {
     comment: '属性可选值',
   })
   values: string[];

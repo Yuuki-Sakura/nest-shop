@@ -1,4 +1,4 @@
-import { RedisService } from '@adachi-sakura/nest-shop-common';
+// import { RedisService } from '@adachi-sakura/nest-shop-common';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '@/user/user.service';
@@ -9,8 +9,7 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
-    private readonly roleService: RoleService,
-    private readonly redisService: RedisService,
+    private readonly roleService: RoleService, // private readonly redisService: RedisService,
   ) {}
 
   // async validateUser(username: string, password: string): Promise<UserEntity> {
