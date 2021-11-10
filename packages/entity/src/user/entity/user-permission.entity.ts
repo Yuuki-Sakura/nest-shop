@@ -31,7 +31,9 @@ export default class UserPermission extends BaseEntity {
   permissions: Permission[];
 
   @ApiProperty()
-  @Field()
+  @Field({
+    description: '过期时间',
+  })
   @Timestamp({
     name: 'expires_at',
     comment: '过期时间',

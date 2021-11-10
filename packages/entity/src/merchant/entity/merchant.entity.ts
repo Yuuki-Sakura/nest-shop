@@ -5,6 +5,7 @@ import { UserEntity } from '@/user';
 import { BaseEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
+import { GraphQLString } from 'graphql';
 import {
   Column,
   Entity,
@@ -22,7 +23,7 @@ export enum MerchantType {
 }
 
 export enum MerchantStatus {
-  Banned = -1, //封禁
+  Banned = -1, //平台封禁
   Normal, //正常
   Closed, //商家主动关闭
 }
@@ -30,11 +31,36 @@ export enum MerchantStatus {
 registerEnumType(MerchantType, {
   name: 'MerchantType',
   description: '商户类型',
+  valuesMap: {
+    Personal: {
+      description: '个人普通店铺',
+    },
+    Company: {
+      description: '企业认证店铺',
+    },
+    Flagship: {
+      description: '旗舰店',
+    },
+    DirectSale: {
+      description: '平台自营店',
+    },
+  },
 });
 
 registerEnumType(MerchantStatus, {
   name: 'MerchantStatus',
   description: '商户状态',
+  valuesMap: {
+    Banned: {
+      description: '平台封禁',
+    },
+    Normal: {
+      description: '正常',
+    },
+    Closed: {
+      description: '商家主动关闭',
+    },
+  },
 });
 
 @Entity('merchant')
@@ -49,13 +75,17 @@ export default class MerchantEntity extends BaseEntity {
   user: UserEntity;
 
   @ApiProperty()
-  @Field()
+  @Field({
+    description: '商户名称',
+  })
   @Column({
     comment: '商户名称',
   })
   name: string;
 
-  @Field(() => MerchantAddressEntity)
+  @Field(() => MerchantAddressEntity, {
+    description: '商户地址',
+  })
   @OneToOne(() => MerchantAddressEntity, (address) => address.merchant)
   @JoinColumn({
     name: 'address_id',
@@ -66,14 +96,13 @@ export default class MerchantEntity extends BaseEntity {
   @Field(() => MerchantType, {
     description: '商户类型',
   })
-  @Column('simple-enum', {
-    enum: MerchantType,
+  @Column('tinyint', {
     comment: '商户类型',
   })
   type: MerchantType;
 
   @ApiProperty()
-  @Field({
+  @Field(() => [GraphQLString], {
     description: '商户资质图片',
   })
   @Column('simple-json', {
@@ -107,12 +136,16 @@ export default class MerchantEntity extends BaseEntity {
   summary: string;
 
   @ApiProperty()
-  @Field()
+  @Field({
+    description: '商户头像',
+  })
   @Column({ length: 500, default: '', comment: '头像' })
   avatar: string;
 
   @ApiProperty()
-  @Field(() => Int)
+  @Field(() => Int, {
+    description: '商品销量',
+  })
   @Column('int', {
     unsigned: true,
     comment: '商品销量',
@@ -161,8 +194,7 @@ export default class MerchantEntity extends BaseEntity {
   @Field(() => MerchantStatus, {
     description: '商户状态',
   })
-  @Column('simple-enum', {
-    enum: MerchantStatus,
+  @Column('tinyint', {
     default: MerchantStatus.Normal,
     comment: '商户状态',
   })
@@ -217,9 +249,15 @@ export default class MerchantEntity extends BaseEntity {
   })
   logisticsRatings: string;
 
+  @Field(() => GoodsSpuEntity, {
+    description: '商家spu',
+  })
   @OneToMany(() => GoodsSpuEntity, (spu) => spu.merchant)
   goodsSpu: GoodsSpuEntity[];
 
+  @Field(() => GoodsSkuEntity, {
+    description: '商家sku',
+  })
   @OneToMany(() => GoodsSkuEntity, (sku) => sku.merchant)
   goodsSku: GoodsSkuEntity[];
 }

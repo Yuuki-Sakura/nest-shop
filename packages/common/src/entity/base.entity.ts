@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Timestamp } from '@/decorator';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 
 @Entity()
 @ObjectType()
@@ -48,6 +48,7 @@ export class BaseEntity {
 
   @Field({
     description: '删除时间',
+    nullable: true,
   })
   @ApiProperty()
   @DeleteDateColumn({
@@ -58,7 +59,7 @@ export class BaseEntity {
   @Timestamp()
   deleteAt: Date;
 
-  @Field({
+  @Field(() => Int, {
     description: '排序编号',
   })
   @ApiProperty()

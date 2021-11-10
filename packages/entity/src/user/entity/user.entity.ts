@@ -23,9 +23,33 @@ export enum UserStatus {
 
 registerEnumType(Gender, {
   name: 'Gender',
+  description: '性别',
+  valuesMap: {
+    Secrecy: {
+      description: '保密',
+    },
+    Male: {
+      description: '男性',
+    },
+    Female: {
+      description: '女性',
+    },
+    Other: {
+      description: '其他',
+    },
+  },
 });
 registerEnumType(UserStatus, {
   name: 'UserStatus',
+  description: '用户状态',
+  valuesMap: {
+    Active: {
+      description: '正常',
+    },
+    Banned: {
+      description: '已禁用',
+    },
+  },
 });
 
 @Entity('user')
@@ -33,7 +57,9 @@ registerEnumType(UserStatus, {
   description: '用户信息',
 })
 export class UserEntity extends BaseEntity {
-  @Field()
+  @Field({
+    description: '用户名',
+  })
   @Column({
     length: 500,
     comment: '用户名',
@@ -41,16 +67,22 @@ export class UserEntity extends BaseEntity {
   })
   username: string = nanoid(10);
 
-  @Field()
+  @Field({
+    description: '用户昵称',
+  })
   @Column({ length: 500, comment: '用户昵称' })
   nickname: string;
 
-  @Field()
+  @Field({
+    description: '邮箱',
+  })
   @IsEmail()
   @Column({ length: 50, nullable: true, comment: '邮箱' })
   email: string;
 
-  @Field()
+  @Field({
+    description: '手机号',
+  })
   @Column({ comment: '手机号', unique: true })
   phone: string;
 
@@ -67,31 +99,35 @@ export class UserEntity extends BaseEntity {
   @Exclude()
   payPassword: string;
 
-  @Field()
+  @Field({
+    description: '头像',
+  })
   @Column({ length: 500, default: '', comment: '头像' })
   avatar: string;
 
-  @Field(() => Gender)
-  @Column('simple-enum', {
-    enum: Gender,
+  @Field(() => Gender, {
+    description: '性别',
+  })
+  @Column('tinyint', {
     default: Gender.Secrecy,
     comment: '性别',
   })
   gender: Gender;
 
-  @Field({ nullable: true })
+  @Field({ description: '生日', nullable: true })
   @Column('timestamp', { comment: '生日', default: null })
   birthday: Date;
 
-  @Field(() => UserStatus)
-  @Column('simple-enum', {
-    enum: UserStatus,
+  @Field(() => UserStatus, {
+    description: '用户状态',
+  })
+  @Column('tinyint', {
     default: UserStatus.Active,
     comment: '用户状态',
   })
   status: UserStatus;
 
-  @Field({ nullable: true })
+  @Field({ description: '上次登陆时间', nullable: true })
   @Timestamp({
     name: 'last_login_at',
     comment: '上次登陆时间',
@@ -99,7 +135,9 @@ export class UserEntity extends BaseEntity {
   })
   lastLoginAt?: Date;
 
-  @Field()
+  @Field({
+    description: '上次登陆IP',
+  })
   @Timestamp({
     name: 'last_login_ip',
     comment: '上次登陆IP',

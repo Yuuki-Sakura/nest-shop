@@ -1,5 +1,6 @@
 import { BaseEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { GraphQLString } from 'graphql';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import GoodsAttributesTemplateEntity from '@/goods/entity/goods-attributes-template.entity';
 
@@ -57,7 +58,7 @@ export default class GoodsAttributesTemplateAttributesEntity extends BaseEntity 
   })
   require: boolean;
 
-  @Field({
+  @Field(() => [GraphQLString], {
     description: '属性可选值',
   })
   @Column('simple-json', {

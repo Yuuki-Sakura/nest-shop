@@ -3,6 +3,7 @@ import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
 import { UserEntity } from '@/user';
 import { BaseEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { GraphQLString } from 'graphql';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity('goods_comment')
@@ -18,7 +19,7 @@ export default class GoodsCommentEntity extends BaseEntity {
   })
   content: string;
 
-  @Field({
+  @Field(() => [GraphQLString], {
     description: '评论图片',
   })
   @Column('simple-json', {

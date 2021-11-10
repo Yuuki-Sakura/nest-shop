@@ -14,7 +14,7 @@ import {
 } from 'typeorm';
 
 export enum FreightTemplateType {
-  Amount, //数量
+  Amount, //件数
   Weight, //重量
   Volume, //体积
 }
@@ -22,6 +22,17 @@ export enum FreightTemplateType {
 registerEnumType(FreightTemplateType, {
   name: 'FreightTemplateType',
   description: '运费计费方式',
+  valuesMap: {
+    Amount: {
+      description: '件数',
+    },
+    Weight: {
+      description: '重量',
+    },
+    Volume: {
+      description: '体积',
+    },
+  },
 });
 
 @Entity('freight_template')
@@ -29,23 +40,28 @@ registerEnumType(FreightTemplateType, {
   description: '运费模板信息',
 })
 export default class FreightTemplateEntity extends BaseEntity {
-  @Field(() => MerchantEntity)
+  @Field(() => MerchantEntity, {
+    description: '运费模板所属商家',
+  })
   @ManyToOne(() => MerchantEntity, (merchant) => merchant.id)
   @JoinColumn({
     name: 'merchant_id',
   })
   merchant: MerchantEntity;
 
-  @Field()
+  @Field({
+    description: '模板名称',
+  })
   @Column('varchar', {
     length: 32,
     comment: '模板名称',
   })
   name: string;
 
-  @Field(() => FreightTemplateType)
-  @Column('simple-enum', {
-    enum: FreightTemplateType,
+  @Field(() => FreightTemplateType, {
+    description: '计费方式',
+  })
+  @Column('tinyint', {
     comment: '计费方式',
   })
   type: FreightTemplateType;
@@ -88,7 +104,9 @@ export default class FreightTemplateEntity extends BaseEntity {
   })
   info: string;
 
-  @Field(() => FreightTemplateDistrictEntity)
+  @Field(() => FreightTemplateDistrictEntity, {
+    description: '运费区域设置',
+  })
   @OneToMany(() => FreightTemplateDistrictEntity, (district) => district.id)
   districts: FreightTemplateDistrictEntity[];
 }

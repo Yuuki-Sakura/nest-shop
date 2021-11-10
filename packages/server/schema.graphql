@@ -1,0 +1,781 @@
+type PolicyQuestion {
+  content: String!
+  answer: String
+}
+
+type Permission {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+  name: String!
+  resource: String!
+  route: String
+  method: HttpMethod
+}
+
+scalar Date
+
+enum HttpMethod {
+  GET
+  POST
+  PUT
+  DELETE
+  PATCH
+  OPTIONS
+  HEAD
+}
+
+type Role {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+
+  # 角色名称
+  name: String!
+
+  # 角色包含权限
+  permissions: [Permission!]!
+
+  # 继承角色
+  extends: [Role!]!
+}
+
+type UserDevice {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+
+  # 设备名称
+  name: String!
+
+  # 设备类型
+  type: String!
+  userAgent: String!
+  lastLoginAt: Date!
+  lastLoginIp: String!
+  user: User!
+}
+
+# 用户权限关联信息
+type UserPermission {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+  user: User!
+  permissions: [Permission!]!
+  expiresAt: Date!
+}
+
+# 用户角色关联信息
+type UserRole {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+  user: User!
+  role: Role!
+  expiresAt: Date!
+}
+
+# 地区信息列表
+type District {
+  id: ID!
+  code: Int!
+  name: String!
+  location: String!
+  level: DistrictLevel!
+  parent: District!
+  children: [District!]!
+}
+
+enum DistrictLevel {
+  Country
+  Province
+  City
+  District
+}
+
+# 用户地址
+type UserAddress {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+
+  # 收件人名称
+  name: String!
+
+  # 收件人手机号
+  mobile: String!
+
+  # 地址关联国家/地区信息
+  country: District!
+
+  # 地址关联省份信息
+  province: District!
+
+  # 地址关联城市信息
+  city: District!
+
+  # 地址关联区/县信息
+  district: District!
+
+  # 详细地址
+  address: String!
+
+  # 位置
+  location: String!
+
+  # 经度
+  longitude: String!
+
+  # 纬度
+  latitude: String!
+  user: User!
+}
+
+# 用户信息
+type User {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+  username: String!
+  nickname: String!
+  email: String!
+  phone: String!
+  avatar: String!
+  gender: Gender!
+  birthday: Date
+  status: UserStatus!
+  lastLoginAt: Date
+  lastLoginIp: String!
+  devices: [UserDevice!]!
+  roles: [UserRole!]!
+  permissions: [UserPermission!]!
+  addresses: [UserAddress!]!
+}
+
+enum Gender {
+  Secrecy
+  Male
+  Female
+  Other
+}
+
+enum UserStatus {
+  Active
+  Banned
+}
+
+# 商户关联地址
+type MerchantAddress {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+
+  # 地址关联国家/地区信息
+  country: District!
+
+  # 地址关联省份信息
+  province: District!
+
+  # 地址关联城市信息
+  city: District!
+
+  # 地址关联区/县信息
+  district: District!
+
+  # 详细地址
+  address: String!
+
+  # 位置
+  location: String!
+
+  # 经度
+  longitude: String!
+
+  # 纬度
+  latitude: String!
+  merchant: Merchant!
+}
+
+# 商品属性模板
+type GoodsAttributesTemplate {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+}
+
+# 商品分类
+type GoodsCategory {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+
+  # 商品分类名称
+  name: String!
+
+  # 商品父分类
+  parent: GoodsCategory!
+
+  # 商品子分类
+  children: [GoodsCategory!]!
+}
+
+# 商品SPU
+type GoodsSpu {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+
+  # SPU关联分类
+  category: GoodsCategory!
+
+  # SPU关联SKU
+  sku: [GoodsSku!]!
+
+  # SPU关联默认SKU
+  defaultSku: GoodsSku!
+  sales: Int!
+
+  # SPU关联评论
+  comments: [GoodsComment!]!
+}
+
+# 商品评价
+type GoodsComment {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+
+  # 评论内容
+  content: String!
+
+  # 评论图片
+  images: [String!]!
+
+  # 评论视频
+  video: String!
+
+  # 评论关联SKU
+  sku: GoodsSku!
+
+  # 评论关联SPU
+  spu: GoodsSpu!
+
+  # 评论关联用户
+  user: User!
+}
+
+type GoodsAttributes {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+
+  # 属性名称
+  name: String!
+
+  # 属性单位
+  unit: String!
+
+  # 属性值
+  value: String!
+
+  # 属性组名称
+  groupName: String!
+}
+
+# 商品SKU属性
+type GoodsSkuInfo {
+  # 属性名称
+  name: String!
+
+  # 属性值
+  value: String!
+}
+
+# 商品SKU
+type GoodsSku {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+
+  # 商品SKU编号
+  sn: Int!
+
+  # 商品SKU属性
+  skuInfo: GoodsSkuInfo!
+
+  # 商品SKU关联SPU
+  spu: GoodsSpu!
+
+  # 商品名称
+  name: String!
+
+  # 商品关键词
+  keywords: [String!]!
+
+  # 商品主图
+  image: String!
+
+  # 商品封面图
+  thumbnail: String!
+
+  # 商品轮播图
+  sliderImages: [String!]!
+
+  # 商品视频链接
+  videoLink: String
+
+  # 商品价格
+  price: String!
+
+  # 商品成本价
+  costPrice: String!
+
+  # 商品划线价
+  linePrice: String!
+
+  # 商品库存
+  stock: Int!
+
+  # 商品单位
+  unitName: String!
+
+  # 商品销量
+  sales: Int!
+
+  # 商品简介
+  summary: String!
+
+  # 商品详情图
+  descImages: [String!]!
+
+  # 商品SKU属性
+  attributes: [GoodsAttributes!]!
+
+  # 商品评论
+  comments: [GoodsComment!]!
+
+  # 评论数
+  commentCount: Int!
+
+  # 商品虚拟销量
+  virtualSales: Int!
+
+  # 起购数量
+  moq: Int!
+
+  # 单次最大购买数量
+  onceOrderQuantity: Int!
+
+  # 版本
+  version: Int!
+}
+
+# 商户信息
+type Merchant {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+  name: String!
+  address: MerchantAddress!
+
+  # 商户类型
+  type: MerchantType!
+
+  # 商户资质图片
+  qualificationImages: [String!]!
+
+  # 联系人姓名
+  realName: String!
+
+  # 联系人电话
+  phone: String!
+
+  # 商户简介
+  summary: String!
+  avatar: String!
+  sales: Int!
+
+  # 商户交易手续费率
+  handlingFee: String!
+
+  # 商户保证金
+  guarantee: String!
+
+  # 商户余额
+  money: String!
+
+  # 商户状态
+  status: MerchantStatus!
+  followCount: Int!
+
+  # 商户商品评分
+  productRatings: String!
+
+  # 商户服务评分
+  serviceRatings: String!
+
+  # 商户物流评分
+  logisticsRatings: String!
+}
+
+# 商户类型
+enum MerchantType {
+  Personal
+  Company
+  Flagship
+  DirectSale
+}
+
+# 商户状态
+enum MerchantStatus {
+  Banned
+  Normal
+  Closed
+}
+
+# 订单
+type Order {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+  user: User!
+  address: OrderAddress!
+}
+
+# 订单地址
+type OrderAddress {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+
+  # 收件人名称
+  name: String!
+
+  # 收件人手机号
+  mobile: String!
+
+  # 地址关联国家/地区信息
+  country: District!
+
+  # 地址关联省份信息
+  province: District!
+
+  # 地址关联城市信息
+  city: District!
+
+  # 地址关联区/县信息
+  district: District!
+
+  # 详细地址
+  address: String!
+
+  # 位置
+  location: String!
+
+  # 经度
+  longitude: String!
+
+  # 纬度
+  latitude: String!
+  user: User!
+}
+
+# 运费模板信息
+type FreightTemplate {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+  merchant: Merchant!
+  name: String!
+  type: FreightTemplateType!
+
+  # 包邮区域
+  freeArea: District!
+
+  # 不配送区域
+  noDeliveryArea: District!
+
+  # 运费说明
+  info: String!
+  districts: FreightTemplateDistrict!
+}
+
+# 运费计费方式
+enum FreightTemplateType {
+  Amount
+  Weight
+  Volume
+}
+
+# 配送区域
+type FreightTemplateDistrict {
+  id: ID!
+
+  # 创建时间
+  createAt: Date!
+
+  # 更新时间
+  updateAt: Date!
+
+  # 删除时间
+  deleteAt: Date!
+
+  # 排序编号
+  sort: Float!
+
+  # 是否隐藏
+  isHidden: Boolean!
+  template: FreightTemplate!
+  district: District!
+
+  # 首件/首重/首件体积
+  first: String!
+
+  # 首件/首重/首件体积价格
+  firstPrice: String!
+
+  # 续件/续重/续件体积
+  additional: String!
+
+  # 续件/续重/续件体积价格
+  additionalPrice: String!
+}
+
+type Query {
+  getUsers: [User!]!
+}

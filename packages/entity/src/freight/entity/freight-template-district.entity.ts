@@ -9,14 +9,18 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
   description: '配送区域',
 })
 export default class FreightTemplateDistrictEntity extends BaseEntity {
-  @Field(() => FreightTemplateEntity)
+  @Field(() => FreightTemplateEntity, {
+    description: '运费模板',
+  })
   @ManyToOne(() => FreightTemplateEntity, (template) => template.id)
   @JoinColumn({
     name: 'template_id',
   })
   template: FreightTemplateEntity;
 
-  @Field(() => DistrictEntity)
+  @Field(() => DistrictEntity, {
+    description: '地区',
+  })
   @ManyToOne(() => DistrictEntity, (district) => district.id)
   @JoinColumn({
     name: 'district_id',
@@ -42,6 +46,7 @@ export default class FreightTemplateDistrictEntity extends BaseEntity {
     precision: 10,
     scale: 2,
     unsigned: true,
+    name: 'first_price',
   })
   firstPrice: string;
 
@@ -64,6 +69,7 @@ export default class FreightTemplateDistrictEntity extends BaseEntity {
     precision: 10,
     scale: 2,
     unsigned: true,
+    name: 'additional_price',
   })
   additionalPrice: string;
 }

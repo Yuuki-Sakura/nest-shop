@@ -29,6 +29,7 @@ export default class UserCartEntity extends BaseEntity {
     unsigned: true,
     precision: 11,
     scale: 2,
+    name: 'add_price',
   })
   addPrice: string;
 

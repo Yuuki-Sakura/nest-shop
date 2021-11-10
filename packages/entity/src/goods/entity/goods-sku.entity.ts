@@ -3,6 +3,7 @@ import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
 import MerchantEntity from '@/merchant/entity/merchant.entity';
 import { Field, Int, InterfaceType, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
+import { GraphQLString } from 'graphql';
 import {
   Column,
   Entity,
@@ -48,7 +49,6 @@ export default class GoodsSkuEntity extends BaseEntity {
     description: '商品SKU编号',
   })
   @Column('int', {
-    unique: true,
     unsigned: true,
     comment: '商品SKU编号',
   })
@@ -83,7 +83,7 @@ export default class GoodsSkuEntity extends BaseEntity {
   name: string;
 
   @ApiProperty()
-  @Field({
+  @Field(() => [GraphQLString], {
     description: '商品关键词',
   })
   @Column('simple-array', {
@@ -110,7 +110,7 @@ export default class GoodsSkuEntity extends BaseEntity {
   thumbnail: string;
 
   @ApiProperty()
-  @Field({
+  @Field(() => [GraphQLString], {
     description: '商品轮播图',
   })
   @Column('json', {
@@ -210,7 +210,7 @@ export default class GoodsSkuEntity extends BaseEntity {
   summary: string;
 
   @ApiProperty()
-  @Field({
+  @Field(() => [GraphQLString], {
     description: '商品详情图',
   })
   @Column('text', {
@@ -279,4 +279,13 @@ export default class GoodsSkuEntity extends BaseEntity {
     name: 'once_order_quantity',
   })
   onceOrderQuantity: number;
+
+  @Field(() => Int, {
+    description: '版本',
+  })
+  @Column('int', {
+    comment: '版本',
+    default: 0,
+  })
+  version: number;
 }

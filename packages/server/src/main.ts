@@ -107,25 +107,25 @@ async function bootstrap() {
   );
   SwaggerModule.setup(process.env.SWAGGER_PREFIX, app, document);
 
-  logger = app.get<AppLogger>(AppLogger);
-  logger.setContext('Nest Blog');
-  app.useLogger(logger);
+  // logger = app.get<AppLogger>(AppLogger);
+  // logger.setContext('Nest Blog');
+  // app.useLogger(logger);
   await app.listen(process.env.SERVER_PORT);
 }
 
 bootstrap().then(async () => {
   // await init(app);
-  logger.log(
+  console.log(
     `Nest Blog Run！at http://localhost:${
       process.env.SERVER_PORT + process.env.SERVER_PREFIX
     } env:${environment}`,
   );
-  logger.log(
+  console.log(
     `Swagger is running at http://localhost:${
       process.env.SERVER_PORT + process.env.SWAGGER_PREFIX
     }`,
   );
-  logger.log(
+  console.log(
     `GraphQL is running at http://localhost:${
       process.env.SERVER_PORT + process.env.SERVER_PREFIX + '/gql'
     }`,

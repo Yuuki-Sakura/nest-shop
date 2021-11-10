@@ -1,4 +1,4 @@
-import { DateScalar, RedisModule } from '@adachi-sakura/nest-shop-common';
+import { DateScalar } from '@adachi-sakura/nest-shop-common';
 import { ExceptionFilterProvider } from '@/common/filters/exception.filter';
 import { LoggingInterceptorProvider } from '@/common/interceptors/logging.interceptor';
 import { CorsMiddleware } from '@/common/middlewares/cors.middleware';
@@ -46,14 +46,10 @@ import { UserModule } from '@/user/user.module';
       useGlobalPrefix: true,
       path: 'gql',
     }),
-    RedisModule.register({
-      host: process.env.REDIS_HOST,
-      port: +process.env.REDIS_PORT,
-    }),
     UserModule,
     AuthModule,
-    RoleModule,
-    PermissionModule,
+    // RoleModule,
+    // PermissionModule,
     LoggerModule,
   ],
   providers: [ExceptionFilterProvider, LoggingInterceptorProvider, DateScalar],

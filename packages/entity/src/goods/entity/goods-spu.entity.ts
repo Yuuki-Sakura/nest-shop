@@ -46,7 +46,9 @@ export default class GoodsSpuEntity extends BaseEntity {
   defaultSku: GoodsSkuEntity;
 
   @ApiProperty()
-  @Field(() => Int)
+  @Field(() => Int, {
+    description: '商品销量',
+  })
   @Column('int', {
     unsigned: true,
     comment: '商品销量',

@@ -1,10 +1,10 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { AuthService } from '@/auth/auth.service';
 import { JwtStrategy } from '@/auth/jwt.strategy';
-import { PassportModule } from '@nestjs/passport';
-import { UserModule } from '@/user/user.module';
-import { JwtModule } from '@nestjs/jwt';
 import { RoleModule } from '@/role/role.module';
+import { UserModule } from '@/user/user.module';
+import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { RoleModule } from '@/role/role.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: +process.env.JWT_EXPIRES },
     }),
-    forwardRef(() => UserModule),
+    UserModule,
     RoleModule,
   ],
   providers: [AuthService, JwtStrategy],

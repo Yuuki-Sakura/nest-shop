@@ -1,5 +1,6 @@
 import { Field, ID, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
+import { GraphQLString } from 'graphql';
 import {
   Column,
   Entity,
@@ -10,14 +11,29 @@ import {
 } from 'typeorm';
 
 export enum DistrictLevel {
-  Country = 'country',
-  Province = 'province',
-  City = 'city',
-  District = 'district',
+  Country = 'country', //国家
+  Province = 'province', //省份
+  City = 'city', //城市
+  District = 'district', //县/区
 }
 
 registerEnumType(DistrictLevel, {
   name: 'DistrictLevel',
+  description: '地区级别',
+  valuesMap: {
+    Country: {
+      description: '国家',
+    },
+    Province: {
+      description: '省份',
+    },
+    City: {
+      description: '城市',
+    },
+    District: {
+      description: '县/区',
+    },
+  },
 });
 @Entity('district')
 @ObjectType('District', {
@@ -29,32 +45,61 @@ export default class DistrictEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field(() => Int)
+  @Field(() => Int, {
+    description: '地区码',
+  })
   @Column('int')
   code: number;
 
-  @Field()
+  @Field({
+    description: '地区名称',
+  })
   @Column()
   name: string;
 
-  @Field()
-  @Column()
-  location: string;
+  @Field(() => GraphQLString, {
+    description: '经纬度',
+  })
+  get location() {
+    return this.longitude + ',' + this.latitude;
+  }
 
-  @Field(() => DistrictLevel)
-  @Column('simple-enum', {
-    enum: DistrictLevel,
+  @Field({
+    description: '经度',
+  })
+  @Column('point', {
+    comment: '经度',
+  })
+  longitude: string;
+
+  @Field({
+    description: '纬度',
+  })
+  @Column('point', {
+    comment: '纬度',
+  })
+  latitude: string;
+
+  @Field(() => DistrictLevel, {
+    description: '地区级别',
+  })
+  @Column('tinyint', {
+    comment: '地区级别',
   })
   level: DistrictLevel;
 
-  @Field(() => DistrictEntity)
+  @Field(() => DistrictEntity, {
+    description: '父级地区',
+  })
   @ManyToOne(() => DistrictEntity)
   @JoinColumn({
     name: 'parent_id',
   })
   parent: DistrictEntity;
 
-  @Field(() => [DistrictEntity])
+  @Field(() => [DistrictEntity], {
+    description: '子级地区',
+  })
   @OneToMany(() => DistrictEntity, (district) => district.parent)
   children: DistrictEntity[];
 }

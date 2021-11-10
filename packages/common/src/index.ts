@@ -6,3 +6,4 @@ export * from './exception';
 export * from './scalars';
 export * from './transformer';
 export * from './utils';
+export * from './enum';

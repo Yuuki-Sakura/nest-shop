@@ -2,6 +2,7 @@ import DistrictEntity from '@/district/entity/district.entity';
 import MerchantEntity from '@/merchant/entity/merchant.entity';
 import { BaseEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { GraphQLString } from 'graphql';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
 @Entity('merchant_address')
@@ -53,8 +54,8 @@ export default class MerchantAddressEntity extends BaseEntity {
   })
   address: string;
 
-  @Field({
-    description: '位置',
+  @Field(() => GraphQLString, {
+    description: '经纬度',
   })
   get location() {
     return this.longitude + ',' + this.latitude;
@@ -76,7 +77,9 @@ export default class MerchantAddressEntity extends BaseEntity {
   })
   latitude: string;
 
-  @Field(() => MerchantEntity)
+  @Field(() => MerchantEntity, {
+    description: '地址关联商户',
+  })
   @OneToOne(() => MerchantEntity)
   merchant: MerchantEntity;
 }
