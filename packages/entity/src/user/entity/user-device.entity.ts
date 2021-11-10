@@ -28,14 +28,19 @@ export default class UserDeviceEntity extends BaseEntity {
   type: string;
 
   @ApiProperty()
-  @Field()
+  @Field({
+    description: '设备UA',
+  })
   @Column({
     name: 'user_agent',
+    comment: '设备UA',
   })
   userAgent: string;
 
   @ApiProperty()
-  @Field()
+  @Field({
+    description: '上次登陆时间',
+  })
   @Timestamp({
     name: 'last_login_at',
     comment: '上次登陆时间',
@@ -43,7 +48,9 @@ export default class UserDeviceEntity extends BaseEntity {
   lastLoginAt: Date;
 
   @ApiProperty()
-  @Field()
+  @Field({
+    description: '上次登陆IP',
+  })
   @Timestamp({
     name: 'last_login_ip',
     comment: '上次登陆IP',
@@ -51,7 +58,9 @@ export default class UserDeviceEntity extends BaseEntity {
   lastLoginIp: string;
 
   @ApiProperty({ type: () => UserEntity })
-  @Field(() => UserEntity)
+  @Field(() => UserEntity, {
+    description: '所属用户',
+  })
   @ManyToOne(() => UserEntity, (user) => user.devices)
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;

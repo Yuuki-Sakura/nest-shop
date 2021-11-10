@@ -28,15 +28,16 @@ import { UserModule } from '@/user/user.module';
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_DATABASE,
       synchronize: true,
-      autoLoadEntities: true,
+      // autoLoadEntities: true,
+      entities: ['./node_modules/@adachi-sakura/nest-shop-entity/dist/**/*.js'],
       logging: !isProdMode,
-      cache: {
-        type: 'ioredis',
-        options: {
-          host: process.env.REDIS_HOST,
-          port: +process.env.REDIS_PORT,
-        },
-      },
+      // cache: {
+      //   type: 'ioredis',
+      //   options: {
+      //     host: process.env.REDIS_HOST,
+      //     port: +process.env.REDIS_PORT,
+      //   },
+      // },
     }),
     GraphQLModule.forRoot({
       debug: true,
@@ -47,7 +48,7 @@ import { UserModule } from '@/user/user.module';
       path: 'gql',
     }),
     UserModule,
-    AuthModule,
+    // AuthModule,
     // RoleModule,
     // PermissionModule,
     LoggerModule,

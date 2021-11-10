@@ -20,21 +20,25 @@ registerEnumType(HttpMethod, {
 @Entity('permission')
 @ObjectType()
 export class Permission extends BaseEntity {
-  @Field()
+  @Field({
+    description: '权限名称',
+  })
   @ApiProperty()
   @Column({ comment: '权限名称', default: '' })
   name: string;
 
-  @Field()
+  @Field({
+    description: '资源',
+  })
   @ApiProperty()
   @Column({ comment: '资源', unique: true })
   resource: string;
 
-  @Field({ nullable: true })
+  @Field({ description: '路由', nullable: true })
   @Column({ comment: '路由', nullable: true })
   route: string;
 
-  @Field(() => HttpMethod, { nullable: true })
+  @Field(() => HttpMethod, { description: 'Http方法', nullable: true })
   @Column('simple-enum', { comment: '方法', nullable: true, enum: HttpMethod })
   method: HttpMethod;
 }

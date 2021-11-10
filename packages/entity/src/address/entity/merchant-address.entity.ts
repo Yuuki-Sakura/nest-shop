@@ -81,5 +81,8 @@ export default class MerchantAddressEntity extends BaseEntity {
     description: '地址关联商户',
   })
   @OneToOne(() => MerchantEntity)
+  @JoinColumn({
+    name: 'merchant_id',
+  })
   merchant: MerchantEntity;
 }

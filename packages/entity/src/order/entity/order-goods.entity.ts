@@ -37,7 +37,9 @@ registerEnumType(OrderRefundStatus, {
   description: '订单商品',
 })
 export default class OrderGoodsEntity extends BaseEntity {
-  @Field(() => UserEntity)
+  @Field(() => UserEntity, {
+    description: '所属订单',
+  })
   @ManyToOne(() => OrderEntity, (order) => order.id)
   @JoinColumn({
     name: 'order_id',

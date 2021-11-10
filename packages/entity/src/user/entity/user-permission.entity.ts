@@ -11,13 +11,17 @@ import { Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 })
 export default class UserPermission extends BaseEntity {
   @ApiProperty({ type: () => UserEntity })
-  @Field(() => UserEntity)
+  @Field(() => UserEntity, {
+    description: '权限关联用户',
+  })
   @ManyToOne(() => UserEntity, (user) => user.permissions)
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
   @ApiProperty({ type: () => [Permission] })
-  @Field(() => [Permission])
+  @Field(() => [Permission], {
+    description: '用户关联权限',
+  })
   @ManyToMany(() => Permission)
   @JoinTable({
     name: 'user_permission_permissions',

@@ -83,7 +83,7 @@ export default class DistrictEntity {
   @Field(() => DistrictLevel, {
     description: '地区级别',
   })
-  @Column('tinyint', {
+  @Column('simple-enum', {
     comment: '地区级别',
   })
   level: DistrictLevel;

@@ -201,7 +201,9 @@ export default class MerchantEntity extends BaseEntity {
   status: MerchantStatus;
 
   @ApiProperty()
-  @Field(() => Int)
+  @Field(() => Int, {
+    description: '商户用户关注数',
+  })
   @Column('int', {
     unsigned: true,
     comment: '商户用户关注数',

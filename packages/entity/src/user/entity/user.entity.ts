@@ -1,7 +1,7 @@
 import UserAddressEntity from '@/address/entity/user-address.entity';
 import { BaseEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
 import { nanoid } from '@adachi-sakura/nest-shop-common';
-import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import UserDeviceEntity from '@/user/entity/user-device.entity';
 import UserPermission from '@/user/entity/user-permission.entity';
 import UserRole from '@/user/entity/user-role.entity';
@@ -144,21 +144,51 @@ export class UserEntity extends BaseEntity {
   })
   lastLoginIp: string;
 
-  @Field(() => [UserDeviceEntity])
+  @Field({
+    description: '用户余额',
+  })
+  @Column('decimal', {
+    comment: '用户余额',
+    unsigned: true,
+    precision: 11,
+    scale: 2,
+    default: '0.00',
+  })
+  balance: string;
+
+  @Field(() => Int, {
+    description: '用户积分',
+  })
+  @Column('int', {
+    comment: '用户积分',
+    default: 0,
+    unsigned: true,
+  })
+  points: number;
+
+  @Field(() => [UserDeviceEntity], {
+    description: '用户设备',
+  })
   @OneToMany(() => UserDeviceEntity, (device) => device.user, { cascade: true })
   devices: UserDeviceEntity[];
 
-  @Field(() => [UserRole])
+  @Field(() => [UserRole], {
+    description: '用户拥有角色',
+  })
   @OneToMany(() => UserRole, (role) => role.user, { cascade: true })
   roles: UserRole[];
 
-  @Field(() => [UserPermission])
+  @Field(() => [UserPermission], {
+    description: '用户拥有权限',
+  })
   @OneToMany(() => UserPermission, (permission) => permission.user, {
     cascade: true,
   })
   permissions: UserPermission[];
 
-  @Field(() => [UserAddressEntity])
+  @Field(() => [UserAddressEntity], {
+    description: '用户收货地址',
+  })
   @OneToMany(() => UserAddressEntity, (address) => address.user, {
     cascade: true,
   })

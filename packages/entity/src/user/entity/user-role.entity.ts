@@ -9,17 +9,23 @@ import { Entity, JoinColumn, ManyToOne } from 'typeorm';
   description: '用户角色关联信息',
 })
 export default class UserRole extends BaseEntity {
-  @Field(() => UserEntity)
+  @Field(() => UserEntity, {
+    description: '角色关联用户',
+  })
   @ManyToOne(() => UserEntity, (user) => user.roles)
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
-  @Field(() => Role)
+  @Field(() => Role, {
+    description: '用户关联角色',
+  })
   @ManyToOne(() => Role)
   @JoinColumn({ name: 'role_id' })
   role: Role;
 
-  @Field()
+  @Field({
+    description: '过期时间',
+  })
   @Timestamp({
     name: 'expires_at',
     comment: '过期时间',
