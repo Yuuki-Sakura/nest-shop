@@ -1,7 +1,7 @@
 import GoodsCommentEntity from '@/goods/entity/goods-comment.entity';
 import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
 import MerchantEntity from '@/merchant/entity/merchant.entity';
-import { Field, Int, InterfaceType, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import { GraphQLString } from 'graphql';
 import {
