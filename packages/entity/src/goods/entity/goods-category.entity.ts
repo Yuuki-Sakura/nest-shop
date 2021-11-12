@@ -1,4 +1,6 @@
-import { BaseEntity } from '@adachi-sakura/nest-shop-common';
+import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
+import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
+import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import {
   Column,
@@ -14,7 +16,7 @@ import GoodsAttributesTemplateEntity from '@/goods/entity/goods-attributes-templ
 @ObjectType('GoodsCategory', {
   description: '商品分类',
 })
-export default class GoodsCategoryEntity extends BaseEntity {
+export default class GoodsCategoryEntity extends CommonEntity {
   @Field({
     description: '商品分类名称',
   })
@@ -44,4 +46,16 @@ export default class GoodsCategoryEntity extends BaseEntity {
     name: 'attributes_template_id',
   })
   attributesTemplate: GoodsAttributesTemplateEntity;
+
+  @Field(() => GoodsSpuEntity, {
+    description: '分类spu',
+  })
+  @OneToMany(() => GoodsSpuEntity, (spu) => spu.category)
+  goodsSpu: GoodsSpuEntity[];
+
+  @Field(() => GoodsSkuEntity, {
+    description: '分类sku',
+  })
+  @OneToMany(() => GoodsSkuEntity, (sku) => sku.category)
+  goodsSku: GoodsSkuEntity[];
 }

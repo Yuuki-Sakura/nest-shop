@@ -13,7 +13,7 @@ import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 
 @Entity()
 @ObjectType()
-export class BaseEntity {
+export class CommonEntity {
   @Field(() => ID)
   @ApiProperty()
   @PrimaryColumn({

@@ -1,4 +1,4 @@
-import { BaseEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { UserEntity } from '@/user';
 import { ApiProperty } from '@nestjs/swagger';
@@ -8,7 +8,7 @@ export enum DeviceType {}
 
 @Entity('user_device')
 @ObjectType('UserDevice')
-export default class UserDeviceEntity extends BaseEntity {
+export default class UserDeviceEntity extends CommonEntity {
   @ApiProperty()
   @Field({
     description: '设备名称',

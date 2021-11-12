@@ -1,4 +1,4 @@
-import { BaseEntity } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Column, Entity } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
@@ -19,7 +19,7 @@ registerEnumType(HttpMethod, {
 
 @Entity('permission')
 @ObjectType()
-export class Permission extends BaseEntity {
+export class Permission extends CommonEntity {
   @Field({
     description: '权限名称',
   })

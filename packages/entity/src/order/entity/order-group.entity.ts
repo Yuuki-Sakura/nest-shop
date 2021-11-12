@@ -1,12 +1,12 @@
 import OrderEntity, { PayMethod, PayStatus } from '@/order/entity/order.entity';
 import { UserEntity } from '@/user';
 import {
-  BaseEntity,
+  CommonEntity,
   generateSn,
   OrderPrefixEnum,
   Timestamp,
 } from '@adachi-sakura/nest-shop-common';
-import { DecimalTransformer } from '@adachi-sakura/nest-shop-common/dist/transformer/decimal.transformer';
+import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Decimal } from 'decimal.js';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
@@ -14,7 +14,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 @ObjectType('OrderGroup', {
   description: '订单组(用于支付)',
 })
-export default class OrderGroupEntity extends BaseEntity {
+export default class OrderGroupEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '订单组所属用户',
   })
@@ -60,7 +60,7 @@ export default class OrderGroupEntity extends BaseEntity {
     unsigned: true,
     precision: 11,
     scale: 2,
-    name: 'total_price',
+    name: 'freight',
     transformer: DecimalTransformer(),
   })
   freight: Decimal;

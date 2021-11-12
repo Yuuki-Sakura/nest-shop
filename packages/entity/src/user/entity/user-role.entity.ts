@@ -1,4 +1,4 @@
-import { BaseEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Role } from '@/role';
 import { UserEntity } from '@/user';
@@ -8,7 +8,7 @@ import { Entity, JoinColumn, ManyToOne } from 'typeorm';
 @ObjectType({
   description: '用户角色关联信息',
 })
-export default class UserRole extends BaseEntity {
+export default class UserRole extends CommonEntity {
   @Field(() => UserEntity, {
     description: '角色关联用户',
   })

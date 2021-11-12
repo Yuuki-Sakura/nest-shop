@@ -1,7 +1,9 @@
+import GoodsCategoryEntity from '@/goods/entity/goods-category.entity';
 import GoodsCommentEntity from '@/goods/entity/goods-comment.entity';
 import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
+import MerchantCategoryEntity from '@/merchant/entity/merchant-category.entity';
 import MerchantEntity from '@/merchant/entity/merchant.entity';
-import { DecimalTransformer } from '@adachi-sakura/nest-shop-common/dist/transformer/decimal.transformer';
+import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import { Decimal } from 'decimal.js';
@@ -16,7 +18,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import GoodsAttributesEntity from '@/goods/entity/goods-attributes.entity';
-import { BaseEntity } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 
 @ObjectType({
   description: '商品SKU属性',
@@ -39,12 +41,36 @@ export class GoodsSkuInfo {
 @ObjectType('GoodsSku', {
   description: '商品SKU',
 })
-export default class GoodsSkuEntity extends BaseEntity {
+export default class GoodsSkuEntity extends CommonEntity {
   @ManyToOne(() => MerchantEntity, (merchant) => merchant.id)
   @JoinColumn({
     name: 'merchant_id',
   })
   merchant: MerchantEntity;
+
+  @ApiProperty({ type: () => GoodsCategoryEntity })
+  @Field(() => GoodsCategoryEntity, {
+    description: 'SKU关联分类',
+  })
+  @ManyToOne(() => GoodsCategoryEntity, (category) => category.id)
+  @JoinColumn({ name: 'category_id' })
+  category: GoodsCategoryEntity;
+
+  @ApiProperty({ type: () => [MerchantCategoryEntity] })
+  @Field(() => [MerchantCategoryEntity], {
+    description: 'SKU关联商家分类',
+  })
+  @ManyToMany(() => MerchantCategoryEntity, (category) => category.id)
+  @JoinTable({
+    name: 'merchant_category_sku',
+    joinColumn: {
+      name: 'sku_id',
+    },
+    inverseJoinColumn: {
+      name: 'merchant_category_id',
+    },
+  })
+  merchantCategory: MerchantCategoryEntity[];
 
   @ApiProperty()
   @Field(() => Int, {

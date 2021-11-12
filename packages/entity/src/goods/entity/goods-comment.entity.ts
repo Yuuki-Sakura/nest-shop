@@ -1,7 +1,7 @@
 import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
 import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
 import { UserEntity } from '@/user';
-import { BaseEntity } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { GraphQLString } from 'graphql';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
@@ -10,7 +10,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 @ObjectType('GoodsComment', {
   description: '商品评价',
 })
-export default class GoodsCommentEntity extends BaseEntity {
+export default class GoodsCommentEntity extends CommonEntity {
   @Field({
     description: '评论内容',
   })

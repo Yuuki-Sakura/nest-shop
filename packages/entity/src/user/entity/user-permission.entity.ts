@@ -1,4 +1,4 @@
-import { BaseEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Permission } from '@/permission';
 import { UserEntity } from '@/user';
@@ -9,7 +9,7 @@ import { Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 @ObjectType({
   description: '用户权限关联信息',
 })
-export default class UserPermission extends BaseEntity {
+export default class UserPermission extends CommonEntity {
   @ApiProperty({ type: () => UserEntity })
   @Field(() => UserEntity, {
     description: '权限关联用户',

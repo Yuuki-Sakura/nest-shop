@@ -1,7 +1,7 @@
 import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
 import { UserEntity } from '@/user';
-import { BaseEntity } from '@adachi-sakura/nest-shop-common';
-import { DecimalTransformer } from '@adachi-sakura/nest-shop-common/dist/transformer/decimal.transformer';
+import { CommonEntity } from '@adachi-sakura/nest-shop-common';
+import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Decimal } from 'decimal.js';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
@@ -10,7 +10,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 @ObjectType('UserCart', {
   description: '用户购物车',
 })
-export default class UserCartEntity extends BaseEntity {
+export default class UserCartEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '购物车关联用户',
   })

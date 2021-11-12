@@ -1,8 +1,11 @@
 import UserAddressEntity from '@/address/entity/user-address.entity';
 import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
-import { BaseEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
-import { nanoid } from '@adachi-sakura/nest-shop-common';
-import { DecimalTransformer } from '@adachi-sakura/nest-shop-common/dist/transformer/decimal.transformer';
+import {
+  CommonEntity,
+  Timestamp,
+  DecimalTransformer,
+  nanoid,
+} from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import UserDeviceEntity from '@/user/entity/user-device.entity';
 import UserPermission from '@/user/entity/user-permission.entity';
@@ -59,7 +62,7 @@ registerEnumType(UserStatus, {
 @ObjectType('User', {
   description: '用户信息',
 })
-export class UserEntity extends BaseEntity {
+export class UserEntity extends CommonEntity {
   @Field({
     description: '用户名',
   })
@@ -198,6 +201,9 @@ export class UserEntity extends BaseEntity {
   })
   addresses: UserAddressEntity[];
 
+  @Field(() => [GoodsSkuEntity], {
+    description: '用户收藏商品',
+  })
   @ManyToMany(() => GoodsSkuEntity, (sku) => sku.id)
   @JoinTable({
     name: 'user_favorites_sku',

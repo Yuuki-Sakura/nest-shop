@@ -4,12 +4,12 @@ import OrderDeliveryInfoEntity from '@/order/entity/order-delivery-info.entity';
 import OrderGroupEntity from '@/order/entity/order-group.entity';
 import { UserEntity } from '@/user';
 import {
-  BaseEntity,
+  CommonEntity,
   generateSn,
   OrderPrefixEnum,
   Timestamp,
 } from '@adachi-sakura/nest-shop-common';
-import { DecimalTransformer } from '@adachi-sakura/nest-shop-common/dist/transformer/decimal.transformer';
+import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Decimal } from 'decimal.js';
 import {
@@ -146,7 +146,7 @@ registerEnumType(OrderStatus, {
 @ObjectType('Order', {
   description: '订单',
 })
-export default class OrderEntity extends BaseEntity {
+export default class OrderEntity extends CommonEntity {
   @Field(() => OrderGroupEntity, {
     description: '所属订单组',
   })
@@ -225,7 +225,7 @@ export default class OrderEntity extends BaseEntity {
     unsigned: true,
     precision: 11,
     scale: 2,
-    name: 'total_price',
+    name: 'freight',
     transformer: DecimalTransformer(2),
   })
   freight: Decimal;

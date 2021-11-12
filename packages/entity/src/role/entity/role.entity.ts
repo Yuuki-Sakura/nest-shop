@@ -1,4 +1,4 @@
-import { BaseEntity } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { Permission } from '@/permission';
@@ -6,7 +6,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 @Entity('role')
 @ObjectType()
-export class Role extends BaseEntity {
+export class Role extends CommonEntity {
   @ApiProperty()
   @Field({
     description: '角色名称',

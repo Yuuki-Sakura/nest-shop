@@ -1,13 +1,13 @@
 import ArticleEntity from '@/article/entity/article.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { BaseEntity } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 
 @Entity('article_category')
 @ObjectType('ArticleCategory', {
   description: '文章分类',
 })
-export class ArticleCategoryEntity extends BaseEntity {
+export class ArticleCategoryEntity extends CommonEntity {
   @Field({
     description: '分类名称',
   })

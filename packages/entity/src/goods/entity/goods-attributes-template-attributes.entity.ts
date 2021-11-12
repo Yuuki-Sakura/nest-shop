@@ -1,4 +1,4 @@
-import { BaseEntity } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { GraphQLString } from 'graphql';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
@@ -8,7 +8,7 @@ import GoodsAttributesTemplateEntity from '@/goods/entity/goods-attributes-templ
 @ObjectType('GoodsAttributesTemplateAttributes', {
   description: '商品属性模板',
 })
-export default class GoodsAttributesTemplateAttributesEntity extends BaseEntity {
+export default class GoodsAttributesTemplateAttributesEntity extends CommonEntity {
   @Field(() => GoodsAttributesTemplateEntity, {
     description: '属性模板',
   })

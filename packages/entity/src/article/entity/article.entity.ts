@@ -2,7 +2,7 @@ import { ArticleCategoryEntity } from '@/article/entity/article-category.entity'
 import { UserEntity } from '@/user';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { BaseEntity } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 
 export enum PublishStatus {
   Recycle = -1, // 回收站
@@ -18,7 +18,7 @@ registerEnumType(PublishStatus, {
 @ObjectType('Article', {
   description: '文章',
 })
-export default class ArticleEntity extends BaseEntity {
+export default class ArticleEntity extends CommonEntity {
   @Field({
     description: '文章标题',
   })

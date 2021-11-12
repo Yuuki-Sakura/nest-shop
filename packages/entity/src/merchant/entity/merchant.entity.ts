@@ -2,8 +2,8 @@ import MerchantAddressEntity from '@/address/entity/merchant-address.entity';
 import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
 import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
 import { UserEntity } from '@/user';
-import { BaseEntity } from '@adachi-sakura/nest-shop-common';
-import { DecimalTransformer } from '@adachi-sakura/nest-shop-common/dist/transformer/decimal.transformer';
+import { CommonEntity } from '@adachi-sakura/nest-shop-common';
+import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import { Decimal } from 'decimal.js';
@@ -20,7 +20,7 @@ import {
 export enum MerchantType {
   Personal, //个人普通店铺
   Company, //企业认证店铺
-  Flagship, //旗舰店
+  Flagship, //品牌旗舰店
   DirectSale, //平台自营店
 }
 
@@ -41,7 +41,7 @@ registerEnumType(MerchantType, {
       description: '企业认证店铺',
     },
     Flagship: {
-      description: '旗舰店',
+      description: '品牌旗舰店',
     },
     DirectSale: {
       description: '平台自营店',
@@ -69,7 +69,7 @@ registerEnumType(MerchantStatus, {
 @ObjectType('Merchant', {
   description: '商户信息',
 })
-export default class MerchantEntity extends BaseEntity {
+export default class MerchantEntity extends CommonEntity {
   @ManyToOne(() => UserEntity)
   @JoinColumn({
     name: 'user_id',

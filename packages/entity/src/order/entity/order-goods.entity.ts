@@ -3,43 +3,17 @@ import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
 import OrderDeliveryInfoEntity from '@/order/entity/order-delivery-info.entity';
 import OrderEntity from '@/order/entity/order.entity';
 import { UserEntity } from '@/user';
-import { BaseEntity } from '@adachi-sakura/nest-shop-common';
-import { DecimalTransformer } from '@adachi-sakura/nest-shop-common/dist/transformer/decimal.transformer';
+import { CommonEntity } from '@adachi-sakura/nest-shop-common';
+import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Decimal } from 'decimal.js';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
-
-export enum OrderRefundStatus {
-  NoRefund, //未发起退款
-  InProgress, //退款处理中
-  PartialRefund, //部分退款
-  FullRefund, //全部退款
-}
-
-registerEnumType(OrderRefundStatus, {
-  name: 'OrderRefundStatus',
-  description: '退款状态',
-  valuesMap: {
-    NoRefund: {
-      description: '未发起退款',
-    },
-    InProgress: {
-      description: '退款处理中',
-    },
-    PartialRefund: {
-      description: '部分退款',
-    },
-    FullRefund: {
-      description: '全部退款',
-    },
-  },
-});
 
 @Entity('order_goods')
 @ObjectType('sOrderGoods', {
   description: '订单商品',
 })
-export default class OrderGoodsEntity extends BaseEntity {
+export default class OrderGoodsEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '所属订单',
   })
@@ -102,10 +76,4 @@ export default class OrderGoodsEntity extends BaseEntity {
     transformer: DecimalTransformer(),
   })
   buyPrice: Decimal;
-
-  @Column('tinyint', {
-    comment: '退款状态',
-    name: 'refund_status',
-  })
-  refundStatus: OrderRefundStatus;
 }

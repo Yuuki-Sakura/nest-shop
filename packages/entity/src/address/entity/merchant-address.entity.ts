@@ -1,6 +1,6 @@
 import DistrictEntity from '@/district/entity/district.entity';
 import MerchantEntity from '@/merchant/entity/merchant.entity';
-import { BaseEntity } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { GraphQLString } from 'graphql';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
@@ -9,7 +9,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 @ObjectType('MerchantAddress', {
   description: '商户关联地址',
 })
-export default class MerchantAddressEntity extends BaseEntity {
+export default class MerchantAddressEntity extends CommonEntity {
   @Field(() => DistrictEntity, {
     description: '地址关联国家/地区信息',
   })

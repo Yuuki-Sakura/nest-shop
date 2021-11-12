@@ -1,6 +1,6 @@
 import OrderGoodsEntity from '@/order/entity/order-goods.entity';
 import OrderEntity from '@/order/entity/order.entity';
-import { BaseEntity } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
@@ -27,7 +27,7 @@ registerEnumType(DeliveryMethod, {
 @ObjectType('OrderDeliveryInfo', {
   description: '订单发货信息',
 })
-export default class OrderDeliveryInfoEntity extends BaseEntity {
+export default class OrderDeliveryInfoEntity extends CommonEntity {
   @Field(() => OrderEntity, {
     description: '发货信息所属订单',
   })
