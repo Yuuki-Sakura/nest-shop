@@ -1,5 +1,4 @@
 import { ArticleCategoryEntity } from '@/article/entity/article-category.entity';
-import { UserEntity } from '@/user';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';

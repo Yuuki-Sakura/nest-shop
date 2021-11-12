@@ -10,7 +10,7 @@
   "license": "MIT",
   "scripts": {
     "build": "pnpm recursive run build",
-    "dev": "pnpm recursive run dev",
+    "dev": "pnpm recursive run dev --no-sort",
     "start": "pnpm recursive run start",
     "precommit": "pnpm run lint && pnpm run format",
     "lint": "eslint \"packages/**/{src,apps,libs,test}/**/*.ts\" --fix",
