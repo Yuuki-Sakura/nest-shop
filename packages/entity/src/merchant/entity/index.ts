@@ -1,2 +1,2 @@
 export * from './merchant.entity';
-export * from 'src/merchant/entity/merchant-request.entity';
+export * from './merchant-request.entity';
