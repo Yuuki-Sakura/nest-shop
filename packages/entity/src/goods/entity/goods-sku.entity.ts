@@ -1,8 +1,10 @@
 import GoodsCommentEntity from '@/goods/entity/goods-comment.entity';
 import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
 import MerchantEntity from '@/merchant/entity/merchant.entity';
+import { DecimalTransformer } from '@adachi-sakura/nest-shop-common/dist/transformer/decimal.transformer';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
+import { Decimal } from 'decimal.js';
 import { GraphQLString } from 'graphql';
 import {
   Column,
@@ -113,7 +115,7 @@ export default class GoodsSkuEntity extends BaseEntity {
   @Field(() => [GraphQLString], {
     description: '商品轮播图',
   })
-  @Column('json', {
+  @Column('simple-json', {
     comment: '商品轮播图',
     name: 'slider_images',
   })
@@ -140,8 +142,9 @@ export default class GoodsSkuEntity extends BaseEntity {
     unsigned: true,
     precision: 11,
     scale: 2,
+    transformer: DecimalTransformer(2),
   })
-  price: string;
+  price: Decimal;
 
   @ApiProperty()
   @Field({
@@ -153,8 +156,9 @@ export default class GoodsSkuEntity extends BaseEntity {
     precision: 11,
     scale: 2,
     name: 'cost_price',
+    transformer: DecimalTransformer(2),
   })
-  costPrice: string;
+  costPrice: Decimal;
 
   @ApiProperty()
   @Field({
@@ -166,8 +170,9 @@ export default class GoodsSkuEntity extends BaseEntity {
     precision: 11,
     scale: 2,
     name: 'line_price',
+    transformer: DecimalTransformer(2),
   })
-  linePrice: string;
+  linePrice: Decimal;
 
   @ApiProperty()
   @Field(() => Int, {
@@ -209,11 +214,20 @@ export default class GoodsSkuEntity extends BaseEntity {
   })
   summary: string;
 
+  @Field({
+    description: '是否为虚拟商品',
+  })
+  @Column('boolean', {
+    comment: '是否为虚拟商品',
+    default: false,
+  })
+  isVirtual: boolean;
+
   @ApiProperty()
   @Field(() => [GraphQLString], {
     description: '商品详情图',
   })
-  @Column('text', {
+  @Column('simple-json', {
     comment: '商品详情图',
   })
   descImages: string[];

@@ -85,6 +85,7 @@ export default class DistrictEntity {
   })
   @Column('simple-enum', {
     comment: '地区级别',
+    enum: DistrictLevel,
   })
   level: DistrictLevel;
 

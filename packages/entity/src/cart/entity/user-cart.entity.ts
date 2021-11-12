@@ -1,7 +1,9 @@
 import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
 import { UserEntity } from '@/user';
 import { BaseEntity } from '@adachi-sakura/nest-shop-common';
+import { DecimalTransformer } from '@adachi-sakura/nest-shop-common/dist/transformer/decimal.transformer';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Decimal } from 'decimal.js';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity('user_cart')
@@ -18,23 +20,31 @@ export default class UserCartEntity extends BaseEntity {
   })
   user: UserEntity;
 
+  @Field(() => GoodsSkuEntity)
   @ManyToOne(() => GoodsSkuEntity, (sku) => sku.id)
   @JoinColumn({
     name: 'sku_id',
   })
   sku: GoodsSkuEntity;
 
+  @Field({
+    description: '加入购物车价格',
+  })
   @Column('decimal', {
     comment: '加入购物车价格',
     unsigned: true,
     precision: 11,
     scale: 2,
     name: 'add_price',
+    transformer: DecimalTransformer(),
   })
-  addPrice: string;
+  addPrice: Decimal;
 
-  @Column('int', {
-    comment: '数量',
+  @Field({
+    description: '商品数量',
   })
-  count: number;
+  @Column('int', {
+    comment: '商品数量',
+  })
+  quantity: number;
 }

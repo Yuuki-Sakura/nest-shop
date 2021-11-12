@@ -15,6 +15,9 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
   },
+  "peerDependencies": {
+    "decimal.js": "^10.3.1"
+  },
   "dependencies": {
     "@adachi-sakura/nest-shop-common": "workspace:^1.0.0",
     "@nestjs/common": "^8.1.1",
@@ -23,6 +26,7 @@
     "@nestjs/swagger": "^5.1.0",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
+    "decimal.js": "^10.3.1",
     "graphql": "^15.7.2",
     "graphql-tools": "^8.2.0",
     "reflect-metadata": "^0.1.13",

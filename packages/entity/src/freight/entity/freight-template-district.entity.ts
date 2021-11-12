@@ -1,7 +1,9 @@
 import DistrictEntity from '@/district/entity/district.entity';
 import FreightTemplateEntity from '@/freight/entity/freight-template.entity';
 import { BaseEntity } from '@adachi-sakura/nest-shop-common';
+import { DecimalTransformer } from '@adachi-sakura/nest-shop-common/dist/transformer/decimal.transformer';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Decimal } from 'decimal.js';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity('freight_template_district')
@@ -35,8 +37,9 @@ export default class FreightTemplateDistrictEntity extends BaseEntity {
     precision: 10,
     scale: 2,
     unsigned: true,
+    transformer: DecimalTransformer(),
   })
-  first: string;
+  first: Decimal;
 
   @Field({
     description: '首件/首重/首件体积价格',
@@ -47,8 +50,9 @@ export default class FreightTemplateDistrictEntity extends BaseEntity {
     scale: 2,
     unsigned: true,
     name: 'first_price',
+    transformer: DecimalTransformer(),
   })
-  firstPrice: string;
+  firstPrice: Decimal;
 
   @Field({
     description: '续件/续重/续件体积',
@@ -58,8 +62,9 @@ export default class FreightTemplateDistrictEntity extends BaseEntity {
     precision: 10,
     scale: 2,
     unsigned: true,
+    transformer: DecimalTransformer(),
   })
-  additional: string;
+  additional: Decimal;
 
   @Field({
     description: '续件/续重/续件体积价格',
@@ -70,6 +75,7 @@ export default class FreightTemplateDistrictEntity extends BaseEntity {
     scale: 2,
     unsigned: true,
     name: 'additional_price',
+    transformer: DecimalTransformer(),
   })
-  additionalPrice: string;
+  additionalPrice: Decimal;
 }

@@ -1,10 +1,13 @@
 import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
 import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
+import OrderDeliveryInfoEntity from '@/order/entity/order-delivery-info.entity';
 import OrderEntity from '@/order/entity/order.entity';
 import { UserEntity } from '@/user';
 import { BaseEntity } from '@adachi-sakura/nest-shop-common';
+import { DecimalTransformer } from '@adachi-sakura/nest-shop-common/dist/transformer/decimal.transformer';
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Decimal } from 'decimal.js';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
 export enum OrderRefundStatus {
   NoRefund, //未发起退款
@@ -69,13 +72,25 @@ export default class OrderGoodsEntity extends BaseEntity {
   })
   sku: GoodsSkuEntity;
 
+  @Field(() => OrderDeliveryInfoEntity, {
+    description: '商品发货信息',
+  })
+  @OneToOne(() => OrderDeliveryInfoEntity, (deliveryInfo) => deliveryInfo.id, {
+    nullable: true,
+  })
+  @JoinColumn({
+    name: 'delivery_info_id',
+  })
+  deliveryInfo: OrderDeliveryInfoEntity;
+
   @Field(() => Int, {
-    description: '购买时数量',
+    description: '购买数量',
   })
   @Column('int', {
-    comment: '数量',
+    comment: '购买数量',
+    unsigned: true,
   })
-  count: number;
+  quantity: number;
 
   @Field()
   @Column('decimal', {
@@ -84,8 +99,9 @@ export default class OrderGoodsEntity extends BaseEntity {
     precision: 11,
     scale: 2,
     name: 'buy_price',
+    transformer: DecimalTransformer(),
   })
-  buyPrice: string;
+  buyPrice: Decimal;
 
   @Column('tinyint', {
     comment: '退款状态',

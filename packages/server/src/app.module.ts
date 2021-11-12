@@ -3,6 +3,7 @@ import { ExceptionFilterProvider } from '@/common/filters/exception.filter';
 import { LoggingInterceptorProvider } from '@/common/interceptors/logging.interceptor';
 import { CorsMiddleware } from '@/common/middlewares/cors.middleware';
 import { OriginMiddleware } from '@/common/middlewares/origin.middleware';
+import { DecimalScalar } from '@adachi-sakura/nest-shop-common/dist/scalars/decimal.scalar';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 //中间件
 import { AppController } from '@/app.controller';
@@ -53,7 +54,12 @@ import { UserModule } from '@/user/user.module';
     // PermissionModule,
     LoggerModule,
   ],
-  providers: [ExceptionFilterProvider, LoggingInterceptorProvider, DateScalar],
+  providers: [
+    ExceptionFilterProvider,
+    LoggingInterceptorProvider,
+    DateScalar,
+    DecimalScalar,
+  ],
   controllers: [AppController],
 })
 export class AppModule {

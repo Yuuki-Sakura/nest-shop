@@ -15,7 +15,7 @@ export class UserRepository extends Repository<UserEntity> {
       .getOne();
   }
 
-  async register(user: UserRegisterDto) {
+  async register(user: UserRegisterDto): Promise<UserEntity> {
     if (await this.findOne({ username: user.username })) {
       throw new BadRequestException(`用户名：'${user.username}' 已被使用`);
     }

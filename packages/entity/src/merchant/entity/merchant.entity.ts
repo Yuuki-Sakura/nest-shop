@@ -3,8 +3,10 @@ import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
 import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
 import { UserEntity } from '@/user';
 import { BaseEntity } from '@adachi-sakura/nest-shop-common';
+import { DecimalTransformer } from '@adachi-sakura/nest-shop-common/dist/transformer/decimal.transformer';
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
+import { Decimal } from 'decimal.js';
 import { GraphQLString } from 'graphql';
 import {
   Column,
@@ -163,8 +165,9 @@ export default class MerchantEntity extends BaseEntity {
     precision: 11,
     scale: 4,
     name: 'handling_fee',
+    transformer: DecimalTransformer(4),
   })
-  handlingFee: string;
+  handlingFee: Decimal;
 
   @ApiProperty()
   @Field({
@@ -175,8 +178,9 @@ export default class MerchantEntity extends BaseEntity {
     unsigned: true,
     precision: 11,
     scale: 2,
+    transformer: DecimalTransformer(),
   })
-  guarantee: string;
+  guarantee: Decimal;
 
   @ApiProperty()
   @Field({
@@ -187,8 +191,9 @@ export default class MerchantEntity extends BaseEntity {
     unsigned: true,
     precision: 12,
     scale: 2,
+    transformer: DecimalTransformer(),
   })
-  money: string;
+  money: Decimal;
 
   @ApiProperty()
   @Field(() => MerchantStatus, {
@@ -222,8 +227,9 @@ export default class MerchantEntity extends BaseEntity {
     precision: 5,
     scale: 2,
     name: 'product_ratings',
+    transformer: DecimalTransformer(),
   })
-  productRatings: string;
+  productRatings: Decimal;
 
   @ApiProperty()
   @Field({
@@ -235,8 +241,9 @@ export default class MerchantEntity extends BaseEntity {
     precision: 5,
     scale: 2,
     name: 'service_ratings',
+    transformer: DecimalTransformer(),
   })
-  serviceRatings: string;
+  serviceRatings: Decimal;
 
   @ApiProperty()
   @Field({
@@ -248,8 +255,9 @@ export default class MerchantEntity extends BaseEntity {
     precision: 5,
     scale: 2,
     name: 'logistics_ratings',
+    transformer: DecimalTransformer(),
   })
-  logisticsRatings: string;
+  logisticsRatings: Decimal;
 
   @Field(() => GoodsSpuEntity, {
     description: '商家spu',

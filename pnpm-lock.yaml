@@ -36,6 +36,7 @@ importers:
       class-transformer: ^0.4.0
       class-validator: ^0.13.1
       dayjs: ^1.10.7
+      decimal.js: ^10.3.1
       graphql: ^15.7.2
       graphql-tools: ^8.2.0
       ioredis: ^4.28.0
@@ -57,6 +58,7 @@ importers:
       class-transformer: registry.npmjs.org/class-transformer/0.4.0
       class-validator: registry.npmjs.org/class-validator/0.13.1
       dayjs: registry.npmjs.org/dayjs/1.10.7
+      decimal.js: registry.npmjs.org/decimal.js/10.3.1
       graphql: registry.npmjs.org/graphql/15.7.2
       graphql-tools: registry.npmjs.org/graphql-tools/8.2.0_graphql@15.7.2
       ioredis: registry.npmjs.org/ioredis/4.28.0
@@ -80,6 +82,7 @@ importers:
       '@nestjs/swagger': ^5.1.0
       class-transformer: ^0.4.0
       class-validator: ^0.13.1
+      decimal.js: ^10.3.1
       graphql: ^15.7.2
       graphql-tools: ^8.2.0
       reflect-metadata: ^0.1.13
@@ -98,6 +101,7 @@ importers:
       '@nestjs/swagger': registry.npmjs.org/@nestjs/swagger/5.1.4_af50d39e2dda58611f992483d2463e06
       class-transformer: registry.npmjs.org/class-transformer/0.4.0
       class-validator: registry.npmjs.org/class-validator/0.13.1
+      decimal.js: registry.npmjs.org/decimal.js/10.3.1
       graphql: registry.npmjs.org/graphql/15.7.2
       graphql-tools: registry.npmjs.org/graphql-tools/8.2.0_graphql@15.7.2
       reflect-metadata: registry.npmjs.org/reflect-metadata/0.1.13
@@ -143,6 +147,7 @@ importers:
       class-validator: ^0.13.1
       compression: ^1.7.4
       cross-env: ^7.0.3
+      decimal.js: ^10.3.1
       dotenv: ^10.0.0
       graphql: ^15.7.2
       graphql-tools: ^8.2.0
@@ -189,6 +194,7 @@ importers:
       class-validator: registry.npmjs.org/class-validator/0.13.1
       compression: registry.npmjs.org/compression/1.7.4
       cross-env: registry.npmjs.org/cross-env/7.0.3
+      decimal.js: registry.npmjs.org/decimal.js/10.3.1
       dotenv: registry.npmjs.org/dotenv/10.0.0
       graphql: registry.npmjs.org/graphql/15.7.2
       graphql-tools: registry.npmjs.org/graphql-tools/8.2.0_graphql@15.7.2
@@ -4303,7 +4309,6 @@ packages:
     resolution: {integrity: sha512-V0pfhfr8suzyPGOx3nmq4aHqabehUZn6Ch9kyFpV79TGDTWFmHqUqXdabR7QHqxzrYolF4+tVmJhUG4OURg5dQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/decimal.js/-/decimal.js-10.3.1.tgz}
     name: decimal.js
     version: 10.3.1
-    dev: true
 
   registry.npmjs.org/dedent/0.7.0:
     resolution: {integrity: sha1-JJXduvbrh0q7Dhvp3yLS5aVEMmw=, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/dedent/-/dedent-0.7.0.tgz}

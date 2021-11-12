@@ -1,13 +1,16 @@
 import UserAddressEntity from '@/address/entity/user-address.entity';
+import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
 import { BaseEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
 import { nanoid } from '@adachi-sakura/nest-shop-common';
+import { DecimalTransformer } from '@adachi-sakura/nest-shop-common/dist/transformer/decimal.transformer';
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import UserDeviceEntity from '@/user/entity/user-device.entity';
 import UserPermission from '@/user/entity/user-permission.entity';
 import UserRole from '@/user/entity/user-role.entity';
 import { Exclude } from 'class-transformer';
 import { IsEmail } from 'class-validator';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Decimal } from 'decimal.js';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 
 export enum Gender {
   Secrecy, //保密
@@ -153,8 +156,9 @@ export class UserEntity extends BaseEntity {
     precision: 11,
     scale: 2,
     default: '0.00',
+    transformer: DecimalTransformer(),
   })
-  balance: string;
+  balance: Decimal;
 
   @Field(() => Int, {
     description: '用户积分',
@@ -193,4 +197,28 @@ export class UserEntity extends BaseEntity {
     cascade: true,
   })
   addresses: UserAddressEntity[];
+
+  @ManyToMany(() => GoodsSkuEntity, (sku) => sku.id)
+  @JoinTable({
+    name: 'user_favorites_sku',
+    joinColumn: {
+      name: 'user_id',
+    },
+    inverseJoinColumn: {
+      name: 'sku_id',
+    },
+  })
+  favorites: GoodsSkuEntity[];
+
+  @ManyToMany(() => GoodsSkuEntity, (sku) => sku.id)
+  @JoinTable({
+    name: 'user_visited_sku',
+    joinColumn: {
+      name: 'user_id',
+    },
+    inverseJoinColumn: {
+      name: 'sku_id',
+    },
+  })
+  visited: GoodsSkuEntity[];
 }
