@@ -7,6 +7,7 @@ importers:
       '@typescript-eslint/eslint-plugin': ^4.33.0
       '@typescript-eslint/parser': ^4.33.0
       commitizen: ^4.2.4
+      concurrently: ^6.3.0
       cz-conventional-changelog: ^3.3.0
       eslint: ^7.32.0
       eslint-config-prettier: ^8.3.0
@@ -14,6 +15,8 @@ importers:
       husky: ^6.0.0
       prettier: ^2.4.1
       typescript: ^4.4.4
+    dependencies:
+      concurrently: registry.npmjs.org/concurrently/6.3.0
     devDependencies:
       '@typescript-eslint/eslint-plugin': registry.npmjs.org/@typescript-eslint/eslint-plugin/4.33.0_cc617358c89d3f38c52462f6d809db4c
       '@typescript-eslint/parser': registry.npmjs.org/@typescript-eslint/parser/4.33.0_eslint@7.32.0+typescript@4.4.4
@@ -4065,6 +4068,23 @@ packages:
       typedarray: registry.npmjs.org/typedarray/0.0.6
     dev: false
 
+  registry.npmjs.org/concurrently/6.3.0:
+    resolution: {integrity: sha512-k4k1jQGHHKsfbqzkUszVf29qECBrkvBKkcPJEUDTyVR7tZd1G/JOfnst4g1sYbFvJ4UjHZisj1aWQR8yLKpGPw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/concurrently/-/concurrently-6.3.0.tgz}
+    name: concurrently
+    version: 6.3.0
+    engines: {node: '>=10.0.0'}
+    hasBin: true
+    dependencies:
+      chalk: registry.npmjs.org/chalk/4.1.2
+      date-fns: registry.npmjs.org/date-fns/2.25.0
+      lodash: registry.npmjs.org/lodash/4.17.21
+      rxjs: registry.npmjs.org/rxjs/6.6.7
+      spawn-command: registry.npmjs.org/spawn-command/0.0.2-1
+      supports-color: registry.npmjs.org/supports-color/8.1.1
+      tree-kill: registry.npmjs.org/tree-kill/1.2.2
+      yargs: registry.npmjs.org/yargs/16.2.0
+    dev: false
+
   registry.npmjs.org/consola/2.15.3:
     resolution: {integrity: sha512-9vAdYbHj6x2fLKC4+oPH0kFzY/orMZyG2Aj+kNylHxKGJ/Ed4dpNyAQYwJOdqO4zdM7XpVHmyejQDcQHrnuXbw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/consola/-/consola-2.15.3.tgz}
     name: consola
@@ -4277,6 +4297,13 @@ packages:
       whatwg-mimetype: registry.npmjs.org/whatwg-mimetype/2.3.0
       whatwg-url: registry.npmjs.org/whatwg-url/8.7.0
     dev: true
+
+  registry.npmjs.org/date-fns/2.25.0:
+    resolution: {integrity: sha512-ovYRFnTrbGPD4nqaEqescPEv1mNwvt+UTqI3Ay9SzNtey9NZnYu6E2qCcBBgJ6/2VF1zGGygpyTDITqpQQ5e+w==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/date-fns/-/date-fns-2.25.0.tgz}
+    name: date-fns
+    version: 2.25.0
+    engines: {node: '>=0.11'}
+    dev: false
 
   registry.npmjs.org/dayjs/1.10.7:
     resolution: {integrity: sha512-P6twpd70BcPK34K26uJ1KT3wlhpuOAPoMwJzpsIWUxHZ7wpmbdZL/hQqBDfz7hGurYSa5PhzdhDHtt319hL3ig==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/dayjs/-/dayjs-1.10.7.tgz}
@@ -8723,7 +8750,6 @@ packages:
     engines: {npm: '>=2.0.0'}
     dependencies:
       tslib: registry.npmjs.org/tslib/1.14.1
-    dev: true
 
   registry.npmjs.org/rxjs/7.4.0:
     resolution: {integrity: sha512-7SQDi7xeTMCJpqViXh8gL/lebcwlp3d831F05+9B44A4B0WfsEwUQHR64gsH1kvJ+Ep/J9K2+n1hVl1CsGN23w==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/rxjs/-/rxjs-7.4.0.tgz}
@@ -9048,6 +9074,12 @@ packages:
     version: 1.4.8
     dev: true
 
+  registry.npmjs.org/spawn-command/0.0.2-1:
+    resolution: {integrity: sha1-YvXpRmmBwbeW3Fkpk34RycaSG9A=, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/spawn-command/-/spawn-command-0.0.2-1.tgz}
+    name: spawn-command
+    version: 0.0.2-1
+    dev: false
+
   registry.npmjs.org/sprintf-js/1.0.3:
     resolution: {integrity: sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz}
     name: sprintf-js
@@ -9302,7 +9334,6 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       has-flag: registry.npmjs.org/has-flag/4.0.0
-    dev: true
 
   registry.npmjs.org/supports-hyperlinks/2.2.0:
     resolution: {integrity: sha512-6sXEzV5+I5j8Bmq9/vUphGRM/RJNT9SCURJLjwfOg51heRtguGWDzcaBlgAzKhQa0EVNpPEKzQuBwZ8S8WaCeQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/supports-hyperlinks/-/supports-hyperlinks-2.2.0.tgz}
@@ -9554,7 +9585,6 @@ packages:
     name: tree-kill
     version: 1.2.2
     hasBin: true
-    dev: true
 
   registry.npmjs.org/ts-invariant/0.9.3:
     resolution: {integrity: sha512-HinBlTbFslQI0OHP07JLsSXPibSegec6r9ai5xxq/qHYCsIQbzpymLpDhAUsnXcSrDEcd0L62L8vsOEdzM0qlA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/ts-invariant/-/ts-invariant-0.9.3.tgz}
@@ -9736,7 +9766,6 @@ packages:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz}
     name: tslib
     version: 1.14.1
-    dev: true
 
   registry.npmjs.org/tslib/2.0.3:
     resolution: {integrity: sha512-uZtkfKblCEQtZKBF6EBXVZeQNl82yqtDQdv+eck8u7tdPxjLu2/lp5/uPW+um2tpuxINHWy3GhiccY7QgEaVHQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/tslib/-/tslib-2.0.3.tgz}

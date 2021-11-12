@@ -12,7 +12,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "pnpm prebuild && tsc && tsc-alias",
-    "dev": "tsc -w & tsc-alias -w",
+    "dev": "concurrently \"tsc -w\" \"tsc-alias -w\"",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
   },
