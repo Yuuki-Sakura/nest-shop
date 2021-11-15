@@ -3,7 +3,14 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { Permission } from '@/permission';
 import { UserEntity } from '@/user';
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+} from 'typeorm';
 
 @Entity('user_permission')
 @ObjectType({
@@ -38,10 +45,11 @@ export default class UserPermission extends CommonEntity {
   @Field({
     description: '过期时间',
   })
-  @Timestamp({
+  @Column('timestamp', {
     name: 'expires_at',
     comment: '过期时间',
     nullable: true,
   })
+  @Timestamp()
   expiresAt?: Date;
 }

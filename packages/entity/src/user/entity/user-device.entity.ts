@@ -41,17 +41,18 @@ export default class UserDeviceEntity extends CommonEntity {
   @Field({
     description: '上次登陆时间',
   })
-  @Timestamp({
+  @Column('timestamp', {
     name: 'last_login_at',
     comment: '上次登陆时间',
   })
+  @Timestamp()
   lastLoginAt: Date;
 
   @ApiProperty()
   @Field({
     description: '上次登陆IP',
   })
-  @Timestamp({
+  @Column({
     name: 'last_login_ip',
     comment: '上次登陆IP',
   })

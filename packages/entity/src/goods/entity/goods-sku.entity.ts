@@ -169,6 +169,7 @@ export default class GoodsSkuEntity extends CommonEntity {
     precision: 11,
     scale: 2,
     transformer: DecimalTransformer(2),
+    nullable: true,
   })
   price: Decimal;
 

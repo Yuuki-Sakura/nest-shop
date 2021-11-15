@@ -134,17 +134,18 @@ export class UserEntity extends CommonEntity {
   status: UserStatus;
 
   @Field({ description: '上次登陆时间', nullable: true })
-  @Timestamp({
+  @Column('timestamp', {
     name: 'last_login_at',
     comment: '上次登陆时间',
     nullable: true,
   })
+  @Timestamp()
   lastLoginAt?: Date;
 
   @Field({
     description: '上次登陆IP',
   })
-  @Timestamp({
+  @Column({
     name: 'last_login_ip',
     comment: '上次登陆IP',
   })

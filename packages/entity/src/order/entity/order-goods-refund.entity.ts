@@ -5,13 +5,14 @@ import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
-export enum OrderRefundRequestStatus {
+export enum OrderGoodsRefundRequestStatus {
   Rejected = -1, //退款已驳回
   InProgress, //退款处理中
+  Passed, //申请已通过
   Refunded, //已退款
 }
 
-registerEnumType(OrderRefundRequestStatus, {
+registerEnumType(OrderGoodsRefundRequestStatus, {
   name: 'OrderRefundStatus',
   description: '退款申请状态',
   valuesMap: {
@@ -27,11 +28,11 @@ registerEnumType(OrderRefundRequestStatus, {
   },
 });
 
-@Entity('order_refund_request')
-@ObjectType('OrderRefundRequest', {
+@Entity('order_goods_refund_request')
+@ObjectType('OrderGoodsRefundRequest', {
   description: '退款申请',
 })
-export default class OrderRefundRequestEntity extends CommonEntity {
+export default class OrderGoodsRefundRequestEntity extends CommonEntity {
   @Field(() => OrderEntity, {
     description: '退款关联订单',
   })
@@ -47,11 +48,11 @@ export default class OrderRefundRequestEntity extends CommonEntity {
   })
   goods: OrderGoodsEntity;
 
-  @Field(() => OrderRefundRequestStatus)
+  @Field(() => OrderGoodsRefundRequestStatus)
   @Column('tinyint', {
     comment: '退款申请状态',
   })
-  status: OrderRefundRequestStatus;
+  status: OrderGoodsRefundRequestStatus;
 
   @Field({
     description: '退款原因',
