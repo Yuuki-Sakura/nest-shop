@@ -1,7 +1,7 @@
 import { Transform } from 'class-transformer';
 import jexl from 'jexl';
 import { applyDecorators } from '@nestjs/common';
-import Expression from 'jexl/Expression';
+import Expression from 'jexl/dist/Expression';
 
 export const JexlExpression = () =>
   applyDecorators(

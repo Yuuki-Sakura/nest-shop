@@ -60,6 +60,7 @@ importers:
       '@nestjs/core': registry.npmjs.org/@nestjs/core/8.2.0_461b1fe9cbc46f5026314aa9aa33f557
       '@nestjs/graphql': registry.npmjs.org/@nestjs/graphql/9.1.1_da31ad94f7d82a5fcd283b9942030941
       '@nestjs/swagger': registry.npmjs.org/@nestjs/swagger/5.1.4_af50d39e2dda58611f992483d2463e06
+      '@types/jexl': registry.npmjs.org/@types/jexl/2.3.0
       class-transformer: registry.npmjs.org/class-transformer/0.4.0
       class-validator: registry.npmjs.org/class-validator/0.13.1
       dayjs: registry.npmjs.org/dayjs/1.10.7
@@ -74,7 +75,6 @@ importers:
       rxjs: registry.npmjs.org/rxjs/7.4.0
       typeorm: registry.npmjs.org/typeorm/0.2.39_ioredis@4.28.0
     devDependencies:
-      '@types/jexl': registry.npmjs.org/@types/jexl/2.3.0
       ts-morph: registry.npmjs.org/ts-morph/12.2.0
       tsc-alias: registry.npmjs.org/tsc-alias/1.4.0
       tsconfig-paths: registry.npmjs.org/tsconfig-paths/3.11.0
@@ -108,6 +108,7 @@ importers:
       '@nestjs/core': registry.npmjs.org/@nestjs/core/8.2.0_461b1fe9cbc46f5026314aa9aa33f557
       '@nestjs/graphql': registry.npmjs.org/@nestjs/graphql/9.1.1_675e1412623958e7ca9c47fa4af3fe67
       '@nestjs/swagger': registry.npmjs.org/@nestjs/swagger/5.1.4_af50d39e2dda58611f992483d2463e06
+      '@types/jexl': registry.npmjs.org/@types/jexl/2.3.0
       class-transformer: registry.npmjs.org/class-transformer/0.4.0
       class-validator: registry.npmjs.org/class-validator/0.13.1
       decimal.js: registry.npmjs.org/decimal.js/10.3.1
@@ -119,7 +120,6 @@ importers:
       rxjs: registry.npmjs.org/rxjs/7.4.0
       typeorm: registry.npmjs.org/typeorm/0.2.39
     devDependencies:
-      '@types/jexl': registry.npmjs.org/@types/jexl/2.3.0
       ts-loader: registry.npmjs.org/ts-loader/8.3.0_typescript@4.4.4
       ts-morph: registry.npmjs.org/ts-morph/12.2.0
       tsc-alias: registry.npmjs.org/tsc-alias/1.4.0
@@ -201,6 +201,7 @@ importers:
       '@nestjs/swagger': registry.npmjs.org/@nestjs/swagger/5.1.4_953ef440701d0fdb30f9ee304eb3b907
       '@nestjs/typeorm': registry.npmjs.org/@nestjs/typeorm/8.0.2_160c9b6fbeb930c4f83acf994aefe5c2
       '@nestjs/websockets': registry.npmjs.org/@nestjs/websockets/8.2.0_0322c81e56bb7239c8dec0d441e208cf
+      '@types/jexl': registry.npmjs.org/@types/jexl/2.3.0
       apollo-server-express: registry.npmjs.org/apollo-server-express/3.5.0_graphql@15.7.2
       argon2: registry.npmjs.org/argon2/0.28.2
       class-transformer: registry.npmjs.org/class-transformer/0.4.0
@@ -233,7 +234,6 @@ importers:
       '@types/express': registry.npmjs.org/@types/express/4.17.13
       '@types/ioredis': registry.npmjs.org/@types/ioredis/4.28.1
       '@types/jest': registry.npmjs.org/@types/jest/27.0.2
-      '@types/jexl': registry.npmjs.org/@types/jexl/2.3.0
       '@types/node': registry.npmjs.org/@types/node/16.11.7
       '@types/passport-jwt': registry.npmjs.org/@types/passport-jwt/3.0.6
       '@types/passport-local': registry.npmjs.org/@types/passport-local/1.0.34
@@ -2395,7 +2395,7 @@ packages:
     resolution: {integrity: sha512-KfkvTtUqxl6UvdFB/RMPEQ8+X99+s3BTKR5SlTkpZ3bDiJiAAkBEg1b88+YAatiaxR3TAmQuyZOeW05eAyag+g==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@types/jexl/-/jexl-2.3.0.tgz}
     name: '@types/jexl'
     version: 2.3.0
-    dev: true
+    dev: false
 
   registry.npmjs.org/@types/json-schema/7.0.9:
     resolution: {integrity: sha512-qcUXuemtEu+E5wZSJHNxUXeCZhAfXKQ41D+duX+VYPde7xyEVZci+/oXKJL13tnRs9lR2pr4fod59GT6/X1/yQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.9.tgz}

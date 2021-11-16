@@ -1,4 +1,5 @@
 import MerchantAddressEntity from '@/address/entity/merchant-address.entity';
+import CouponEntity from '@/coupon/entity/coupon.entity';
 import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
 import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
 import { UserEntity } from '@/user';
@@ -258,6 +259,10 @@ export default class MerchantEntity extends CommonEntity {
     transformer: DecimalTransformer(),
   })
   logisticsRatings: Decimal;
+
+  @Field(() => [CouponEntity])
+  @OneToMany(() => CouponEntity, (coupon) => coupon.id)
+  coupons: CouponEntity[];
 
   @Field(() => GoodsSpuEntity, {
     description: '商家spu',

@@ -5,12 +5,12 @@ import OrderEntity from '@/order/entity/order.entity';
 import { UserEntity } from '@/user';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
-import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Decimal } from 'decimal.js';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
 @Entity('order_goods')
-@ObjectType('sOrderGoods', {
+@ObjectType('OrderGoods', {
   description: '订单商品',
 })
 export default class OrderGoodsEntity extends CommonEntity {

@@ -1,5 +1,5 @@
 import jexl from 'jexl';
-import Expression from 'jexl/Expression';
+import Expression from 'jexl/dist/Expression';
 import { ValueTransformer } from 'typeorm';
 
 export const JexlExpressionTransformer: ValueTransformer = {

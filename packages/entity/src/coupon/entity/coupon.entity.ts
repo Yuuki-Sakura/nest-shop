@@ -1,14 +1,16 @@
+import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
 import MerchantEntity from '@/merchant/entity/merchant.entity';
 import {
   CommonEntity,
   DecimalTransformer,
   JexlExpression,
+  JexlExpressionScalar,
   Timestamp,
 } from '@adachi-sakura/nest-shop-common';
 import { JexlExpressionTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Decimal } from 'decimal.js';
-import Expression from 'jexl/Expression';
+import Expression from 'jexl/dist/Expression';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 //优惠券领取类型
@@ -73,12 +75,6 @@ export default class CouponEntity extends CommonEntity {
   })
   remain: number;
 
-  @Field(() => CouponGetType)
-  @Column('tinyint', {
-    comment: '优惠券获取类型',
-  })
-  getType: CouponGetType;
-
   @Field({
     description: '优惠券面值',
   })
@@ -92,7 +88,7 @@ export default class CouponEntity extends CommonEntity {
   })
   parValue: Decimal;
 
-  @Field({
+  @Field(() => JexlExpressionScalar, {
     description: '优惠券Jexl表达式',
   })
   @Column('varchar', {
@@ -102,6 +98,15 @@ export default class CouponEntity extends CommonEntity {
   })
   @JexlExpression()
   conditions: Expression;
+
+  @Field(() => JexlExpressionScalar, {
+    description: '优惠券商品条件',
+  })
+  @Column('json', {
+    comment: '优惠券商品条件',
+    name: 'sku_conditions',
+  })
+  skuConditions: Partial<GoodsSkuEntity>;
 
   @Field({
     description: '过期时间',
