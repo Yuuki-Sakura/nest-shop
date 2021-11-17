@@ -1,4 +1,5 @@
 import UserAddressEntity from '@/address/entity/user-address.entity';
+import UserCouponEntity from '@/coupon/entity/user-coupon.entity';
 import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
 import {
   CommonEntity,
@@ -217,15 +218,30 @@ export class UserEntity extends CommonEntity {
   })
   favorites: GoodsSkuEntity[];
 
-  @ManyToMany(() => GoodsSkuEntity, (sku) => sku.id)
+  @Field(() => [UserCouponEntity], {
+    description: '用户优惠券',
+  })
+  @ManyToMany(() => UserCouponEntity, (coupon) => coupon.id)
   @JoinTable({
-    name: 'user_visited_sku',
+    name: 'user_coupons',
     joinColumn: {
       name: 'user_id',
     },
     inverseJoinColumn: {
-      name: 'sku_id',
+      name: 'coupon_id',
     },
   })
-  visited: GoodsSkuEntity[];
+  coupons: UserCouponEntity[];
+
+  // @ManyToMany(() => GoodsSkuEntity, (sku) => sku.id)
+  // @JoinTable({
+  //   name: 'user_visited_sku',
+  //   joinColumn: {
+  //     name: 'user_id',
+  //   },
+  //   inverseJoinColumn: {
+  //     name: 'sku_id',
+  //   },
+  // })
+  // visited: GoodsSkuEntity[];
 }

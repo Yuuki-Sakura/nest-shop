@@ -8,30 +8,10 @@ import {
   Timestamp,
 } from '@adachi-sakura/nest-shop-common';
 import { JexlExpressionTransformer } from '@adachi-sakura/nest-shop-common';
-import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Decimal } from 'decimal.js';
 import Expression from 'jexl/dist/Expression';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-
-//优惠券领取类型
-export enum CouponGetType {
-  Manual, //用户手动领取
-  NewUser, //新用户（平台发券时为新注册用户，商户发券为商户首次购买用户）
-}
-
-registerEnumType(CouponGetType, {
-  name: 'CouponGetType',
-  description: '优惠券获取类型',
-  valuesMap: {
-    Manual: {
-      description: '用户手动领取',
-    },
-    NewUser: {
-      description:
-        '新用户（平台发券时为新注册用户，商户发券为商户首次购买用户）',
-    },
-  },
-});
 
 @Entity('coupon')
 @ObjectType('Coupon', {
@@ -72,6 +52,7 @@ export default class CouponEntity extends CommonEntity {
   })
   @Column('int', {
     comment: '优惠券剩余数量',
+    default: 0,
   })
   remain: number;
 
