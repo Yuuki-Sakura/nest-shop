@@ -61,7 +61,7 @@ export default class FreightTemplateEntity extends CommonEntity {
   @Field(() => FreightTemplateType, {
     description: '计费方式',
   })
-  @Column('tinyint', {
+  @Column('smallint', {
     comment: '计费方式',
   })
   type: FreightTemplateType;

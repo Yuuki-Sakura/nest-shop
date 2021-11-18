@@ -1,8 +1,25 @@
-import { UserPointsLogAction } from '@/points';
 import { UserEntity } from '@/user';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+
+export enum UserAmountLogAction {
+  Deductions, //扣除
+  Increase, //增加
+}
+
+registerEnumType(UserAmountLogAction, {
+  name: 'UserPointsLogAction',
+  description: '用户积分操作',
+  valuesMap: {
+    Deductions: {
+      description: '用户操作扣除',
+    },
+    Increase: {
+      description: '增加',
+    },
+  },
+});
 
 @Entity('user_amount_log')
 @ObjectType('UserAmountLog', {
@@ -18,13 +35,13 @@ export default class UserAmountLogEntity extends CommonEntity {
   })
   user: UserEntity;
 
-  @Field(() => UserPointsLogAction, {
+  @Field(() => UserAmountLogAction, {
     description: '用户余额操作',
   })
-  @Column('tinyint', {
+  @Column('smallint', {
     comment: '用户余额操作',
   })
-  action: UserPointsLogAction;
+  action: UserAmountLogAction;
 
   @Column({
     comment: '增加/减少原因',
@@ -34,10 +51,11 @@ export default class UserAmountLogEntity extends CommonEntity {
   @Field(() => Int, {
     description: '扣除/获得多少余额',
   })
-  @Column('int', {
+  @Column('decimal', {
     comment: '扣除/获得多少余额',
-    default: 0,
     unsigned: true,
+    precision: 11,
+    scale: 2,
     name: 'how_much',
   })
   howMuch: number;
@@ -45,9 +63,10 @@ export default class UserAmountLogEntity extends CommonEntity {
   @Field(() => Int, {
     description: '剩余所有可用余额',
   })
-  @Column('int', {
+  @Column('decimal', {
     comment: '剩余所有可用余额',
-    default: 0,
+    precision: 11,
+    scale: 2,
     unsigned: true,
     name: 'remaining_available',
   })

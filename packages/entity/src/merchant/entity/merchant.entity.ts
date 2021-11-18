@@ -2,17 +2,21 @@ import MerchantAddressEntity from '@/address/entity/merchant-address.entity';
 import CouponEntity from '@/coupon/entity/coupon.entity';
 import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
 import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
+import MerchantCategoryEntity, {
+  MerchantCategoryQualification,
+} from '@/merchant/entity/merchant-category.entity';
 import { UserEntity } from '@/user';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import { Decimal } from 'decimal.js';
-import { GraphQLString } from 'graphql';
 import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -66,6 +70,16 @@ registerEnumType(MerchantStatus, {
   },
 });
 
+@ObjectType('MerchantQualification', {
+  description: '商户资质',
+})
+export class MerchantQualification extends MerchantCategoryQualification {
+  @Field({
+    description: '资质图',
+  })
+  image: string;
+}
+
 @Entity('merchant')
 @ObjectType('Merchant', {
   description: '商户信息',
@@ -99,20 +113,36 @@ export default class MerchantEntity extends CommonEntity {
   @Field(() => MerchantType, {
     description: '商户类型',
   })
-  @Column('tinyint', {
+  @Column('smallint', {
     comment: '商户类型',
   })
   type: MerchantType;
 
   @ApiProperty()
-  @Field(() => [GraphQLString], {
+  @Field(() => MerchantCategoryEntity, {
+    description: '商户经营类目',
+  })
+  @ManyToMany(() => MerchantCategoryEntity, (category) => category.id)
+  @JoinTable({
+    name: 'merchant_merchant_category',
+    joinColumn: {
+      name: 'merchant_id',
+    },
+    inverseJoinColumn: {
+      name: 'merchant_category_id',
+    },
+  })
+  category: MerchantCategoryEntity[];
+
+  @ApiProperty()
+  @Field(() => [MerchantQualification], {
     description: '商户资质图片',
   })
-  @Column('simple-json', {
-    comment: '商户资质图片',
-    name: 'qualification_images',
+  @Column('json', {
+    comment: '商户资质',
+    name: 'qualifications',
   })
-  qualificationImages: string[];
+  qualifications: MerchantQualification[];
 
   @ApiProperty()
   @Field({
@@ -200,7 +230,7 @@ export default class MerchantEntity extends CommonEntity {
   @Field(() => MerchantStatus, {
     description: '商户状态',
   })
-  @Column('tinyint', {
+  @Column('smallint', {
     default: MerchantStatus.Normal,
     comment: '商户状态',
   })

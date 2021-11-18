@@ -49,7 +49,7 @@ export default class OrderGoodsRefundRequestEntity extends CommonEntity {
   goods: OrderGoodsEntity;
 
   @Field(() => OrderGoodsRefundRequestStatus)
-  @Column('tinyint', {
+  @Column('smallint', {
     comment: '退款申请状态',
   })
   status: OrderGoodsRefundRequestStatus;

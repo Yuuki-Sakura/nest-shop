@@ -1,9 +1,8 @@
-import { DateScalar } from '@adachi-sakura/nest-shop-common';
+import { DateScalar, DecimalScalar } from '@adachi-sakura/nest-shop-common';
 import { ExceptionFilterProvider } from '@/common/filters/exception.filter';
 import { LoggingInterceptorProvider } from '@/common/interceptors/logging.interceptor';
 import { CorsMiddleware } from '@/common/middlewares/cors.middleware';
 import { OriginMiddleware } from '@/common/middlewares/origin.middleware';
-import { DecimalScalar } from '@adachi-sakura/nest-shop-common/dist/scalars/decimal.scalar';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 //中间件
 import { AppController } from '@/app.controller';
@@ -22,7 +21,7 @@ import { UserModule } from '@/user/user.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: process.env.DATABASE_HOST,
       port: +process.env.DATABASE_PORT,
       username: process.env.DATABASE_USERNAME,

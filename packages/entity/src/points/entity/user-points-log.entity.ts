@@ -49,7 +49,7 @@ export default class UserPointsLogEntity extends CommonEntity {
   @Field(() => UserPointsLogAction, {
     description: '用户积分操作',
   })
-  @Column('tinyint', {
+  @Column('smallint', {
     comment: '用户积分操作',
   })
   action: UserPointsLogAction;

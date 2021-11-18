@@ -61,7 +61,7 @@ export default class GoodsAttributesTemplateAttributesEntity extends CommonEntit
   @Field(() => [GraphQLString], {
     description: '属性可选值',
   })
-  @Column('simple-json', {
+  @Column('json', {
     comment: '属性可选值',
   })
   values: string[];

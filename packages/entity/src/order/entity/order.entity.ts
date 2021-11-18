@@ -266,7 +266,7 @@ export default class OrderEntity extends CommonEntity {
     description: '支付方式',
     nullable: true,
   })
-  @Column('tinyint', {
+  @Column('smallint', {
     comment: '支付方式',
     nullable: true,
     name: 'pay_method',
@@ -289,7 +289,7 @@ export default class OrderEntity extends CommonEntity {
     description: '支付状态',
     nullable: true,
   })
-  @Column('tinyint', {
+  @Column('smallint', {
     comment: '支付状态',
     nullable: true,
     name: 'pay_status',
@@ -312,7 +312,7 @@ export default class OrderEntity extends CommonEntity {
   @Field(() => OrderStatus, {
     description: '订单状态',
   })
-  @Column('tinyint', {
+  @Column('smallint', {
     comment: '订单状态',
     name: 'status',
   })

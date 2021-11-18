@@ -1,12 +1,11 @@
 import MerchantAddressEntity from '@/address/entity/merchant-address.entity';
-import { MerchantType } from '@/merchant';
+import { MerchantQualification, MerchantType } from '@/merchant';
 import { UserEntity } from '@/user';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import { Decimal } from 'decimal.js';
-import { GraphQLString } from 'graphql';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
 @Entity('merchant_request')
@@ -42,20 +41,20 @@ export default class MerchantRequestEntity extends CommonEntity {
   @Field(() => MerchantType, {
     description: '商户类型',
   })
-  @Column('tinyint', {
+  @Column('smallint', {
     comment: '商户类型',
   })
   type: MerchantType;
 
   @ApiProperty()
-  @Field(() => [GraphQLString], {
+  @Field(() => [MerchantQualification], {
     description: '商户资质图片',
   })
-  @Column('simple-json', {
-    comment: '商户资质图片',
-    name: 'qualification_images',
+  @Column('json', {
+    comment: '商户资质',
+    name: 'qualifications',
   })
-  qualificationImages: string[];
+  qualifications: MerchantQualification[];
 
   @ApiProperty()
   @Field({

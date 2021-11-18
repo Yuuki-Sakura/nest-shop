@@ -19,7 +19,7 @@ export default class OrderChangeLogEntity extends CommonEntity {
   @Field({
     description: '订单操作',
   })
-  @Column('tinyint', {
+  @Column({
     comment: '订单操作',
   })
   action: string;
@@ -27,7 +27,7 @@ export default class OrderChangeLogEntity extends CommonEntity {
   @Field({
     description: '操作信息',
   })
-  @Column('tinyint', {
+  @Column({
     comment: '操作信息',
   })
   message: string;

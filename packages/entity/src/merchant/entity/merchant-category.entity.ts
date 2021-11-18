@@ -1,31 +1,44 @@
-import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
-import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
+@ObjectType('MerchantCategoryQualification', {
+  description: '商户类目所需资质',
+})
+export class MerchantCategoryQualification {
+  @Field({
+    description: '资质名称',
+  })
+  name: string;
+
+  @Field({
+    description: '资质详情',
+  })
+  description: string;
+}
+
 @Entity('merchant_category')
 @ObjectType('MerchantCategory', {
-  description: '商户商品分类',
+  description: '商户经营类目',
 })
 export default class MerchantCategoryEntity extends CommonEntity {
   @Field({
-    description: '商户商品分类名称',
+    description: '商户类目名称',
   })
   @Column({
-    comment: '商户商品分类名称',
+    comment: '商户类目名称',
   })
   name: string;
 
   @Field(() => MerchantCategoryEntity, {
-    description: '商户商品父分类',
+    description: '商户父类目',
   })
   @ManyToOne(() => MerchantCategoryEntity, (category) => category.children)
   @JoinColumn({ name: 'parent_id' })
   parent: MerchantCategoryEntity;
 
   @Field(() => [MerchantCategoryEntity], {
-    description: '商户商品子分类',
+    description: '商户子类目',
   })
   @OneToMany(() => MerchantCategoryEntity, (category) => category.parent, {
     cascade: true,
@@ -33,15 +46,11 @@ export default class MerchantCategoryEntity extends CommonEntity {
   })
   children: MerchantCategoryEntity[];
 
-  @Field(() => [GoodsSpuEntity], {
-    description: '分类下spu',
+  @Field(() => [MerchantCategoryQualification], {
+    description: '类目所需资质',
   })
-  @OneToMany(() => GoodsSpuEntity, (spu) => spu.merchantCategory)
-  goodsSpu: GoodsSpuEntity[];
-
-  @Field(() => [GoodsSkuEntity], {
-    description: '分类下sku',
+  @Column('jsonb', {
+    comment: '类目所需资质',
   })
-  @OneToMany(() => GoodsSkuEntity, (sku) => sku.merchantCategory)
-  goodsSku: GoodsSkuEntity[];
+  qualification: MerchantCategoryQualification[];
 }

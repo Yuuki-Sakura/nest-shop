@@ -22,7 +22,7 @@ export default class GoodsCommentEntity extends CommonEntity {
   @Field(() => [GraphQLString], {
     description: '评论图片',
   })
-  @Column('simple-json', {
+  @Column('json', {
     comment: '评论图片',
   })
   images: string[];

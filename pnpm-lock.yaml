@@ -174,6 +174,7 @@ importers:
       passport: ^0.4.1
       passport-jwt: ^4.0.0
       passport-local: ^1.0.0
+      pg: ^8.7.1
       reflect-metadata: ^0.1.13
       rimraf: ^3.0.2
       rxjs: ^7.4.0
@@ -222,11 +223,12 @@ importers:
       passport: registry.npmjs.org/passport/0.4.1
       passport-jwt: registry.npmjs.org/passport-jwt/4.0.0
       passport-local: registry.npmjs.org/passport-local/1.0.0
+      pg: registry.npmjs.org/pg/8.7.1
       reflect-metadata: registry.npmjs.org/reflect-metadata/0.1.13
       rimraf: registry.npmjs.org/rimraf/3.0.2
       rxjs: registry.npmjs.org/rxjs/7.4.0
       swagger-ui-express: registry.npmjs.org/swagger-ui-express/4.1.6
-      typeorm: registry.npmjs.org/typeorm/0.2.39_ioredis@4.28.0+mysql2@2.3.2
+      typeorm: registry.npmjs.org/typeorm/0.2.39_08b33927f9b40a83da7d764562b433ce
     devDependencies:
       '@nestjs/cli': registry.npmjs.org/@nestjs/cli/8.1.4_eslint@7.32.0
       '@nestjs/schematics': registry.npmjs.org/@nestjs/schematics/8.0.4_typescript@4.4.4
@@ -1986,7 +1988,7 @@ packages:
       '@nestjs/core': registry.npmjs.org/@nestjs/core/8.2.0_c34d51c3dc877ce8125ab6fd70ab3fae
       reflect-metadata: registry.npmjs.org/reflect-metadata/0.1.13
       rxjs: registry.npmjs.org/rxjs/7.4.0
-      typeorm: registry.npmjs.org/typeorm/0.2.39_ioredis@4.28.0+mysql2@2.3.2
+      typeorm: registry.npmjs.org/typeorm/0.2.39_08b33927f9b40a83da7d764562b433ce
       uuid: registry.npmjs.org/uuid/8.3.2
     dev: false
 
@@ -3621,6 +3623,13 @@ packages:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/buffer-from/-/buffer-from-1.1.2.tgz}
     name: buffer-from
     version: 1.1.2
+
+  registry.npmjs.org/buffer-writer/2.0.0:
+    resolution: {integrity: sha512-a7ZpuTZU1TRtnwyCNW3I5dc0wWNC3VR9S++Ewyk2HHZdrO3CQJqSpd+95Us590V6AL7JqUAH2IwZ/398PmNFgw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/buffer-writer/-/buffer-writer-2.0.0.tgz}
+    name: buffer-writer
+    version: 2.0.0
+    engines: {node: '>=4'}
+    dev: false
 
   registry.npmjs.org/buffer/5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/buffer/-/buffer-5.7.1.tgz}
@@ -7839,7 +7848,7 @@ packages:
     dependencies:
       '@nestjs/common': registry.npmjs.org/@nestjs/common/8.2.0_43f93dd897e68fe834a23ddd32fb54cc
       chalk: registry.npmjs.org/chalk/4.1.2
-      typeorm: registry.npmjs.org/typeorm/0.2.39_ioredis@4.28.0+mysql2@2.3.2
+      typeorm: registry.npmjs.org/typeorm/0.2.39_08b33927f9b40a83da7d764562b433ce
     dev: false
 
   registry.npmjs.org/no-case/3.0.4:
@@ -8149,6 +8158,12 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
+  registry.npmjs.org/packet-reader/1.0.0:
+    resolution: {integrity: sha512-HAKu/fG3HpHFO0AA8WE8q2g+gBJaZ9MG7fcKk+IJPLTGAD6Psw4443l+9DGRbOIh3/aXr7Phy0TjilYivJo5XQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/packet-reader/-/packet-reader-1.0.0.tgz}
+    name: packet-reader
+    version: 1.0.0
+    dev: false
+
   registry.npmjs.org/parent-module/1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/parent-module/-/parent-module-1.0.1.tgz}
     name: parent-module
@@ -8303,6 +8318,77 @@ packages:
     version: 0.0.1
     dev: false
 
+  registry.npmjs.org/pg-connection-string/2.5.0:
+    resolution: {integrity: sha512-r5o/V/ORTA6TmUnyWZR9nCj1klXCO2CEKNRlVuJptZe85QuhFayC7WeMic7ndayT5IRIR0S0xFxFi2ousartlQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/pg-connection-string/-/pg-connection-string-2.5.0.tgz}
+    name: pg-connection-string
+    version: 2.5.0
+    dev: false
+
+  registry.npmjs.org/pg-int8/1.0.1:
+    resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/pg-int8/-/pg-int8-1.0.1.tgz}
+    name: pg-int8
+    version: 1.0.1
+    engines: {node: '>=4.0.0'}
+    dev: false
+
+  registry.npmjs.org/pg-pool/3.4.1_pg@8.7.1:
+    resolution: {integrity: sha512-TVHxR/gf3MeJRvchgNHxsYsTCHQ+4wm3VIHSS19z8NC0+gioEhq1okDY1sm/TYbfoP6JLFx01s0ShvZ3puP/iQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/pg-pool/-/pg-pool-3.4.1.tgz}
+    id: registry.npmjs.org/pg-pool/3.4.1
+    name: pg-pool
+    version: 3.4.1
+    peerDependencies:
+      pg: '>=8.0'
+    dependencies:
+      pg: registry.npmjs.org/pg/8.7.1
+    dev: false
+
+  registry.npmjs.org/pg-protocol/1.5.0:
+    resolution: {integrity: sha512-muRttij7H8TqRNu/DxrAJQITO4Ac7RmX3Klyr/9mJEOBeIpgnF8f9jAfRz5d3XwQZl5qBjF9gLsUtMPJE0vezQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/pg-protocol/-/pg-protocol-1.5.0.tgz}
+    name: pg-protocol
+    version: 1.5.0
+    dev: false
+
+  registry.npmjs.org/pg-types/2.2.0:
+    resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/pg-types/-/pg-types-2.2.0.tgz}
+    name: pg-types
+    version: 2.2.0
+    engines: {node: '>=4'}
+    dependencies:
+      pg-int8: registry.npmjs.org/pg-int8/1.0.1
+      postgres-array: registry.npmjs.org/postgres-array/2.0.0
+      postgres-bytea: registry.npmjs.org/postgres-bytea/1.0.0
+      postgres-date: registry.npmjs.org/postgres-date/1.0.7
+      postgres-interval: registry.npmjs.org/postgres-interval/1.2.0
+    dev: false
+
+  registry.npmjs.org/pg/8.7.1:
+    resolution: {integrity: sha512-7bdYcv7V6U3KAtWjpQJJBww0UEsWuh4yQ/EjNf2HeO/NnvKjpvhEIe/A/TleP6wtmSKnUnghs5A9jUoK6iDdkA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/pg/-/pg-8.7.1.tgz}
+    name: pg
+    version: 8.7.1
+    engines: {node: '>= 8.0.0'}
+    peerDependencies:
+      pg-native: '>=2.0.0'
+    peerDependenciesMeta:
+      pg-native:
+        optional: true
+    dependencies:
+      buffer-writer: registry.npmjs.org/buffer-writer/2.0.0
+      packet-reader: registry.npmjs.org/packet-reader/1.0.0
+      pg-connection-string: registry.npmjs.org/pg-connection-string/2.5.0
+      pg-pool: registry.npmjs.org/pg-pool/3.4.1_pg@8.7.1
+      pg-protocol: registry.npmjs.org/pg-protocol/1.5.0
+      pg-types: registry.npmjs.org/pg-types/2.2.0
+      pgpass: registry.npmjs.org/pgpass/1.0.4
+    dev: false
+
+  registry.npmjs.org/pgpass/1.0.4:
+    resolution: {integrity: sha512-YmuA56alyBq7M59vxVBfPJrGSozru8QAdoNlWuW3cz8l+UX3cWge0vTvjKhsSHSJpo3Bom8/Mm6hf0TR5GY0+w==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/pgpass/-/pgpass-1.0.4.tgz}
+    name: pgpass
+    version: 1.0.4
+    dependencies:
+      split2: registry.npmjs.org/split2/3.2.2
+    dev: false
+
   registry.npmjs.org/picocolors/1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/picocolors/-/picocolors-1.0.0.tgz}
     name: picocolors
@@ -8339,6 +8425,36 @@ packages:
     version: 8.0.0
     engines: {node: '>=4'}
     dev: true
+
+  registry.npmjs.org/postgres-array/2.0.0:
+    resolution: {integrity: sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/postgres-array/-/postgres-array-2.0.0.tgz}
+    name: postgres-array
+    version: 2.0.0
+    engines: {node: '>=4'}
+    dev: false
+
+  registry.npmjs.org/postgres-bytea/1.0.0:
+    resolution: {integrity: sha1-AntTPAqokOJtFy1Hz5zOzFIazTU=, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/postgres-bytea/-/postgres-bytea-1.0.0.tgz}
+    name: postgres-bytea
+    version: 1.0.0
+    engines: {node: '>=0.10.0'}
+    dev: false
+
+  registry.npmjs.org/postgres-date/1.0.7:
+    resolution: {integrity: sha512-suDmjLVQg78nMK2UZ454hAG+OAW+HQPZ6n++TNDUX+L0+uUlLywnoxJKDou51Zm+zTCjrCl0Nq6J9C5hP9vK/Q==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/postgres-date/-/postgres-date-1.0.7.tgz}
+    name: postgres-date
+    version: 1.0.7
+    engines: {node: '>=0.10.0'}
+    dev: false
+
+  registry.npmjs.org/postgres-interval/1.2.0:
+    resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/postgres-interval/-/postgres-interval-1.2.0.tgz}
+    name: postgres-interval
+    version: 1.2.0
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      xtend: registry.npmjs.org/xtend/4.0.2
+    dev: false
 
   registry.npmjs.org/prelude-ls/1.1.2:
     resolution: {integrity: sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.1.2.tgz}
@@ -9119,6 +9235,14 @@ packages:
     resolution: {integrity: sha1-YvXpRmmBwbeW3Fkpk34RycaSG9A=, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/spawn-command/-/spawn-command-0.0.2-1.tgz}
     name: spawn-command
     version: 0.0.2-1
+    dev: false
+
+  registry.npmjs.org/split2/3.2.2:
+    resolution: {integrity: sha512-9NThjpgZnifTkJpzTZ7Eue85S49QwpNhZTq6GRJwObb6jnLFNGB7Qm73V5HewTROPyxD0C29xqmaI68bQtV+hg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/split2/-/split2-3.2.2.tgz}
+    name: split2
+    version: 3.2.2
+    dependencies:
+      readable-stream: registry.npmjs.org/readable-stream/3.6.0
     dev: false
 
   registry.npmjs.org/sprintf-js/1.0.3:
@@ -9979,82 +10103,7 @@ packages:
       - supports-color
     dev: false
 
-  registry.npmjs.org/typeorm/0.2.39_ioredis@4.28.0:
-    resolution: {integrity: sha512-yQdvDpmmmn8wp1We25V76KIBPYR/lDbymNbGC++Uq8mSRhpHIPnlg26VAT4CF6Ypqx72zn8eqr+/72uSo7HdJQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/typeorm/-/typeorm-0.2.39.tgz}
-    id: registry.npmjs.org/typeorm/0.2.39
-    name: typeorm
-    version: 0.2.39
-    hasBin: true
-    peerDependencies:
-      '@sap/hana-client': '*'
-      better-sqlite3: '*'
-      hdb-pool: '*'
-      ioredis: '*'
-      mongodb: ^3.6.0
-      mssql: '*'
-      mysql2: '*'
-      oracledb: '*'
-      pg: '*'
-      pg-native: '*'
-      pg-query-stream: '*'
-      redis: '*'
-      sql.js: '*'
-      sqlite3: '*'
-      typeorm-aurora-data-api-driver: '*'
-    peerDependenciesMeta:
-      '@sap/hana-client':
-        optional: true
-      better-sqlite3:
-        optional: true
-      hdb-pool:
-        optional: true
-      ioredis:
-        optional: true
-      mongodb:
-        optional: true
-      mssql:
-        optional: true
-      mysql2:
-        optional: true
-      oracledb:
-        optional: true
-      pg:
-        optional: true
-      pg-native:
-        optional: true
-      pg-query-stream:
-        optional: true
-      redis:
-        optional: true
-      sql.js:
-        optional: true
-      sqlite3:
-        optional: true
-      typeorm-aurora-data-api-driver:
-        optional: true
-    dependencies:
-      '@sqltools/formatter': registry.npmjs.org/@sqltools/formatter/1.2.3
-      app-root-path: registry.npmjs.org/app-root-path/3.0.0
-      buffer: registry.npmjs.org/buffer/6.0.3
-      chalk: registry.npmjs.org/chalk/4.1.2
-      cli-highlight: registry.npmjs.org/cli-highlight/2.1.11
-      debug: registry.npmjs.org/debug/4.3.2
-      dotenv: registry.npmjs.org/dotenv/8.6.0
-      glob: registry.npmjs.org/glob/7.2.0
-      ioredis: registry.npmjs.org/ioredis/4.28.0
-      js-yaml: registry.npmjs.org/js-yaml/4.1.0
-      mkdirp: registry.npmjs.org/mkdirp/1.0.4
-      reflect-metadata: registry.npmjs.org/reflect-metadata/0.1.13
-      sha.js: registry.npmjs.org/sha.js/2.4.11
-      tslib: registry.npmjs.org/tslib/2.3.1
-      xml2js: registry.npmjs.org/xml2js/0.4.23
-      yargs: registry.npmjs.org/yargs/17.2.1
-      zen-observable-ts: registry.npmjs.org/zen-observable-ts/1.1.0
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
-  registry.npmjs.org/typeorm/0.2.39_ioredis@4.28.0+mysql2@2.3.2:
+  registry.npmjs.org/typeorm/0.2.39_08b33927f9b40a83da7d764562b433ce:
     resolution: {integrity: sha512-yQdvDpmmmn8wp1We25V76KIBPYR/lDbymNbGC++Uq8mSRhpHIPnlg26VAT4CF6Ypqx72zn8eqr+/72uSo7HdJQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/typeorm/-/typeorm-0.2.39.tgz}
     id: registry.npmjs.org/typeorm/0.2.39
     name: typeorm
@@ -10120,6 +10169,82 @@ packages:
       js-yaml: registry.npmjs.org/js-yaml/4.1.0
       mkdirp: registry.npmjs.org/mkdirp/1.0.4
       mysql2: registry.npmjs.org/mysql2/2.3.2
+      pg: registry.npmjs.org/pg/8.7.1
+      reflect-metadata: registry.npmjs.org/reflect-metadata/0.1.13
+      sha.js: registry.npmjs.org/sha.js/2.4.11
+      tslib: registry.npmjs.org/tslib/2.3.1
+      xml2js: registry.npmjs.org/xml2js/0.4.23
+      yargs: registry.npmjs.org/yargs/17.2.1
+      zen-observable-ts: registry.npmjs.org/zen-observable-ts/1.1.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  registry.npmjs.org/typeorm/0.2.39_ioredis@4.28.0:
+    resolution: {integrity: sha512-yQdvDpmmmn8wp1We25V76KIBPYR/lDbymNbGC++Uq8mSRhpHIPnlg26VAT4CF6Ypqx72zn8eqr+/72uSo7HdJQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/typeorm/-/typeorm-0.2.39.tgz}
+    id: registry.npmjs.org/typeorm/0.2.39
+    name: typeorm
+    version: 0.2.39
+    hasBin: true
+    peerDependencies:
+      '@sap/hana-client': '*'
+      better-sqlite3: '*'
+      hdb-pool: '*'
+      ioredis: '*'
+      mongodb: ^3.6.0
+      mssql: '*'
+      mysql2: '*'
+      oracledb: '*'
+      pg: '*'
+      pg-native: '*'
+      pg-query-stream: '*'
+      redis: '*'
+      sql.js: '*'
+      sqlite3: '*'
+      typeorm-aurora-data-api-driver: '*'
+    peerDependenciesMeta:
+      '@sap/hana-client':
+        optional: true
+      better-sqlite3:
+        optional: true
+      hdb-pool:
+        optional: true
+      ioredis:
+        optional: true
+      mongodb:
+        optional: true
+      mssql:
+        optional: true
+      mysql2:
+        optional: true
+      oracledb:
+        optional: true
+      pg:
+        optional: true
+      pg-native:
+        optional: true
+      pg-query-stream:
+        optional: true
+      redis:
+        optional: true
+      sql.js:
+        optional: true
+      sqlite3:
+        optional: true
+      typeorm-aurora-data-api-driver:
+        optional: true
+    dependencies:
+      '@sqltools/formatter': registry.npmjs.org/@sqltools/formatter/1.2.3
+      app-root-path: registry.npmjs.org/app-root-path/3.0.0
+      buffer: registry.npmjs.org/buffer/6.0.3
+      chalk: registry.npmjs.org/chalk/4.1.2
+      cli-highlight: registry.npmjs.org/cli-highlight/2.1.11
+      debug: registry.npmjs.org/debug/4.3.2
+      dotenv: registry.npmjs.org/dotenv/8.6.0
+      glob: registry.npmjs.org/glob/7.2.0
+      ioredis: registry.npmjs.org/ioredis/4.28.0
+      js-yaml: registry.npmjs.org/js-yaml/4.1.0
+      mkdirp: registry.npmjs.org/mkdirp/1.0.4
       reflect-metadata: registry.npmjs.org/reflect-metadata/0.1.13
       sha.js: registry.npmjs.org/sha.js/2.4.11
       tslib: registry.npmjs.org/tslib/2.3.1

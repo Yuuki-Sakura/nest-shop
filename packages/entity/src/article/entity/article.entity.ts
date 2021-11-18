@@ -11,6 +11,17 @@ export enum PublishStatus {
 
 registerEnumType(PublishStatus, {
   name: 'PublishStatus',
+  valuesMap: {
+    Recycle: {
+      description: '回收站',
+    },
+    Draft: {
+      description: '草稿',
+    },
+    Published: {
+      description: '已发布',
+    },
+  },
 });
 
 @Entity('article')
@@ -27,7 +38,7 @@ export default class ArticleEntity extends CommonEntity {
   @Field({
     description: '概述',
   })
-  @Column('mediumtext', { comment: '概述' })
+  @Column('text', { comment: '概述' })
   summary: string;
 
   @Field({
@@ -41,7 +52,7 @@ export default class ArticleEntity extends CommonEntity {
   @Field({
     description: '文章',
   })
-  @Column('mediumtext', { comment: '文章' })
+  @Column('text', { comment: '文章' })
   body: string;
 
   @Field(() => ArticleCategoryEntity)
@@ -52,7 +63,7 @@ export default class ArticleEntity extends CommonEntity {
   category: ArticleCategoryEntity;
 
   @Field(() => [String])
-  @Column('simple-array')
+  @Column('json')
   tags: string[];
 
   @Field({
@@ -63,7 +74,9 @@ export default class ArticleEntity extends CommonEntity {
   })
   author: string;
 
-  @Field(() => PublishStatus)
-  @Column('simple-enum', { enum: PublishStatus, comment: '发布状态' })
+  @Field(() => PublishStatus, {
+    description: '发布状态',
+  })
+  @Column('smallint', { comment: '发布状态' })
   status: PublishStatus;
 }

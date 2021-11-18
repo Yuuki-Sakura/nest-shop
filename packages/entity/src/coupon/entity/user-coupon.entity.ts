@@ -61,7 +61,7 @@ export default class UserCouponEntity extends CommonEntity {
   @Field(() => CouponGetMethod, {
     description: '优惠券获取方式',
   })
-  @Column('tinyint', {
+  @Column('smallint', {
     comment: '优惠券获取方式',
     name: 'get_method',
   })

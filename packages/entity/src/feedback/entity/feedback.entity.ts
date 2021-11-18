@@ -29,7 +29,7 @@ export default class FeedbackEntity extends CommonEntity {
   @Field(() => [GraphQLString], {
     description: '反馈图片',
   })
-  @Column('simple-json', {
+  @Column('json', {
     comment: '反馈图片',
   })
   images: string[];

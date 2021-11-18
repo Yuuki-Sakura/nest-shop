@@ -1,7 +1,7 @@
 import GoodsCategoryEntity from '@/goods/entity/goods-category.entity';
 import GoodsCommentEntity from '@/goods/entity/goods-comment.entity';
 import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
-import MerchantCategoryEntity from '@/merchant/entity/merchant-category.entity';
+import MerchantGoodsCategoryEntity from '@/merchant/entity/merchant-goods-category.entity';
 import MerchantEntity from '@/merchant/entity/merchant.entity';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
@@ -35,11 +35,11 @@ export default class GoodsSpuEntity extends CommonEntity {
   @JoinColumn({ name: 'category_id' })
   category: GoodsCategoryEntity;
 
-  @ApiProperty({ type: () => [MerchantCategoryEntity] })
-  @Field(() => [MerchantCategoryEntity], {
+  @ApiProperty({ type: () => [MerchantGoodsCategoryEntity] })
+  @Field(() => [MerchantGoodsCategoryEntity], {
     description: 'SKU关联商家分类',
   })
-  @ManyToMany(() => MerchantCategoryEntity, (category) => category.id)
+  @ManyToMany(() => MerchantGoodsCategoryEntity, (category) => category.id)
   @JoinTable({
     name: 'merchant_category_spu',
     joinColumn: {
@@ -49,7 +49,7 @@ export default class GoodsSpuEntity extends CommonEntity {
       name: 'merchant_category_id',
     },
   })
-  merchantCategory: MerchantCategoryEntity[];
+  merchantCategory: MerchantGoodsCategoryEntity[];
 
   @ApiProperty({ type: () => [GoodsSkuEntity] })
   @Field(() => [GoodsSkuEntity], {

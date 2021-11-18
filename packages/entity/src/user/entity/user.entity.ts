@@ -115,7 +115,7 @@ export class UserEntity extends CommonEntity {
   @Field(() => Gender, {
     description: '性别',
   })
-  @Column('tinyint', {
+  @Column('smallint', {
     default: Gender.Secrecy,
     comment: '性别',
   })
@@ -128,7 +128,7 @@ export class UserEntity extends CommonEntity {
   @Field(() => UserStatus, {
     description: '用户状态',
   })
-  @Column('tinyint', {
+  @Column('smallint', {
     default: UserStatus.Active,
     comment: '用户状态',
   })

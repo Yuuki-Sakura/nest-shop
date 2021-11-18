@@ -1,3 +1,4 @@
+import CarrierEntity from '@/carrier/entity/carrier.entity';
 import OrderGoodsEntity from '@/order/entity/order-goods.entity';
 import OrderEntity from '@/order/entity/order.entity';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
@@ -46,19 +47,20 @@ export default class OrderDeliveryInfoEntity extends CommonEntity {
   @Field(() => DeliveryMethod, {
     description: '发货方式',
   })
-  @Column('tinyint', {
+  @Column('smallint', {
     comment: '发货方式',
     name: 'delivery_method',
   })
   deliveryMethod: DeliveryMethod;
 
-  @Field({
+  @Field(() => CarrierEntity, {
     description: '承运人',
   })
-  @Column({
-    comment: '承运人',
+  @ManyToOne(() => CarrierEntity, (carrier) => carrier.id)
+  @JoinColumn({
+    name: 'carrier_id',
   })
-  carrier: string;
+  carrier: CarrierEntity;
 
   @Field({
     description: '快递追踪号码',
