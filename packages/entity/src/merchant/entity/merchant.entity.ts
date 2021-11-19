@@ -213,6 +213,14 @@ export default class MerchantEntity extends CommonEntity {
   })
   guarantee: Decimal;
 
+  @Field({
+    description: '商户账期',
+  })
+  @Column('interval', {
+    comment: '商户账期',
+  })
+  paymentDays: number;
+
   @ApiProperty()
   @Field({
     description: '商户余额',

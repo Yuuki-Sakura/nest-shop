@@ -1,6 +1,7 @@
+import { UserEntity } from '@/user';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 //发票类型
 export enum InvoiceType {
@@ -26,6 +27,15 @@ registerEnumType(InvoiceType, {
   description: '用户发票信息',
 })
 export default class UserInvoiceEntity extends CommonEntity {
+  @Field(() => UserEntity, {
+    description: '发票信息所属用户',
+  })
+  @ManyToOne(() => UserEntity, (user) => user.id)
+  @JoinColumn({
+    name: 'user_id',
+  })
+  user: UserEntity;
+
   @Field(() => InvoiceType)
   @Column('smallint', {
     comment: '发票类型',

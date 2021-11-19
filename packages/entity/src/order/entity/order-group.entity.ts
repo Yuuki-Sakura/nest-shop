@@ -1,3 +1,4 @@
+import UserCouponEntity from '@/coupon/entity/user-coupon.entity';
 import OrderEntity, { PayMethod, PayStatus } from '@/order/entity/order.entity';
 import { UserEntity } from '@/user';
 import {
@@ -9,7 +10,15 @@ import {
 import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Decimal } from 'decimal.js';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 @Entity('order_group')
 @ObjectType('OrderGroup', {
   description: '订单组(用于支付)',
@@ -134,4 +143,19 @@ export default class OrderGroupEntity extends CommonEntity {
     transformer: DecimalTransformer(2),
   })
   payAmount: Decimal;
+
+  @Field(() => UserCouponEntity, {
+    description: '订单组使用优惠券',
+  })
+  @ManyToMany(() => UserCouponEntity, (coupon) => coupon.id)
+  @JoinTable({
+    name: 'order_group_coupons',
+    joinColumn: {
+      name: 'order_group_id',
+    },
+    inverseJoinColumn: {
+      name: 'user_coupon_id',
+    },
+  })
+  coupons: UserCouponEntity[];
 }

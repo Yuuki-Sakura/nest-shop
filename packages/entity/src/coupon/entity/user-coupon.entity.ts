@@ -43,7 +43,7 @@ export default class UserCouponEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '所属用户',
   })
-  @ManyToOne(() => UserEntity, (user) => user.id)
+  @ManyToOne(() => UserEntity, (user) => user.coupons)
   @JoinColumn({
     name: 'user_id',
   })
@@ -52,7 +52,7 @@ export default class UserCouponEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '优惠券',
   })
-  @ManyToOne(() => UserEntity, (user) => user.id)
+  @ManyToOne(() => CouponEntity, (coupon) => coupon.id)
   @JoinColumn({
     name: 'coupon_id',
   })

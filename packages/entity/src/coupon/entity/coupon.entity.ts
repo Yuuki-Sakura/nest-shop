@@ -22,7 +22,7 @@ export default class CouponEntity extends CommonEntity {
     description: '优惠卷关联商户，若为空则为平台券',
     nullable: true,
   })
-  @ManyToOne(() => MerchantEntity, (merchant) => merchant.id, {
+  @ManyToOne(() => MerchantEntity, (merchant) => merchant.coupons, {
     nullable: true,
   })
   @JoinColumn({

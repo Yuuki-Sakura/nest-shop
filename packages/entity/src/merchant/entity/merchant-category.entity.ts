@@ -49,7 +49,7 @@ export default class MerchantCategoryEntity extends CommonEntity {
   @Field(() => [MerchantCategoryQualification], {
     description: '类目所需资质',
   })
-  @Column('jsonb', {
+  @Column('json', {
     comment: '类目所需资质',
   })
   qualification: MerchantCategoryQualification[];

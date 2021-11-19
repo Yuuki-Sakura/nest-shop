@@ -1,6 +1,7 @@
 import UserAddressEntity from '@/address/entity/user-address.entity';
 import UserCouponEntity from '@/coupon/entity/user-coupon.entity';
 import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
+import UserInvoiceEntity from '@/user/entity/user-invoice.entity';
 import {
   CommonEntity,
   Timestamp,
@@ -232,6 +233,12 @@ export class UserEntity extends CommonEntity {
     },
   })
   coupons: UserCouponEntity[];
+
+  @Field(() => UserInvoiceEntity, {
+    description: '用户发票信息',
+  })
+  @OneToMany(() => UserInvoiceEntity, (invoice) => invoice.user)
+  invoice: UserInvoiceEntity[];
 
   // @ManyToMany(() => GoodsSkuEntity, (sku) => sku.id)
   // @JoinTable({

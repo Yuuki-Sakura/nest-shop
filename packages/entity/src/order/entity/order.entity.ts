@@ -1,7 +1,9 @@
 import OrderAddressEntity from '@/address/entity/order-address.entity';
+import UserCouponEntity from '@/coupon/entity/user-coupon.entity';
 import MerchantEntity from '@/merchant/entity/merchant.entity';
 import OrderDeliveryInfoEntity from '@/order/entity/order-delivery-info.entity';
 import OrderGroupEntity from '@/order/entity/order-group.entity';
+import OrderInvoiceEntity from '@/order/entity/order-invoice.entity';
 import { UserEntity } from '@/user';
 import {
   CommonEntity,
@@ -16,6 +18,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -326,4 +330,25 @@ export default class OrderEntity extends CommonEntity {
     eager: true,
   })
   deliveryInfo: OrderDeliveryInfoEntity[];
+
+  @OneToOne(() => OrderInvoiceEntity, (invoice) => invoice.order)
+  @JoinColumn({
+    name: 'order_invoice_id',
+  })
+  invoice: OrderInvoiceEntity;
+
+  @Field(() => UserCouponEntity, {
+    description: '订单使用优惠券',
+  })
+  @ManyToMany(() => UserCouponEntity, (coupon) => coupon.id)
+  @JoinTable({
+    name: 'order_coupons',
+    joinColumn: {
+      name: 'order_id',
+    },
+    inverseJoinColumn: {
+      name: 'user_coupon_id',
+    },
+  })
+  coupons: UserCouponEntity[];
 }

@@ -1,4 +1,5 @@
-import { AppModule } from '@/app.module';
+import { AppConfig } from '@/app.config';
+import { AppModule } from './app.module';
 import { NestApplication, NestFactory, Reflector } from '@nestjs/core';
 import { environment } from '@/app.environment';
 import { TransformInterceptor } from '@/common/interceptors/transform.interceptor';
@@ -8,11 +9,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ClassSerializerInterceptor } from '@nestjs/common';
 import { ValidationPipe } from '@/common/pipes/validation.pipe';
 import { AppLogger } from '@/app.logger';
-import { config } from 'dotenv';
 let logger;
 let app: NestApplication;
-
-config();
 
 // async function init(app: NestApplication) {
 //   const permissionService: PermissionService =
@@ -94,7 +92,8 @@ async function bootstrap() {
     new ClassSerializerInterceptor(new Reflector()),
   );
   app.useGlobalPipes(new ValidationPipe());
-  app.setGlobalPrefix(process.env.SERVER_PREFIX);
+  const config = app.get<AppConfig>(AppConfig);
+  app.setGlobalPrefix(config.server.prefix);
 
   const document = SwaggerModule.createDocument(
     app,
@@ -105,29 +104,30 @@ async function bootstrap() {
       .setVersion('1.0')
       .build(),
   );
-  SwaggerModule.setup(process.env.SWAGGER_PREFIX, app, document);
+  SwaggerModule.setup(config.swagger.prefix, app, document, config.swagger);
 
   // logger = app.get<AppLogger>(AppLogger);
   // logger.setContext('Nest Blog');
   // app.useLogger(logger);
-  await app.listen(process.env.SERVER_PORT);
+  await app.listen(config.server.port);
 }
 
 bootstrap().then(async () => {
+  const config = app.get<AppConfig>(AppConfig);
   // await init(app);
   console.log(
     `Nest Blog Run！at http://localhost:${
-      process.env.SERVER_PORT + process.env.SERVER_PREFIX
+      config.server.port + config.server.prefix
     } env:${environment}`,
   );
   console.log(
     `Swagger is running at http://localhost:${
-      process.env.SERVER_PORT + process.env.SWAGGER_PREFIX
+      config.server.port + config.swagger.prefix
     }`,
   );
   console.log(
     `GraphQL is running at http://localhost:${
-      process.env.SERVER_PORT + process.env.SERVER_PREFIX + '/gql'
+      config.server.port + config.server.prefix + config.graphql.path
     }`,
   );
 });

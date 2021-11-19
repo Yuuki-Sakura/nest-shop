@@ -96,7 +96,7 @@ export default class UserAddressEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '地址关联用户',
   })
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, (user) => user.addresses)
   @JoinColumn({
     name: 'user_id',
   })

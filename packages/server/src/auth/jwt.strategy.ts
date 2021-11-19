@@ -1,3 +1,4 @@
+import { AppConfig } from '@/app.config';
 import { HttpUnauthorizedException } from '@adachi-sakura/nest-shop-common';
 import { UserEntity } from '@adachi-sakura/nest-shop-entity';
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -7,11 +8,14 @@ import { UserService } from '@/user/user.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(private readonly userService: UserService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly appConfig: AppConfig,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_SECRET,
+      secretOrKey: appConfig.jwt.secret,
     });
   }
 

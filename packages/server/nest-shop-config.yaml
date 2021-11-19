@@ -1,0 +1,46 @@
+database:
+  type: 'postgres'
+  host: ''
+  port: 5432
+  username: ''
+  password: ''
+  database: ''
+  synchronize: true
+  entities:
+    - './node_modules/@adachi-sakura/nest-shop-entity/dist/**/*.js'
+  cache:
+    type: 'ioredis'
+    options:
+      port: 6379
+      host: ''
+      password: ''
+redis:
+  closeClient: true
+  config:
+    port: 6379
+    host: ''
+    password: ''
+server:
+  port: 4000
+  prefix: '/api'
+  allowReferer: "zy.ci"
+  allowOrigins:
+    - "https://zy.ci"
+    - "https://admin.zy.ci"
+graphql:
+  debug: true
+  playground: true
+  autoSchemaFile: true
+  installSubscriptionHandlers: true
+  useGlobalPrefix: true
+  path: '/graphql'
+swagger:
+  prefix: '/doc'
+jwt:
+  secret: 'nest_shop_jwt_secret'
+  signOptions:
+    expiresIn: '7200s'
+elasticsearch:
+  node:
+    - 'http://elasticsearch:9200'
+

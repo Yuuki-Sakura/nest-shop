@@ -80,7 +80,7 @@ export default class MerchantAddressEntity extends CommonEntity {
   @Field(() => MerchantEntity, {
     description: '地址关联商户',
   })
-  @OneToOne(() => MerchantEntity)
+  @OneToOne(() => MerchantEntity, (merchant) => merchant.address)
   @JoinColumn({
     name: 'merchant_id',
   })

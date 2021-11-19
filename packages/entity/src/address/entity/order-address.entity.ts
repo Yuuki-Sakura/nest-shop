@@ -8,7 +8,7 @@ import { Entity, JoinColumn, OneToOne } from 'typeorm';
   description: '订单地址',
 })
 export default class OrderAddressEntity extends UserAddressEntity {
-  @OneToOne(() => OrderEntity, (order) => order.id)
+  @OneToOne(() => OrderEntity, (order) => order.address)
   @JoinColumn({
     name: 'order_id',
   })

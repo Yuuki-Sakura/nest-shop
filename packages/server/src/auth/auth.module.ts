@@ -1,3 +1,4 @@
+import { AppConfig } from '@/app.config';
 import { AuthService } from '@/auth/auth.service';
 import { JwtStrategy } from '@/auth/jwt.strategy';
 import { RoleModule } from '@/role/role.module';
@@ -9,9 +10,9 @@ import { PassportModule } from '@nestjs/passport';
 @Module({
   imports: [
     PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: +process.env.JWT_EXPIRES },
+    JwtModule.registerAsync({
+      useFactory: (config: AppConfig) => config.jwt,
+      inject: [AppConfig],
     }),
     UserModule,
     RoleModule,

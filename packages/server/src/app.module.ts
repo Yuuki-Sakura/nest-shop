@@ -1,8 +1,10 @@
+import { AppConfig } from '@/app.config';
 import { DateScalar, DecimalScalar } from '@adachi-sakura/nest-shop-common';
 import { ExceptionFilterProvider } from '@/common/filters/exception.filter';
 import { LoggingInterceptorProvider } from '@/common/interceptors/logging.interceptor';
 import { CorsMiddleware } from '@/common/middlewares/cors.middleware';
 import { OriginMiddleware } from '@/common/middlewares/origin.middleware';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 //中间件
 import { AppController } from '@/app.controller';
@@ -14,38 +16,33 @@ import { isProdMode } from '@/app.environment';
 import { LoggerModule } from '@/app.logger';
 import { GraphQLModule } from '@nestjs/graphql';
 import { UserModule } from '@/user/user.module';
+import { fileLoader, TypedConfigModule } from 'nest-typed-config';
 
 //配置文件
-
 // 业务模块
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DATABASE_HOST,
-      port: +process.env.DATABASE_PORT,
-      username: process.env.DATABASE_USERNAME,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_DATABASE,
-      synchronize: true,
-      // autoLoadEntities: true,
-      entities: ['./node_modules/@adachi-sakura/nest-shop-entity/dist/**/*.js'],
-      logging: !isProdMode,
-      // cache: {
-      //   type: 'ioredis',
-      //   options: {
-      //     host: process.env.REDIS_HOST,
-      //     port: +process.env.REDIS_PORT,
-      //   },
-      // },
+    TypedConfigModule.forRoot({
+      schema: AppConfig,
+      load: fileLoader({
+        basename: 'nest-shop-config',
+      }),
+      validate: (rawConfig: any) => {
+        console.log(rawConfig);
+        return rawConfig;
+      },
     }),
-    GraphQLModule.forRoot({
-      debug: true,
-      playground: true,
-      autoSchemaFile: true,
-      installSubscriptionHandlers: true,
-      useGlobalPrefix: true,
-      path: 'gql',
+    TypeOrmModule.forRootAsync({
+      useFactory: (config: AppConfig) => config.database,
+      inject: [AppConfig],
+    }),
+    GraphQLModule.forRootAsync({
+      useFactory: (config: AppConfig) => config.graphql,
+      inject: [AppConfig],
+    }),
+    RedisModule.forRootAsync({
+      useFactory: (config: AppConfig) => config.redis,
+      inject: [AppConfig],
     }),
     UserModule,
     // AuthModule,

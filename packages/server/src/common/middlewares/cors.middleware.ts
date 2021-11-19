@@ -4,9 +4,11 @@
  * @module middleware/cors
  */
 
+import { AppConfig } from '@/app.config';
 import { Request, Response } from 'express';
 import {
   HttpStatus,
+  Inject,
   Injectable,
   NestMiddleware,
   RequestMethod,
@@ -19,12 +21,15 @@ import { isDevMode } from '@/app.environment';
  */
 @Injectable()
 export class CorsMiddleware implements NestMiddleware {
+  @Inject()
+  appConfig: AppConfig;
+
   use(request: Request, response: Response, next) {
     const getMethod = (method) => RequestMethod[method];
     const origins = request.headers.origin;
     const origin = (Array.isArray(origins) ? origins[0] : origins) || '';
 
-    const allowOrigins = [...JSON.parse(process.env.ALLOW_ORIGINS)];
+    const allowOrigins = [...this.appConfig.server.allowOrigins];
     const allowMethods = [
       RequestMethod.GET,
       RequestMethod.HEAD,
