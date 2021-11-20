@@ -6,6 +6,8 @@ database:
   password: ''
   database: ''
   synchronize: true
+  logging: true
+  maxQueryExecutionTime: -1
   entities:
     - './node_modules/@adachi-sakura/nest-shop-entity/dist/**/*.js'
   cache:
