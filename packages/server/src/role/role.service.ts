@@ -1,5 +1,6 @@
 import { Role } from '@adachi-sakura/nest-shop-entity';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { nanoid } from 'nanoid';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RoleUpdateDto } from '@/role/dto/role-update.dto';

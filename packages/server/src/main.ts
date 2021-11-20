@@ -98,7 +98,7 @@ async function bootstrap() {
             format.timestamp({
               format: 'YYYY-MM-DD HH:mm:ss.SSS A ZZ',
             }),
-            format.ms(),
+            // format.ms(),
             format.printf((info) => {
               const { context, level, timestamp, message, ms, ...meta } = info;
               const nestLikeColorScheme: Record<string, bare.Format> = {

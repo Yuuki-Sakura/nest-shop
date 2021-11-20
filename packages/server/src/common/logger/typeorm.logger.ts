@@ -1,3 +1,4 @@
+import { nanoid } from '@adachi-sakura/nest-shop-common';
 import { Logger, QueryRunner } from 'typeorm';
 import { Logger as NestLogger } from '@nestjs/common';
 export class TypeormLogger implements Logger {
@@ -16,7 +17,12 @@ export class TypeormLogger implements Logger {
   }
 
   logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner): any {
-    this.logger.log(`query: ${query} parameters: ${parameters}`);
+    queryRunner.data.queryId = nanoid(20);
+    queryRunner.data.queryAt = Date.now();
+    this.logger.log(
+      `[query-id: ${queryRunner.data.queryId}] query: ${query}` +
+        (parameters ? ` parameters: ${parameters}` : ''),
+    );
   }
 
   logQueryError(
@@ -25,7 +31,11 @@ export class TypeormLogger implements Logger {
     parameters?: any[],
     queryRunner?: QueryRunner,
   ): any {
-    this.logger.error(`query: ${query} parameters: ${parameters}`, error);
+    this.logger.error(
+      `[query-id: ${queryRunner.data.queryId}] query: ${query}` +
+        (parameters ? ` parameters: ${parameters}` : ''),
+      error,
+    );
   }
 
   logQuerySlow(
@@ -34,7 +44,11 @@ export class TypeormLogger implements Logger {
     parameters?: any[],
     queryRunner?: QueryRunner,
   ): any {
-    this.logger.warn(`query: ${query} parameters: ${parameters} time: ${time}`);
+    this.logger.log(
+      `[query-id: ${queryRunner.data.queryId}] query: ${query} ` +
+        (parameters ? ` parameters: ${parameters}` : '') +
+        ` query-time: ${Date.now() - queryRunner.data.queryAt}ms`,
+    );
   }
 
   logSchemaBuild(message: string, queryRunner?: QueryRunner): any {
