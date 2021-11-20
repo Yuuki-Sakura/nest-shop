@@ -1,4 +1,14 @@
 import { AppConfig } from '@/app.config';
+import clc from 'cli-color';
+import bare from 'cli-color/bare';
+import safeStringify from 'fast-safe-stringify';
+import {
+  utilities,
+  WINSTON_MODULE_NEST_PROVIDER,
+  WinstonModule,
+} from 'nest-winston';
+import { inspect } from 'util';
+import { format, transports } from 'winston';
 import { AppModule } from './app.module';
 import { NestApplication, NestFactory, Reflector } from '@nestjs/core';
 import { environment } from '@/app.environment';
@@ -6,9 +16,9 @@ import { TransformInterceptor } from '@/common/interceptors/transform.intercepto
 import helmet from 'helmet';
 import compression from 'compression';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ClassSerializerInterceptor } from '@nestjs/common';
+import { ClassSerializerInterceptor, Logger } from '@nestjs/common';
 import { ValidationPipe } from '@/common/pipes/validation.pipe';
-import { AppLogger } from '@/app.logger';
+import rTracer from 'cls-rtracer';
 let logger;
 let app: NestApplication;
 
@@ -78,13 +88,69 @@ let app: NestApplication;
 // }
 
 async function bootstrap() {
-  app = await NestFactory.create(AppModule);
+  app = await NestFactory.create(AppModule, {
+    logger: WinstonModule.createLogger({
+      exitOnError: false,
+      transports: [
+        new transports.Console({
+          format: format.combine(
+            // format.colorize(),
+            format.timestamp({
+              format: 'YYYY-MM-DD HH:mm:ss.SSS A ZZ',
+            }),
+            format.ms(),
+            format.printf((info) => {
+              const { context, level, timestamp, message, ms, ...meta } = info;
+              const nestLikeColorScheme: Record<string, bare.Format> = {
+                info: clc.green,
+                error: clc.red,
+                warn: clc.yellow,
+                debug: clc.magentaBright,
+                verbose: clc.cyanBright,
+              };
+              const color =
+                nestLikeColorScheme[level] || ((text: string): string => text);
+
+              const stringifiedMeta = safeStringify(meta);
+              const formattedMeta = inspect(JSON.parse(stringifiedMeta), {
+                colors: true,
+                depth: null,
+              });
+              const requestId = rTracer.id();
+              return (
+                `${clc.yellow(`[Nest Shop]`)} ` +
+                // `[${clc.yellow(
+                //   level.charAt(0).toUpperCase() + level.slice(1),
+                // )}] ` +
+                color(`[${level.toUpperCase()}] `) +
+                ('undefined' !== typeof timestamp
+                  ? clc.green(`[${timestamp}] `)
+                  : '') +
+                ('undefined' !== typeof context
+                  ? `${clc.yellow('[' + context + ']')} `
+                  : '') +
+                ('undefined' !== typeof requestId
+                  ? clc.green(`[request-id: ${requestId}] `)
+                  : '') +
+                `${color(message)} - ` +
+                `${formattedMeta}` +
+                ('undefined' !== typeof ms ? ` ${clc.yellow(ms)}` : '')
+              );
+            }),
+          ),
+        }),
+      ],
+    }),
+  });
+  logger = app.get(Logger);
+  const config = app.get<AppConfig>(AppConfig);
   app.use(
     helmet({
       contentSecurityPolicy:
         process.env.NODE_ENV === 'production' ? undefined : false,
     }),
   );
+  app.use(rTracer.expressMiddleware());
   app.use(compression());
   app.useGlobalInterceptors(
     new TransformInterceptor(new Reflector()),
@@ -92,7 +158,6 @@ async function bootstrap() {
     new ClassSerializerInterceptor(new Reflector()),
   );
   app.useGlobalPipes(new ValidationPipe());
-  const config = app.get<AppConfig>(AppConfig);
   app.setGlobalPrefix(config.server.prefix);
 
   const document = SwaggerModule.createDocument(
@@ -115,17 +180,17 @@ async function bootstrap() {
 bootstrap().then(async () => {
   const config = app.get<AppConfig>(AppConfig);
   // await init(app);
-  console.log(
+  logger.log(
     `Nest Blog Run！at http://localhost:${
       config.server.port + config.server.prefix
     } env:${environment}`,
   );
-  console.log(
+  logger.log(
     `Swagger is running at http://localhost:${
       config.server.port + config.swagger.prefix
     }`,
   );
-  console.log(
+  logger.log(
     `GraphQL is running at http://localhost:${
       config.server.port + config.server.prefix + config.graphql.path
     }`,

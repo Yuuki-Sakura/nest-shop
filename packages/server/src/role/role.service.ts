@@ -1,5 +1,5 @@
 import { Role } from '@adachi-sakura/nest-shop-entity';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RoleUpdateDto } from '@/role/dto/role-update.dto';
@@ -15,6 +15,7 @@ export class RoleService {
     private readonly roleRepository: Repository<Role>,
     private readonly permissionService: PermissionService,
   ) {}
+  private readonly logger = new Logger('RoleService');
 
   findById(id: string) {
     return this.roleRepository.findOne(id, { relations: ['permissions'] });
@@ -32,7 +33,7 @@ export class RoleService {
   }
 
   findAll() {
-    return this.roleRepository.find({ relations: ['permissions'] });
+    return this.roleRepository.find();
   }
 
   find(options?: FindManyOptions<Role>): Promise<Role[]>;

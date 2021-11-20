@@ -1,25 +1,20 @@
 import { AppConfig } from '@/app.config';
-import { DateScalar, DecimalScalar } from '@adachi-sakura/nest-shop-common';
+import { AppController } from '@/app.controller';
 import { ExceptionFilterProvider } from '@/common/filters/exception.filter';
 import { LoggingInterceptorProvider } from '@/common/interceptors/logging.interceptor';
+import { TypeormLogger } from '@/common/logger/typeorm.logger';
 import { CorsMiddleware } from '@/common/middlewares/cors.middleware';
 import { OriginMiddleware } from '@/common/middlewares/origin.middleware';
-import { RedisModule } from '@liaoliaots/nestjs-redis';
-import { MiddlewareConsumer, Module } from '@nestjs/common';
-//中间件
-import { AppController } from '@/app.controller';
-import { AuthModule } from '@/auth/auth.module';
-import { RoleModule } from '@/role/role.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PermissionModule } from '@/permission/permission.module';
-import { isProdMode } from '@/app.environment';
-import { LoggerModule } from '@/app.logger';
-import { GraphQLModule } from '@nestjs/graphql';
 import { UserModule } from '@/user/user.module';
+import { DateScalar, DecimalScalar } from '@adachi-sakura/nest-shop-common';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { Logger, MiddlewareConsumer, Module } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import Ajv, { ErrorObject } from 'ajv';
+import merge from 'deepmerge';
 import { fileLoader, TypedConfigModule } from 'nest-typed-config';
 
-//配置文件
-// 业务模块
 @Module({
   imports: [
     TypedConfigModule.forRoot({
@@ -28,12 +23,56 @@ import { fileLoader, TypedConfigModule } from 'nest-typed-config';
         basename: 'nest-shop-config',
       }),
       validate: (rawConfig: any) => {
-        console.log(rawConfig);
+        const schema = fileLoader({
+          basename: 'nest-shop-config.schema',
+        })();
+        const validate = new Ajv({
+          allowUnionTypes: true,
+          verbose: true,
+        }).compile(schema);
+        validate(rawConfig);
+        if (validate.errors) {
+          throw new Error(
+            TypedConfigModule.getConfigErrorMessage(
+              validate.errors
+                .reduce((prev: ErrorObject[], current) => {
+                  const findIndex = prev.findIndex(
+                    (item) => item.instancePath === current.instancePath,
+                  );
+                  if (findIndex === -1) {
+                    prev.push(current);
+                  } else {
+                    const error = prev[findIndex];
+                    const mergedParams = merge(error.params, current.params);
+                    prev.splice(findIndex, 1, {
+                      ...error,
+                      params: mergedParams,
+                    });
+                  }
+                  return prev;
+                }, [])
+                .map((item) => ({
+                  property: item.instancePath,
+                  value: item.data,
+                  constraints: item.params,
+                })),
+            ),
+          );
+        }
         return rawConfig;
       },
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: (config: AppConfig) => config.database,
+      useFactory: (config: AppConfig) => {
+        console.log({
+          ...config.database,
+          logger: new TypeormLogger(),
+        });
+        return {
+          ...config.database,
+          logger: new TypeormLogger(),
+        };
+      },
       inject: [AppConfig],
     }),
     GraphQLModule.forRootAsync({
@@ -48,9 +87,9 @@ import { fileLoader, TypedConfigModule } from 'nest-typed-config';
     // AuthModule,
     // RoleModule,
     // PermissionModule,
-    LoggerModule,
   ],
   providers: [
+    Logger,
     ExceptionFilterProvider,
     LoggingInterceptorProvider,
     DateScalar,

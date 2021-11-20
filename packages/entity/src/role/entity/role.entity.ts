@@ -33,7 +33,7 @@ export class Role extends CommonEntity {
   @Field(() => [Role], {
     description: '继承角色',
   })
-  @ManyToMany(() => Role, { eager: true })
+  @ManyToMany(() => Role)
   @JoinTable({
     joinColumn: {
       name: 'parent_role_id',

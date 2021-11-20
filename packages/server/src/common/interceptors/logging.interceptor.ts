@@ -10,20 +10,20 @@ import {
   CallHandler,
   ExecutionContext,
   Inject,
+  Logger,
   NestInterceptor,
 } from '@nestjs/common';
 import { isDevMode } from '@/app.environment';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { Response } from 'express';
-import { AppLogger } from '@/app.logger';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
 export class LoggingInterceptor implements NestInterceptor {
-  constructor(
-    @Inject(AppLogger) private readonly logger: AppLogger, // @Inject(HttpLogService) private readonly logService: HttpLogService,
-  ) {}
+  @Inject()
+  private readonly logger: Logger;
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const now = Date.now();
     const gqlContext = GqlExecutionContext.create(context);
     if (gqlContext.getType() == 'graphql') {
       return next.handle();
@@ -32,23 +32,17 @@ export class LoggingInterceptor implements NestInterceptor {
       return next.handle();
     }
     const request = context.switchToHttp().getRequest();
+    this.logger.log(
+      `Request: ${request.method} -> ${request.url} HTTP/${request.httpVersion}`,
+    );
     const response = context.switchToHttp().getResponse<Response>();
     return next.handle().pipe(
       tap(() => {
         this.logger.log(
-          `Response: ${request.method} -> ${request.url} HTTP/${request.httpVersion} ${response.statusCode} ${request.headers['user-agent']}`,
+          `Response: ${request.method} -> ${request.url} time: ${
+            Date.now() - now
+          }ms HTTP/${request.httpVersion} ${response.statusCode}`,
         );
-        // this.logService.create({
-        //   method: request.method,
-        //   url: request.originalUrl,
-        //   status: response.statusCode,
-        //   httpVersion: request.httpVersion,
-        //   userAgent: request.headers['user-agent'],
-        //   host: request.headers['host'],
-        //   ip: request.ip,
-        //   requestTime: new Date(Date.now()),
-        //   headers: request.headers,
-        // });
       }),
     );
   }

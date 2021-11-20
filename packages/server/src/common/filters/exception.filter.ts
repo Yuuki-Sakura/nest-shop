@@ -6,17 +6,16 @@ import {
   HttpException,
   HttpStatus,
   Inject,
+  Logger,
 } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
 import { Response } from 'express';
-import { AppLogger } from '@/app.logger';
 import { GqlArgumentsHost } from '@nestjs/graphql';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  constructor(
-    @Inject(AppLogger) private readonly logger: AppLogger, // @Inject(HttpLogService) private readonly logService: HttpLogService,
-  ) {}
+  @Inject()
+  private readonly logger: Logger;
 
   catch(exception: HttpException, host: ArgumentsHost) {
     const gqlHost = GqlArgumentsHost.create(host);
