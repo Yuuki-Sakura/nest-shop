@@ -4,8 +4,8 @@
  * @module interceptor/logging
  */
 
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 import {
   CallHandler,
   ExecutionContext,
@@ -38,6 +38,10 @@ export class LoggingInterceptor implements NestInterceptor {
     );
     const response = context.switchToHttp().getResponse<Response>();
     return next.handle().pipe(
+      catchError((err) => {
+        console.log(err);
+        return throwError(err);
+      }),
       tap(() => {
         this.logger.log(
           `Response: ${request.method} -> ${request.url} HTTP/${

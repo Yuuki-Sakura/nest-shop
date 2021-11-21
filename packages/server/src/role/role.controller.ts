@@ -5,11 +5,21 @@ import { RoleUpdateDto } from '@/role/dto/role-update.dto';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RoleCreateDto } from '@/role/dto/role-create.dto';
 import { Auth } from '@/auth/auth.utils';
+import { CommonController } from '@/common/controller/common.controller';
+import {
+  AfterInvoke,
+  BeforeInvoke,
+  EnableMethodListener,
+} from '@/common/decorator/enable-method-listener.decorator';
+import rTracer from 'cls-rtracer';
 
 @ApiTags('角色')
 @Controller('role')
-export class RoleController {
-  constructor(private readonly roleService: RoleService) {}
+@EnableMethodListener()
+export class RoleController extends CommonController {
+  constructor(private readonly roleService: RoleService) {
+    super('RoleController');
+  }
 
   @Get()
   @ApiResponse({ type: Role, isArray: true })

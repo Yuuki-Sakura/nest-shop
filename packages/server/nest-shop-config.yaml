@@ -1,10 +1,16 @@
+redis:
+  closeClient: true
+  config: &redis-config
+    port: 6379
+    host: 101.34.66.96
+    password: AhGHNXBFFNKJ
 database:
   type: 'postgres'
-  host: ''
+  host: 101.34.66.96
   port: 5432
-  username: ''
-  password: ''
-  database: ''
+  username: 'nest_shop'
+  password: 'AhGHNXBFFNKJ'
+  database: 'nestshop'
   synchronize: true
   logging: true
   maxQueryExecutionTime: -1
@@ -12,16 +18,7 @@ database:
     - './node_modules/@adachi-sakura/nest-shop-entity/dist/**/*.js'
   cache:
     type: 'ioredis'
-    options:
-      port: 6379
-      host: ''
-      password: ''
-redis:
-  closeClient: true
-  config:
-    port: 6379
-    host: ''
-    password: ''
+    options: *redis-config
 server:
   port: 4000
   prefix: '/api'

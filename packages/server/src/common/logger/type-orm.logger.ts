@@ -1,7 +1,9 @@
 import { nanoid } from '@adachi-sakura/nest-shop-common';
 import { Logger, QueryRunner } from 'typeorm';
-import { Logger as NestLogger } from '@nestjs/common';
-export class TypeormLogger implements Logger {
+import { Injectable, Logger as NestLogger } from '@nestjs/common';
+
+@Injectable()
+export class TypeOrmLogger implements Logger {
   private readonly logger = new NestLogger('TypeORM');
   log(
     level: 'log' | 'info' | 'warn',
@@ -21,7 +23,7 @@ export class TypeormLogger implements Logger {
     queryRunner.data.queryAt = Date.now();
     this.logger.log(
       `[query-id: ${queryRunner.data.queryId}] query: ${query}` +
-        (parameters ? ` parameters: ${parameters}` : ''),
+        (parameters ? ` parameters: ${JSON.stringify(parameters)}` : ''),
     );
   }
 
@@ -33,7 +35,7 @@ export class TypeormLogger implements Logger {
   ): any {
     this.logger.error(
       `[query-id: ${queryRunner.data.queryId}] query: ${query}` +
-        (parameters ? ` parameters: ${parameters}` : ''),
+        (parameters ? ` parameters: ${JSON.stringify(parameters)}` : ''),
       error,
     );
   }
@@ -46,7 +48,7 @@ export class TypeormLogger implements Logger {
   ): any {
     this.logger.log(
       `[query-id: ${queryRunner.data.queryId}] query: ${query} ` +
-        (parameters ? ` parameters: ${parameters}` : '') +
+        (parameters ? ` parameters: ${JSON.stringify(parameters)}` : '') +
         ` query-time: ${Date.now() - queryRunner.data.queryAt}ms`,
     );
   }

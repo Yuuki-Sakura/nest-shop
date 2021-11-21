@@ -2,7 +2,7 @@ import { AppConfig } from '@/app.config';
 import { AppController } from '@/app.controller';
 import { ExceptionFilterProvider } from '@/common/filters/exception.filter';
 import { LoggingInterceptorProvider } from '@/common/interceptors/logging.interceptor';
-import { TypeormLogger } from '@/common/logger/typeorm.logger';
+import { TypeOrmLogger } from '@/common/logger/type-orm.logger';
 import { CorsMiddleware } from '@/common/middlewares/cors.middleware';
 import { OriginMiddleware } from '@/common/middlewares/origin.middleware';
 import { UserModule } from '@/user/user.module';
@@ -14,6 +14,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import Ajv, { ErrorObject } from 'ajv';
 import merge from 'deepmerge';
 import { fileLoader, TypedConfigModule } from 'nest-typed-config';
+import { OpenTelemetryModule } from '@metinseylan/nestjs-opentelemetry';
+import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import { JaegerExporter } from '@opentelemetry/exporter-jaeger';
+import { ModuleRef } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -62,15 +66,25 @@ import { fileLoader, TypedConfigModule } from 'nest-typed-config';
         return rawConfig;
       },
     }),
+    // OpenTelemetryModule.forRootAsync({
+    //   imports: [AppConfig],
+    //   useFactory: (config: AppConfig) => {
+    //     console.log(moduleRef);
+    //     return {
+    //       spanProcessor: new SimpleSpanProcessor(
+    //         new JaegerExporter({
+    //           endpoint: 'http://101.34.66.96:14268/api/traces',
+    //         }),
+    //       ),
+    //     };
+    //   },
+    //   inject: [AppConfig],
+    // }),
     TypeOrmModule.forRootAsync({
       useFactory: (config: AppConfig) => {
-        console.log({
-          ...config.database,
-          logger: new TypeormLogger(),
-        });
         return {
           ...config.database,
-          logger: new TypeormLogger(),
+          logger: new TypeOrmLogger(),
         };
       },
       inject: [AppConfig],
@@ -90,8 +104,8 @@ import { fileLoader, TypedConfigModule } from 'nest-typed-config';
   ],
   providers: [
     Logger,
-    ExceptionFilterProvider,
     LoggingInterceptorProvider,
+    ExceptionFilterProvider,
     DateScalar,
     DecimalScalar,
   ],

@@ -8,15 +8,19 @@ import { RoleCreateDto } from '@/role/dto/role-create.dto';
 import { PermissionService } from '@/permission/permission.service';
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
 import { FindConditions } from 'typeorm/find-options/FindConditions';
+import { CommonService } from '@/common/service/common.service';
+import { EnableMethodListener } from '@/common/decorator/enable-method-listener.decorator';
 
 @Injectable()
-export class RoleService {
+@EnableMethodListener()
+export class RoleService extends CommonService {
   constructor(
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
     private readonly permissionService: PermissionService,
-  ) {}
-  private readonly logger = new Logger('RoleService');
+  ) {
+    super('RoleService');
+  }
 
   findById(id: string) {
     return this.roleRepository.findOne(id, { relations: ['permissions'] });

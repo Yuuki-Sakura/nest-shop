@@ -19,8 +19,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ClassSerializerInterceptor, Logger } from '@nestjs/common';
 import { ValidationPipe } from '@/common/pipes/validation.pipe';
 import rTracer from 'cls-rtracer';
+import { nanoid } from '@adachi-sakura/nest-shop-common/dist';
 let logger;
-let app: NestApplication;
+export let app: NestApplication;
 
 // async function init(app: NestApplication) {
 //   const permissionService: PermissionService =
@@ -150,7 +151,11 @@ async function bootstrap() {
         process.env.NODE_ENV === 'production' ? undefined : false,
     }),
   );
-  app.use(rTracer.expressMiddleware());
+  app.use(
+    rTracer.expressMiddleware({
+      requestIdFactory: () => nanoid(20),
+    }),
+  );
   app.use(compression());
   app.useGlobalInterceptors(
     new TransformInterceptor(new Reflector()),
