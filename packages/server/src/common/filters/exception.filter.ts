@@ -1,4 +1,4 @@
-import { isDevMode } from '@/app.environment';
+import { CommonException } from '@adachi-sakura/nest-shop-common';
 import {
   ArgumentsHost,
   Catch,
@@ -17,51 +17,37 @@ export class HttpExceptionFilter implements ExceptionFilter {
   @Inject()
   private readonly logger: Logger;
 
-  catch(exception: HttpException, host: ArgumentsHost) {
+  catch(
+    exception: HttpException | CommonException | Error,
+    host: ArgumentsHost,
+  ) {
     const gqlHost = GqlArgumentsHost.create(host);
     if (gqlHost['contextType'] == 'graphql') {
       return;
     }
     const response = host.switchToHttp().getResponse<Response>();
     const request = host.switchToHttp().getRequest();
-    const status = exception.getStatus
-      ? exception.getStatus() || HttpStatus.INTERNAL_SERVER_ERROR
-      : HttpStatus.INTERNAL_SERVER_ERROR;
+    let status = HttpStatus.INTERNAL_SERVER_ERROR;
+    if (exception instanceof HttpException) {
+      status = exception.getStatus();
+    }
+    if (exception instanceof CommonException) {
+      if (exception.code) status = exception.code;
+    }
     const stack = exception.stack;
     const data = {
       code: status,
       message: exception.message,
-      stack: undefined,
     };
     if (status === HttpStatus.FORBIDDEN) {
       data.message = '没有权限';
     }
     const content = request.method + ' -> ' + request.url;
     this.logger.error(
-      `Error Response: ${content} HTTP/${request.httpVersion} ${status} ${request.headers['user-agent']}`,
+      `Error Response: ${content} HTTP/${request.httpVersion} ${status}}`,
+      stack,
+      'Response',
     );
-    if (
-      !(
-        status === HttpStatus.NOT_FOUND ||
-        status === HttpStatus.UNAUTHORIZED ||
-        status === HttpStatus.FORBIDDEN
-      ) &&
-      isDevMode
-    ) {
-      data.stack = stack;
-      this.logger.error(stack);
-    }
-    // this.logService.create({
-    //   method: request.method,
-    //   url: request.originalUrl,
-    //   status: status,
-    //   httpVersion: request.httpVersion,
-    //   userAgent: request.headers['user-agent'],
-    //   host: request.headers['host'],
-    //   ip: request.ip,
-    //   requestTime: new Date(Date.now()),
-    //   headers: request.headers,
-    // });
     return response.status(status).jsonp(data);
   }
 }

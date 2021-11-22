@@ -7,7 +7,6 @@
 import { Request, Response } from 'express';
 import { HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
 import { isProdMode } from '@/app.environment';
-import * as TEXT from '@adachi-sakura/nest-shop-common/dist/constants/text.constant';
 
 /**
  * @class OriginMiddleware
@@ -26,7 +25,7 @@ export class OriginMiddleware implements NestMiddleware {
       if (!isVerifiedOrigin && !isVerifiedReferer) {
         return response.status(HttpStatus.UNAUTHORIZED).jsonp({
           code: HttpStatus.UNAUTHORIZED,
-          message: TEXT.HTTP_ANONYMOUS_TEXT,
+          message: 'Disallowed origin or referer',
         });
       }
     }

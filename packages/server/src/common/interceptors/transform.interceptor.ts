@@ -4,6 +4,8 @@
  * @module interceptor/transform
  */
 
+import { CUSTOM_SUCCESS_MESSAGE_METADATA } from '@adachi-sakura/nest-shop-common';
+import { HTTP_CODE_METADATA } from '@nestjs/common/constants';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Reflector } from '@nestjs/core';
@@ -14,8 +16,6 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import * as META from '@adachi-sakura/nest-shop-common/dist/constants/meta.constant';
-import * as TEXT from '@adachi-sakura/nest-shop-common/dist/constants/text.constant';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
 type TResponse<T> = {
@@ -40,21 +40,17 @@ export class TransformInterceptor<T> implements NestInterceptor<T> {
     if (gqlContext.getType() == 'graphql') return next.handle();
     const target = context.getHandler();
     const message =
-      this.reflector.get<string>(META.HTTP_SUCCESS_MESSAGE, target) ||
-      TEXT.HTTP_DEFAULT_SUCCESS_TEXT;
-    const statusCode = this.reflector.get<HttpStatus>(
-      META.HTTP_ERROR_CODE,
-      target,
-    );
+      this.reflector.get<string>(CUSTOM_SUCCESS_MESSAGE_METADATA, target) ||
+      'success';
+    const statusCode =
+      this.reflector.get<HttpStatus>(HTTP_CODE_METADATA, target) ||
+      context.switchToHttp().getResponse().statusCode;
     return next.handle().pipe(
-      map((data: any) => {
-        const isString = typeof data === 'string';
-        return {
-          code: statusCode || context.switchToHttp().getResponse().statusCode,
-          message: isString ? data : message,
-          data: !isString ? data : undefined,
-        };
-      }),
+      map((data: T) => ({
+        code: statusCode,
+        message: message,
+        data,
+      })),
     );
   }
 }

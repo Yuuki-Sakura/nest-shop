@@ -1,6 +1,9 @@
-import { HttpBadRequestException } from '@adachi-sakura/nest-shop-common';
 import { UserEntity, UserRegisterDto } from '@adachi-sakura/nest-shop-entity';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { encryptPassword } from '@/auth/auth.utils';
 
@@ -20,9 +23,9 @@ export class UserRepository extends Repository<UserEntity> {
       throw new BadRequestException(`用户名：'${user.username}' 已被使用`);
     }
     const password = await encryptPassword(user.password);
-    const result = await this.save({ ...new UserEntity(), ...user, password });
+    const result = await this.save(this.create({ ...user, password }));
     if (!result) {
-      throw new HttpBadRequestException('注册失败');
+      throw new InternalServerErrorException('注册失败');
     } else {
       return result;
     }

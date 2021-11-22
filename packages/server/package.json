@@ -51,7 +51,7 @@
     "ajv": "^8.8.1",
     "apollo-server-express": "^3.5.0",
     "argon2": "^0.28.2",
-    "class-transformer": "^0.4.0",
+    "class-transformer": "0.4.0",
     "class-validator": "^0.13.1",
     "cli-color": "^2.0.1",
     "cls-rtracer": "^2.6.0",

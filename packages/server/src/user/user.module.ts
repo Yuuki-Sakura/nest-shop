@@ -8,7 +8,11 @@ import { AuthModule } from '@/auth/auth.module';
 import { RoleModule } from '@/role/role.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserRepository]), AuthModule, RoleModule],
+  imports: [
+    TypeOrmModule.forFeature([UserRepository]),
+    forwardRef(() => AuthModule),
+    RoleModule,
+  ],
   controllers: [UserController],
   providers: [UserService, UserResolver],
   exports: [UserService],

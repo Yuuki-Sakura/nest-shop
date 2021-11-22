@@ -2,11 +2,11 @@ redis:
   closeClient: true
   config: &redis-config
     port: 6379
-    host: 101.34.66.96
-    password: AhGHNXBFFNKJ
+    host: '101.34.66.96'
+    password: 'AhGHNXBFFNKJ'
 database:
   type: 'postgres'
-  host: 101.34.66.96
+  host: '101.34.66.96'
   port: 5432
   username: 'nest_shop'
   password: 'AhGHNXBFFNKJ'
@@ -22,7 +22,7 @@ database:
 server:
   port: 4000
   prefix: '/api'
-  allowReferer: "zy.ci"
+  allowReferer: 'zy.ci'
   allowOrigins:
     - "https://zy.ci"
     - "https://admin.zy.ci"

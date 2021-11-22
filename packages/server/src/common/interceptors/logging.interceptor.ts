@@ -32,6 +32,7 @@ export class LoggingInterceptor implements NestInterceptor {
       return next.handle();
     }
     const request = context.switchToHttp().getRequest();
+    request.requestAt = Date.now();
     this.logger.log(
       `Request: ${request.method} -> ${request.url} HTTP/${request.httpVersion}`,
       'Request',

@@ -2,11 +2,7 @@ import { AppConfig } from '@/app.config';
 import clc from 'cli-color';
 import bare from 'cli-color/bare';
 import safeStringify from 'fast-safe-stringify';
-import {
-  utilities,
-  WINSTON_MODULE_NEST_PROVIDER,
-  WinstonModule,
-} from 'nest-winston';
+import { WinstonModule } from 'nest-winston';
 import { inspect } from 'util';
 import { format, transports } from 'winston';
 import { AppModule } from './app.module';
@@ -19,9 +15,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ClassSerializerInterceptor, Logger } from '@nestjs/common';
 import { ValidationPipe } from '@/common/pipes/validation.pipe';
 import rTracer from 'cls-rtracer';
-import { nanoid } from '@adachi-sakura/nest-shop-common/dist';
-let logger;
-export let app: NestApplication;
+import { nanoid } from '@adachi-sakura/nest-shop-common';
+let app: NestApplication;
 
 // async function init(app: NestApplication) {
 //   const permissionService: PermissionService =
@@ -143,7 +138,6 @@ async function bootstrap() {
       ],
     }),
   });
-  logger = app.get(Logger);
   const config = app.get<AppConfig>(AppConfig);
   app.use(
     helmet({
@@ -179,10 +173,11 @@ async function bootstrap() {
   // logger = app.get<AppLogger>(AppLogger);
   // logger.setContext('Nest Blog');
   // app.useLogger(logger);
-  await app.listen(config.server.port);
+  return await app.listen(config.server.port);
 }
 
 bootstrap().then(async () => {
+  const logger = app.get<Logger>(Logger);
   const config = app.get<AppConfig>(AppConfig);
   // await init(app);
   logger.log(

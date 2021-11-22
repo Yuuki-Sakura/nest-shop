@@ -1,10 +1,13 @@
 import { AppConfig } from '@/app.config';
 import { AppController } from '@/app.controller';
+import { AuthModule } from '@/auth/auth.module';
 import { ExceptionFilterProvider } from '@/common/filters/exception.filter';
 import { LoggingInterceptorProvider } from '@/common/interceptors/logging.interceptor';
 import { TypeOrmLogger } from '@/common/logger/type-orm.logger';
 import { CorsMiddleware } from '@/common/middlewares/cors.middleware';
 import { OriginMiddleware } from '@/common/middlewares/origin.middleware';
+import { PermissionModule } from '@/permission/permission.module';
+import { RoleModule } from '@/role/role.module';
 import { UserModule } from '@/user/user.module';
 import { DateScalar, DecimalScalar } from '@adachi-sakura/nest-shop-common';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
@@ -17,7 +20,6 @@ import { fileLoader, TypedConfigModule } from 'nest-typed-config';
 import { OpenTelemetryModule } from '@metinseylan/nestjs-opentelemetry';
 import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { JaegerExporter } from '@opentelemetry/exporter-jaeger';
-import { ModuleRef } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -69,7 +71,6 @@ import { ModuleRef } from '@nestjs/core';
     // OpenTelemetryModule.forRootAsync({
     //   imports: [AppConfig],
     //   useFactory: (config: AppConfig) => {
-    //     console.log(moduleRef);
     //     return {
     //       spanProcessor: new SimpleSpanProcessor(
     //         new JaegerExporter({
@@ -98,9 +99,9 @@ import { ModuleRef } from '@nestjs/core';
       inject: [AppConfig],
     }),
     UserModule,
-    // AuthModule,
-    // RoleModule,
-    // PermissionModule,
+    AuthModule,
+    RoleModule,
+    PermissionModule,
   ],
   providers: [
     Logger,

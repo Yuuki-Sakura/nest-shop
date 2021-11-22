@@ -5,24 +5,23 @@ import { Injectable, Logger as NestLogger } from '@nestjs/common';
 @Injectable()
 export class TypeOrmLogger implements Logger {
   private readonly logger = new NestLogger('TypeORM');
-  log(
-    level: 'log' | 'info' | 'warn',
-    message: any,
-    queryRunner?: QueryRunner,
-  ): any {
+  log(level: 'log' | 'info' | 'warn', message: any): any {
     if (level === 'info') level = 'log';
     this.logger[level](message);
   }
 
-  logMigration(message: string, queryRunner?: QueryRunner): any {
+  logMigration(message: string): any {
     this.logger.log(message);
   }
 
   logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner): any {
-    queryRunner.data.queryId = nanoid(20);
-    queryRunner.data.queryAt = Date.now();
+    if (queryRunner) {
+      queryRunner.data.queryId = nanoid(20);
+      queryRunner.data.queryAt = Date.now();
+    }
     this.logger.log(
-      `[query-id: ${queryRunner.data.queryId}] query: ${query}` +
+      (!queryRunner ? '' : `[query-id: ${queryRunner.data.queryId}] `) +
+        `query: ${query}` +
         (parameters ? ` parameters: ${JSON.stringify(parameters)}` : ''),
     );
   }
@@ -34,7 +33,8 @@ export class TypeOrmLogger implements Logger {
     queryRunner?: QueryRunner,
   ): any {
     this.logger.error(
-      `[query-id: ${queryRunner.data.queryId}] query: ${query}` +
+      (!queryRunner ? '' : `[query-id: ${queryRunner.data.queryId}] `) +
+        `query: ${query}` +
         (parameters ? ` parameters: ${JSON.stringify(parameters)}` : ''),
       error,
     );
@@ -47,13 +47,14 @@ export class TypeOrmLogger implements Logger {
     queryRunner?: QueryRunner,
   ): any {
     this.logger.log(
-      `[query-id: ${queryRunner.data.queryId}] query: ${query} ` +
+      (!queryRunner ? '' : `[query-id: ${queryRunner.data.queryId}] `) +
+        `query: ${query}` +
         (parameters ? ` parameters: ${JSON.stringify(parameters)}` : '') +
         ` query-time: ${Date.now() - queryRunner.data.queryAt}ms`,
     );
   }
 
-  logSchemaBuild(message: string, queryRunner?: QueryRunner): any {
+  logSchemaBuild(message: string): any {
     this.logger.log(message);
   }
 }
