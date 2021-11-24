@@ -7,7 +7,7 @@ export class UserLoginDto {
   @Field()
   @ApiProperty()
   @IsNotEmpty()
-  usernameOrEmail: string;
+  phoneOrEmail: string;
 
   @Field()
   @ApiProperty()

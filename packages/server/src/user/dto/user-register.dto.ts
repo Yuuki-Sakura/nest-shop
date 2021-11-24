@@ -1,15 +1,14 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsPhoneNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UserRegisterDto {
   @ApiProperty()
-  @IsNotEmpty()
-  readonly username: string;
+  @IsEmail()
+  readonly email?: string;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsEmail({}, { message: '邮箱格式错误' })
-  readonly email: string;
+  @IsPhoneNumber()
+  readonly phone?: string;
 
   @ApiProperty()
   @IsNotEmpty()

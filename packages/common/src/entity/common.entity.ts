@@ -15,7 +15,9 @@ import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class CommonEntity {
   @Field(() => ID)
-  @ApiProperty()
+  @ApiProperty({
+    readOnly: true,
+  })
   @PrimaryColumn({
     type: 'varchar',
     length: '11',
@@ -25,7 +27,10 @@ export class CommonEntity {
   @Field({
     description: '创建时间',
   })
-  @ApiProperty()
+  @ApiProperty({
+    readOnly: true,
+    description: '创建时间',
+  })
   @CreateDateColumn({
     type: 'timestamp',
     comment: '创建时间',
@@ -37,7 +42,11 @@ export class CommonEntity {
   @Field({
     description: '更新时间',
   })
-  @ApiProperty()
+  @ApiProperty({
+    nullable: true,
+    readOnly: true,
+    description: '更新时间',
+  })
   @UpdateDateColumn({
     type: 'timestamp',
     comment: '更新时间',
@@ -50,7 +59,11 @@ export class CommonEntity {
     description: '删除时间',
     nullable: true,
   })
-  @ApiProperty()
+  @ApiProperty({
+    nullable: true,
+    readOnly: true,
+    description: '删除时间',
+  })
   @DeleteDateColumn({
     type: 'timestamp',
     comment: '删除时间',
@@ -62,14 +75,20 @@ export class CommonEntity {
   @Field(() => Int, {
     description: '排序编号',
   })
-  @ApiProperty()
+  @ApiProperty({
+    description: '排序编号',
+    readOnly: true,
+  })
   @Column({ default: 0, comment: '排序编号' })
   sort: number;
 
   @Field({
     description: '是否隐藏',
   })
-  @ApiProperty()
+  @ApiProperty({
+    description: '是否隐藏',
+    readOnly: true,
+  })
   @Column('boolean', { default: false, name: 'is_hidden', comment: '是否隐藏' })
   isHidden: boolean;
 }

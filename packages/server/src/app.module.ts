@@ -3,6 +3,7 @@ import { AppController } from '@/app.controller';
 import { AuthModule } from '@/auth/auth.module';
 import { ExceptionFilterProvider } from '@/common/filters/exception.filter';
 import { LoggingInterceptorProvider } from '@/common/interceptors/logging.interceptor';
+import { TransformInterceptorProvider } from '@/common/interceptors/transform.interceptor';
 import { TypeOrmLogger } from '@/common/logger/type-orm.logger';
 import { CorsMiddleware } from '@/common/middlewares/cors.middleware';
 import { OriginMiddleware } from '@/common/middlewares/origin.middleware';
@@ -11,15 +12,20 @@ import { RoleModule } from '@/role/role.module';
 import { UserModule } from '@/user/user.module';
 import { DateScalar, DecimalScalar } from '@adachi-sakura/nest-shop-common';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { BullModule } from '@nestjs/bull';
 import { Logger, MiddlewareConsumer, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import Ajv, { ErrorObject } from 'ajv';
 import merge from 'deepmerge';
+import { RedisOptions } from 'ioredis';
 import { fileLoader, TypedConfigModule } from 'nest-typed-config';
 import { OpenTelemetryModule } from '@metinseylan/nestjs-opentelemetry';
 import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { JaegerExporter } from '@opentelemetry/exporter-jaeger';
+import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
+import path from 'path';
 
 @Module({
   imports: [
@@ -68,6 +74,14 @@ import { JaegerExporter } from '@opentelemetry/exporter-jaeger';
         return rawConfig;
       },
     }),
+    I18nModule.forRoot({
+      fallbackLanguage: 'zh-CN',
+      parser: I18nJsonParser,
+      parserOptions: {
+        path: path.join(process.cwd(), '/i18n/'),
+        watch: true,
+      },
+    }),
     // OpenTelemetryModule.forRootAsync({
     //   imports: [AppConfig],
     //   useFactory: (config: AppConfig) => {
@@ -98,6 +112,13 @@ import { JaegerExporter } from '@opentelemetry/exporter-jaeger';
       useFactory: (config: AppConfig) => config.redis,
       inject: [AppConfig],
     }),
+    ScheduleModule.forRoot(),
+    BullModule.forRootAsync({
+      useFactory: (config: AppConfig) => ({
+        redis: config.redis.config as RedisOptions,
+      }),
+      inject: [AppConfig],
+    }),
     UserModule,
     AuthModule,
     RoleModule,
@@ -106,6 +127,7 @@ import { JaegerExporter } from '@opentelemetry/exporter-jaeger';
   providers: [
     Logger,
     LoggingInterceptorProvider,
+    TransformInterceptorProvider,
     ExceptionFilterProvider,
     DateScalar,
     DecimalScalar,

@@ -1,13 +1,10 @@
 import { AuthService } from '@/auth/auth.service';
-import { verifyPassword } from '@/auth/auth.utils';
+import { encryptPassword, verifyPassword } from '@/auth/auth.utils';
 import { create } from '@/common/utils/create.util';
-import { UserLoginDto, UserLoginResultDto } from '@/user/dto';
+import { UserLoginDto, UserLoginResultDto, UserRegisterDto } from '@/user/dto';
 import { CommonException } from '@adachi-sakura/nest-shop-common';
-import {
-  UserEntity,
-  UserRegisterDto,
-  UserUpdateDto,
-} from '@adachi-sakura/nest-shop-entity';
+import { UserEntity } from '@adachi-sakura/nest-shop-entity';
+import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import {
   BadRequestException,
   HttpStatus,
@@ -17,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { UserRepository } from '@/user/user.repository';
 import { RoleService } from '@/role/role.service';
+import { Redis } from 'ioredis';
 
 @Injectable()
 export class UserService {
@@ -29,6 +27,9 @@ export class UserService {
   @Inject(RoleService)
   private readonly roleService: RoleService;
 
+  @InjectRedis()
+  private readonly redis: Redis;
+
   async findAll() {
     return await this.userRepository.find({});
   }
@@ -37,66 +38,39 @@ export class UserService {
     return this.userRepository.findOne(id);
   }
 
-  async findOneByUsernameOrEmail(username: string) {
-    const user = await this.userRepository.findOneByUsernameOrEmail(username);
+  async findOneByPhoneOrEmail(phoneOrEmail: string) {
+    const user = await this.userRepository.findOneByPhoneOrEmail(phoneOrEmail);
     if (!user) {
-      throw new NotFoundException('用户名或邮箱无效');
+      throw new NotFoundException('手机号或邮箱无效');
     }
     return user;
   }
 
-  async update(
-    id: string,
-    user:
-      | (UserUpdateDto & { articleIds?: string[]; roleIds?: string[] })
-      | UserEntity,
-  ) {
-    const user1 = await this.userRepository.findOne(id);
-    if (!user1) throw new BadRequestException('用户id无效');
-    if (!(user instanceof UserEntity)) {
-      if (!user1.roles) user1.roles = [];
-      if (user.roleIds) {
-        const roles = await this.roleService.findByIds(user.roleIds);
-        // user1.roles.push(...roles);
-        // await this.redisService.set(id + '-roles', user1.roles);
-      }
-    }
-    return await this.userRepository.save(user);
-  }
-
-  async login({ usernameOrEmail, password }: UserLoginDto) {
-    const user = await this.userRepository
-      .createQueryBuilder('user')
-      .where('user.username = :usernameOrEmail', { usernameOrEmail })
-      .orWhere('user.email = :usernameOrEmail', { usernameOrEmail })
-      .leftJoinAndSelect('user.roles', 'roles')
-      .leftJoinAndSelect('roles.role', 'role')
-      .leftJoinAndSelect('role.extends', 'role_extends')
-      .leftJoinAndSelect('role.permissions', 'role_permissions')
-      .leftJoinAndSelect('user.permissions', 'permissions')
-      .getOne();
-    if (!user) {
-      throw new CommonException('用户名或邮箱无效', HttpStatus.NOT_FOUND);
-    }
+  async login({ phoneOrEmail, password }: UserLoginDto) {
+    const user = await this.findOneByPhoneOrEmail(phoneOrEmail);
     if (!(await verifyPassword(user.password, password))) {
-      throw new CommonException('用户名或密码错误', HttpStatus.BAD_REQUEST);
+      throw new CommonException(
+        { key: 'user.login.accountOrPasswordFail' },
+        HttpStatus.BAD_REQUEST,
+      );
     }
     const token = this.authService.signToken(user);
     return create(UserLoginResultDto, { ...user, token });
   }
 
-  register(user: UserRegisterDto) {
-    return this.userRepository.register(user);
+  async register(registerDto: UserRegisterDto): Promise<void> {
+    if (registerDto.phone && registerDto.email) {
+    }
+    const password = await encryptPassword(registerDto.password);
+    const result = await this.userRepository.save(
+      this.userRepository.create({ ...registerDto, password }),
+    );
+    if (!result) {
+      throw new CommonException({ key: 'user.register.fail' });
+    }
   }
 
   logout(user: UserEntity, token: string) {
-    // return this.redisService
-    //   .getClient()
-    //   .set(
-    //     'expired-token-' + createHash('sha1').update(token).digest('hex'),
-    //     token,
-    //     'EX',
-    //     +process.env.JWT_EXPIRES,
-    //   );
+    return this.redis.zadd('expired-token', Date.now(), token);
   }
 }

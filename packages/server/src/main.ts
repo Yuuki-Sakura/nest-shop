@@ -8,11 +8,14 @@ import { format, transports } from 'winston';
 import { AppModule } from './app.module';
 import { NestApplication, NestFactory, Reflector } from '@nestjs/core';
 import { environment } from '@/app.environment';
-import { TransformInterceptor } from '@/common/interceptors/transform.interceptor';
 import helmet from 'helmet';
 import compression from 'compression';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ClassSerializerInterceptor, Logger } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Logger,
+  VersioningType,
+} from '@nestjs/common';
 import { ValidationPipe } from '@/common/pipes/validation.pipe';
 import rTracer from 'cls-rtracer';
 import { nanoid } from '@adachi-sakura/nest-shop-common';
@@ -139,6 +142,14 @@ async function bootstrap() {
     }),
   });
   const config = app.get<AppConfig>(AppConfig);
+  app.enableVersioning({
+    type: VersioningType.URI,
+    prefix: false,
+  });
+  app.use((req, res, next) => {
+    req.requestAt = Date.now();
+    next();
+  });
   app.use(
     helmet({
       contentSecurityPolicy:
@@ -151,11 +162,7 @@ async function bootstrap() {
     }),
   );
   app.use(compression());
-  app.useGlobalInterceptors(
-    new TransformInterceptor(new Reflector()),
-    // new LoggingInterceptor(logger),
-    new ClassSerializerInterceptor(new Reflector()),
-  );
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(new Reflector()));
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix(config.server.prefix);
 
@@ -181,18 +188,21 @@ bootstrap().then(async () => {
   const config = app.get<AppConfig>(AppConfig);
   // await init(app);
   logger.log(
-    `Nest Blog Run！at http://localhost:${
+    `Nest Shop Run！at http://localhost:${
       config.server.port + config.server.prefix
     } env:${environment}`,
+    'NestApplication',
   );
   logger.log(
     `Swagger is running at http://localhost:${
       config.server.port + config.swagger.prefix
     }`,
+    'NestApplication',
   );
   logger.log(
     `GraphQL is running at http://localhost:${
       config.server.port + config.server.prefix + config.graphql.path
     }`,
+    'NestApplication',
   );
 });

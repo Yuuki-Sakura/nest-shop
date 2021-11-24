@@ -13,7 +13,7 @@ import UserDeviceEntity from '@/user/entity/user-device.entity';
 import UserPermission from '@/user/entity/user-permission.entity';
 import UserRole from '@/user/entity/user-role.entity';
 import { Exclude } from 'class-transformer';
-import { IsEmail } from 'class-validator';
+import { IsEmail, IsPhoneNumber, IsUrl } from 'class-validator';
 import { Decimal } from 'decimal.js';
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 
@@ -66,16 +66,6 @@ registerEnumType(UserStatus, {
 })
 export class UserEntity extends CommonEntity {
   @Field({
-    description: '用户名',
-  })
-  @Column({
-    length: 500,
-    comment: '用户名',
-    unique: true,
-  })
-  username: string = nanoid(10);
-
-  @Field({
     description: '用户昵称',
   })
   @Column({ length: 500, comment: '用户昵称' })
@@ -85,13 +75,14 @@ export class UserEntity extends CommonEntity {
     description: '邮箱',
   })
   @IsEmail()
-  @Column({ length: 50, nullable: true, comment: '邮箱' })
+  @Column({ length: 50, nullable: true, comment: '邮箱', unique: true })
   email: string;
 
   @Field({
     description: '手机号',
   })
-  @Column({ comment: '手机号', unique: true })
+  @IsPhoneNumber()
+  @Column({ comment: '手机号', unique: true, nullable: true })
   phone: string;
 
   @Column({ length: 256, comment: '密码' })
@@ -110,6 +101,7 @@ export class UserEntity extends CommonEntity {
   @Field({
     description: '头像',
   })
+  @IsUrl()
   @Column({ length: 500, default: '', comment: '头像' })
   avatar: string;
 

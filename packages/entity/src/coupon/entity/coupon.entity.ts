@@ -80,8 +80,9 @@ export default class CouponEntity extends CommonEntity {
   @JexlExpression()
   conditions: Expression;
 
-  @Field(() => JexlExpressionScalar, {
+  @Field(() => GoodsSkuEntity, {
     description: '优惠券商品条件',
+    nullable: 'itemsAndList',
   })
   @Column('json', {
     comment: '优惠券商品条件',

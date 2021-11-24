@@ -4,8 +4,8 @@
  * @module interceptor/logging
  */
 
-import { Observable, throwError } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import {
   CallHandler,
   ExecutionContext,
@@ -23,7 +23,6 @@ export class LoggingInterceptor implements NestInterceptor {
   private readonly logger: Logger;
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const now = Date.now();
     const gqlContext = GqlExecutionContext.create(context);
     if (gqlContext.getType() == 'graphql') {
       return next.handle();
@@ -32,22 +31,19 @@ export class LoggingInterceptor implements NestInterceptor {
       return next.handle();
     }
     const request = context.switchToHttp().getRequest();
-    request.requestAt = Date.now();
     this.logger.log(
-      `Request: ${request.method} -> ${request.url} HTTP/${request.httpVersion}`,
+      `[request-at: ${request.requestAt}] Request: [${request.method} -> ${request.url}]`,
       'Request',
     );
     const response = context.switchToHttp().getResponse<Response>();
     return next.handle().pipe(
-      catchError((err) => {
-        console.log(err);
-        return throwError(err);
-      }),
       tap(() => {
         this.logger.log(
-          `Response: ${request.method} -> ${request.url} HTTP/${
-            request.httpVersion
-          } ${response.statusCode} time: ${Date.now() - now}ms`,
+          `[request-at: ${request.requestAt}] Response: [${request.method} -> ${
+            request.url
+          }] code: ${response.statusCode} time: ${
+            Date.now() - request.requestAt
+          }ms`,
           'Response',
         );
       }),
