@@ -1,4 +1,4 @@
-import { RedisModuleOptions } from '@liaoliaots/nestjs-redis';
+import { RedisModuleOptions } from '@adachi-sakura/nestjs-redis';
 import { NestApplicationOptions } from '@nestjs/common';
 import { ElasticsearchModuleOptions } from '@nestjs/elasticsearch';
 import { GqlModuleOptions } from '@nestjs/graphql';

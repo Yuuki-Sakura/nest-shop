@@ -27,6 +27,11 @@ export class RoleController extends CommonController {
     return this.roleService.findAll();
   }
 
+  @Get('test')
+  async test() {
+    return await this.roleService.test();
+  }
+
   @Get(':id')
   @ApiResponse({ type: Role })
   async findOne(@Param('id') id: string) {

@@ -11,7 +11,7 @@ import { PermissionModule } from '@/permission/permission.module';
 import { RoleModule } from '@/role/role.module';
 import { UserModule } from '@/user/user.module';
 import { DateScalar, DecimalScalar } from '@adachi-sakura/nest-shop-common';
-import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { RedisModule } from '@adachi-sakura/nestjs-redis';
 import { BullModule } from '@nestjs/bull';
 import { Logger, MiddlewareConsumer, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -19,7 +19,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import Ajv, { ErrorObject } from 'ajv';
 import merge from 'deepmerge';
-import { RedisOptions } from 'ioredis';
+import IORedis, { Command, RedisOptions } from 'ioredis';
 import { fileLoader, TypedConfigModule } from 'nest-typed-config';
 import { OpenTelemetryModule } from '@metinseylan/nestjs-opentelemetry';
 import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
@@ -109,7 +109,43 @@ import path from 'path';
       inject: [AppConfig],
     }),
     RedisModule.forRootAsync({
-      useFactory: (config: AppConfig) => config.redis,
+      imports: [Logger],
+      useFactory: (
+        config: AppConfig,
+        logger: Logger = new Logger('Redis'),
+      ) => ({
+        ...config.redis,
+        proxyHandler: {
+          get(target: IORedis.Redis, property: keyof IORedis.Redis): any {
+            if (property !== 'sendCommand') {
+              return target[property];
+            }
+            return new Proxy(target[property], {
+              apply(target, thisArg: IORedis.Redis, argArray: Command[]): any {
+                const command = argArray[0];
+                const invokeAt = Date.now();
+                logger.log(
+                  `[invoke-at: ${invokeAt}] [command: ${command.name.toUpperCase()}] args: ${JSON.stringify(
+                    command['args'],
+                  )}`,
+                );
+                const result = target.apply(thisArg, argArray);
+                (command['promise'] as Promise<any>).then((res) => {
+                  logger.log(
+                    `[invoke-at: ${invokeAt}] [command: ${command.name.toUpperCase()}] args: ${JSON.stringify(
+                      command['args'],
+                    )} result: ${JSON.stringify(res)} time: ${
+                      Date.now() - invokeAt
+                    }ms`,
+                  );
+                  return res;
+                });
+                return result;
+              },
+            });
+          },
+        },
+      }),
       inject: [AppConfig],
     }),
     ScheduleModule.forRoot(),

@@ -1,4 +1,4 @@
-import { InjectRedis } from '@liaoliaots/nestjs-redis';
+import { InjectRedis } from '@adachi-sakura/nestjs-redis';
 import { AuthGuard as NestAuthGuard } from '@nestjs/passport';
 import {
   CanActivate,

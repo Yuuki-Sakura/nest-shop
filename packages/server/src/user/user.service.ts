@@ -4,9 +4,8 @@ import { create } from '@/common/utils/create.util';
 import { UserLoginDto, UserLoginResultDto, UserRegisterDto } from '@/user/dto';
 import { CommonException } from '@adachi-sakura/nest-shop-common';
 import { UserEntity } from '@adachi-sakura/nest-shop-entity';
-import { InjectRedis } from '@liaoliaots/nestjs-redis';
+import { InjectRedis } from '@adachi-sakura/nestjs-redis';
 import {
-  BadRequestException,
   HttpStatus,
   Inject,
   Injectable,

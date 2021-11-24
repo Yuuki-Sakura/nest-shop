@@ -1,6 +1,7 @@
 import { Role } from '@adachi-sakura/nest-shop-entity';
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { nanoid } from 'nanoid';
+import { InjectRedis } from '@adachi-sakura/nestjs-redis';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { Redis } from 'ioredis';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RoleUpdateDto } from '@/role/dto/role-update.dto';
@@ -14,13 +15,17 @@ import { EnableMethodListener } from '@/common/decorator/enable-method-listener.
 @Injectable()
 @EnableMethodListener()
 export class RoleService extends CommonService {
-  constructor(
-    @InjectRepository(Role)
-    private readonly roleRepository: Repository<Role>,
-    private readonly permissionService: PermissionService,
-  ) {
+  constructor() {
     super('RoleService');
   }
+
+  @InjectRepository(Role)
+  private readonly roleRepository: Repository<Role>;
+  @Inject()
+  private readonly permissionService: PermissionService;
+
+  @InjectRedis()
+  private readonly redis: Redis;
 
   findById(id: string) {
     return this.roleRepository.findOne(id, { relations: ['permissions'] });
@@ -76,5 +81,13 @@ export class RoleService extends CommonService {
         ),
       }) as Role,
     );
+  }
+
+  async test() {
+    await this.redis.set('test', 'test');
+    await this.redis.get('test');
+    await this.redis.del('test');
+    await this.roleRepository.findOne();
+    return 'test';
   }
 }

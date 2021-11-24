@@ -1,5 +1,5 @@
 import { Role } from '@adachi-sakura/nest-shop-entity';
-import { InjectRedis } from '@liaoliaots/nestjs-redis';
+import { InjectRedis } from '@adachi-sakura/nestjs-redis';
 import {
   CanActivate,
   ExecutionContext,

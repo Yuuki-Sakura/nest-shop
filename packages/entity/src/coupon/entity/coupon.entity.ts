@@ -82,7 +82,7 @@ export default class CouponEntity extends CommonEntity {
 
   @Field(() => GoodsSkuEntity, {
     description: '优惠券商品条件',
-    nullable: 'itemsAndList',
+    nullable: true,
   })
   @Column('json', {
     comment: '优惠券商品条件',
