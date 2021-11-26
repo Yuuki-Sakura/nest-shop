@@ -1,4 +1,4 @@
-import CouponEntity from '@/coupon/entity/coupon.entity';
+import { CouponEntity } from '@/coupon';
 import { UserEntity } from '@/user';
 import { CommonEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
@@ -39,7 +39,7 @@ registerEnumType(CouponGetMethod, {
 
 @Entity('user_coupon')
 @ObjectType()
-export default class UserCouponEntity extends CommonEntity {
+export class UserCouponEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '所属用户',
   })

@@ -12,7 +12,7 @@ import { HTTP_CODE_METADATA } from '@nestjs/common/constants';
 import { I18nService } from 'nestjs-i18n';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { APP_INTERCEPTOR, Reflector } from '@nestjs/core';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import {
   CallHandler,
   ExecutionContext,
@@ -50,22 +50,26 @@ export class TransformInterceptor<T> implements NestInterceptor<T> {
     const gqlContext = GqlExecutionContext.create(context);
     if (gqlContext.getType() == 'graphql') return next.handle();
     const target = context.getHandler();
-    const message: CommonResponseMessage = (Reflect.getMetadata(
-      CUSTOM_SUCCESS_MESSAGE_METADATA,
-      target,
-    ) as CommonResponseMessage) || { key: 'common.success' };
-    const statusCode =
-      Reflect.getMetadata(HTTP_CODE_METADATA, target) ||
-      context.switchToHttp().getResponse().statusCode;
     return next.handle().pipe(
-      map(async (data: T) => ({
-        code: statusCode,
-        message: await this.i18n.translate(message.key, {
-          args: message.args,
-          lang: ctx.getRequest().i18nLang,
-        }),
-        data,
-      })),
+      map(async (data: T) => {
+        const message: CommonResponseMessage = { key: 'common.success' };
+        const messageKey: string = Reflect.getMetadata(
+          CUSTOM_SUCCESS_MESSAGE_METADATA,
+          target,
+        );
+        if (messageKey) message.key = messageKey;
+        const statusCode =
+          Reflect.getMetadata(HTTP_CODE_METADATA, target) ||
+          context.switchToHttp().getResponse().statusCode;
+        return {
+          code: statusCode,
+          message: await this.i18n.translate(message.key, {
+            args: message.args || {},
+            lang: ctx.getRequest().i18nLang,
+          }),
+          data,
+        };
+      }),
     );
   }
 }

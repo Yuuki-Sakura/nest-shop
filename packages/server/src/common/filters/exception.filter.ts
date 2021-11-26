@@ -12,8 +12,8 @@ import {
   Logger,
 } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
-import { Response } from 'express';
 import { GqlArgumentsHost } from '@nestjs/graphql';
+import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 
 @Catch()
@@ -35,15 +35,24 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = host.switchToHttp().getResponse<Response>();
     const request = host.switchToHttp().getRequest();
     let httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-    let message: string | object = exception.message;
+    let message: string | object = await this.i18n.translate(
+      'common.fail.unknown',
+      {
+        lang: request.i18nLang,
+      },
+    );
     let code = HttpStatus.INTERNAL_SERVER_ERROR;
     if (exception instanceof HttpException) {
       httpStatus = exception.getStatus();
       code = httpStatus;
-      message = exception.getResponse();
+      const errResponse = exception.getResponse();
+      message =
+        typeof errResponse === 'string'
+          ? errResponse
+          : (errResponse as Record<string, any>).message;
     }
     if (exception instanceof CommonException) {
-      if (exception.code) code = exception.code;
+      code = exception.code || HttpStatus.INTERNAL_SERVER_ERROR;
       const msg = exception.getResponse() as CommonResponseMessage;
       message = await this.i18n.translate(msg.key, {
         args: msg.args,
@@ -55,7 +64,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       message,
     };
     if (httpStatus === HttpStatus.FORBIDDEN) {
-      data.message = await this.i18n.translate('common.FORBIDDEN', {
+      data.message = await this.i18n.translate('common.fail.FORBIDDEN', {
         args: {
           method: request.method,
           url: request.url,

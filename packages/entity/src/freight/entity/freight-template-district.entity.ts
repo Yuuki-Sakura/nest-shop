@@ -1,5 +1,5 @@
-import DistrictEntity from '@/district/entity/district.entity';
-import FreightTemplateEntity from '@/freight/entity/freight-template.entity';
+import { DistrictEntity } from '@/district';
+import { FreightTemplateEntity } from '@/freight';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
@@ -10,7 +10,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 @ObjectType('FreightTemplateDistrict', {
   description: '配送区域',
 })
-export default class FreightTemplateDistrictEntity extends CommonEntity {
+export class FreightTemplateDistrictEntity extends CommonEntity {
   @Field(() => FreightTemplateEntity, {
     description: '运费模板',
   })

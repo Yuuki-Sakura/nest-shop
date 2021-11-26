@@ -1,7 +1,5 @@
-import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
-import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
-import OrderDeliveryInfoEntity from '@/order/entity/order-delivery-info.entity';
-import OrderEntity from '@/order/entity/order.entity';
+import { GoodsSkuEntity, GoodsSpuEntity } from '@/goods';
+import { OrderDeliveryInfoEntity, OrderEntity } from '@/order';
 import { UserEntity } from '@/user';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
@@ -13,7 +11,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 @ObjectType('OrderGoods', {
   description: '订单商品',
 })
-export default class OrderGoodsEntity extends CommonEntity {
+export class OrderGoodsEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '所属订单',
   })

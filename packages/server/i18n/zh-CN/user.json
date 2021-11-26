@@ -1,8 +1,13 @@
 {
   "login": {
-    "accountOrPasswordFail": "账号或密码错误"
+    "accountOrPasswordFail": "账号或密码错误",
+    "accountLocked": "该账号已被锁定{time}秒"
   },
   "register": {
-    "fail": "注册失败"
+    "fail": {
+      "missingParameters": "手机号和邮箱请至少填写一个",
+      "exists": "手机号或邮箱已被使用",
+      "unknown": "未知错误"
+    }
   }
 }

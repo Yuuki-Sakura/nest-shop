@@ -14,7 +14,10 @@ export class AuthGuard extends NestAuthGuard('jwt') implements CanActivate {
   private readonly redisService: Redis;
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const token = context.switchToHttp().getRequest().headers?.authorization;
+    const token = context
+      .switchToHttp()
+      .getRequest()
+      .headers?.authorization?.match(/^Bearer\s([\w.]+)/)[1];
     if (await this.redisService.zscore('expired-token', token))
       throw new UnauthorizedException('token has expired');
     return super.canActivate(context) as boolean;

@@ -8,7 +8,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 @ObjectType({
   description: '用户角色关联信息',
 })
-export default class UserRole extends CommonEntity {
+export class UserRole extends CommonEntity {
   @Field(() => UserEntity, {
     description: '角色关联用户',
   })

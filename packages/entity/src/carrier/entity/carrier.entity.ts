@@ -6,7 +6,7 @@ import { Column, Entity } from 'typeorm';
 @ObjectType('Carrier', {
   description: '承运人',
 })
-export default class CarrierEntity extends CommonEntity {
+export class CarrierEntity extends CommonEntity {
   @Column({
     comment: '承运人名称',
   })

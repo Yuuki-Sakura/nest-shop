@@ -1,4 +1,4 @@
-import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
+import { GoodsSkuEntity } from '@/goods';
 import { UserEntity } from '@/user';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
@@ -10,7 +10,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 @ObjectType('UserCart', {
   description: '用户购物车',
 })
-export default class UserCartEntity extends CommonEntity {
+export class UserCartEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '购物车关联用户',
   })

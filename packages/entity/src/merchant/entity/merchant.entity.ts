@@ -1,8 +1,8 @@
-import MerchantAddressEntity from '@/address/entity/merchant-address.entity';
-import CouponEntity from '@/coupon/entity/coupon.entity';
-import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
-import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
-import MerchantCategoryEntity, {
+import { MerchantAddressEntity } from '@/address';
+import { CouponEntity } from '@/coupon';
+import { GoodsSkuEntity, GoodsSpuEntity } from '@/goods';
+import {
+  MerchantCategoryEntity,
   MerchantCategoryQualification,
 } from '@/merchant/entity/merchant-category.entity';
 import { UserEntity } from '@/user';
@@ -84,7 +84,7 @@ export class MerchantQualification extends MerchantCategoryQualification {
 @ObjectType('Merchant', {
   description: '商户信息',
 })
-export default class MerchantEntity extends CommonEntity {
+export class MerchantEntity extends CommonEntity {
   @ManyToOne(() => UserEntity)
   @JoinColumn({
     name: 'user_id',

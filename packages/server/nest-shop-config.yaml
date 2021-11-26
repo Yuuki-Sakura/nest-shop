@@ -26,6 +26,16 @@ server:
   allowOrigins:
     - "https://zy.ci"
     - "https://admin.zy.ci"
+  rootAccount:
+    email: 'admin@zy.ci'
+    nickname: admin
+  session:
+    secret: 'my-secret'
+    resave: false
+    saveUninitialized: false
+  validator:
+    whitelist: true
+    transform: true
 graphql:
   debug: true
   playground: true

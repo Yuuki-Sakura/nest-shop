@@ -8,7 +8,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 @ObjectType('Feedback', {
   description: '用户反馈',
 })
-export default class FeedbackEntity extends CommonEntity {
+export class FeedbackEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '反馈用户',
   })

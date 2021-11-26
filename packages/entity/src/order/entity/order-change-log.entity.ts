@@ -1,4 +1,4 @@
-import OrderEntity from '@/order/entity/order.entity';
+import { OrderEntity } from '@/order';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
@@ -7,7 +7,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 @ObjectType('OrderChangeLog', {
   description: '订单操作记录',
 })
-export default class OrderChangeLogEntity extends CommonEntity {
+export class OrderChangeLogEntity extends CommonEntity {
   @Field(() => OrderEntity)
   @ManyToOne(() => OrderEntity, (order) => order.id)
   @JoinColumn({

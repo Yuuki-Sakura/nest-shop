@@ -1,7 +1,7 @@
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { ApiProperty } from '@nestjs/swagger';
+import { GraphQLString } from 'graphql';
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
-import { Permission } from '@/permission';
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @Entity('role')
@@ -14,20 +14,14 @@ export class Role extends CommonEntity {
   @Column({ comment: '角色名称', unique: true })
   name: string;
 
-  @ApiProperty({ type: () => [Permission] })
-  @Field(() => [Permission], {
+  @ApiProperty()
+  @Field(() => [GraphQLString], {
     description: '角色包含权限',
   })
-  @ManyToMany(() => Permission)
-  @JoinTable({
-    joinColumn: {
-      name: 'role_id',
-    },
-    inverseJoinColumn: {
-      name: 'permission_id',
-    },
+  @Column('json', {
+    comment: '角色包含权限',
   })
-  permissions: Permission[];
+  permissions: string[];
 
   @ApiProperty({ type: () => [Role] })
   @Field(() => [Role], {

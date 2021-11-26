@@ -26,7 +26,7 @@ registerEnumType(InvoiceType, {
 @ObjectType('UserInvoice', {
   description: '用户发票信息',
 })
-export default class UserInvoiceEntity extends CommonEntity {
+export class UserInvoiceEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '发票信息所属用户',
   })

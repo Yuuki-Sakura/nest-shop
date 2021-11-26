@@ -1,5 +1,5 @@
-import UserCouponEntity from '@/coupon/entity/user-coupon.entity';
-import OrderEntity, { PayMethod, PayStatus } from '@/order/entity/order.entity';
+import { UserCouponEntity } from '@/coupon/entity/user-coupon.entity';
+import { OrderEntity, PayMethod, PayStatus } from '@/order/entity/order.entity';
 import { UserEntity } from '@/user';
 import {
   CommonEntity,
@@ -23,7 +23,7 @@ import {
 @ObjectType('OrderGroup', {
   description: '订单组(用于支付)',
 })
-export default class OrderGroupEntity extends CommonEntity {
+export class OrderGroupEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '订单组所属用户',
   })

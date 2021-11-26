@@ -1,4 +1,4 @@
-import ArticleEntity from '@/article/entity/article.entity';
+import { ArticleEntity } from '@/article';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';

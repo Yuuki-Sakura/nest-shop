@@ -1,4 +1,7 @@
 {
-  "FORBIDDEN": "无权限",
-  "success": "成功"
+  "success": "成功",
+  "fail": {
+    "FORBIDDEN": "无权限",
+    "unknown": "未知错误"
+  }
 }

@@ -1,17 +1,18 @@
-import UserAddressEntity from '@/address/entity/user-address.entity';
-import UserCouponEntity from '@/coupon/entity/user-coupon.entity';
-import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
-import UserInvoiceEntity from '@/user/entity/user-invoice.entity';
+import { UserAddressEntity } from '@/address';
+import { UserCouponEntity } from '@/coupon/entity/user-coupon.entity';
+import { GoodsSkuEntity } from '@/goods';
+import {
+  UserDeviceEntity,
+  UserPermission,
+  UserRole,
+  UserInvoiceEntity,
+} from '@/user';
 import {
   CommonEntity,
   Timestamp,
   DecimalTransformer,
-  nanoid,
 } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
-import UserDeviceEntity from '@/user/entity/user-device.entity';
-import UserPermission from '@/user/entity/user-permission.entity';
-import UserRole from '@/user/entity/user-role.entity';
 import { Exclude } from 'class-transformer';
 import { IsEmail, IsPhoneNumber, IsUrl } from 'class-validator';
 import { Decimal } from 'decimal.js';
@@ -142,6 +143,7 @@ export class UserEntity extends CommonEntity {
   @Column({
     name: 'last_login_ip',
     comment: '上次登陆IP',
+    nullable: true,
   })
   lastLoginIp: string;
 

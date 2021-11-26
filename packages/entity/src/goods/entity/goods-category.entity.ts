@@ -1,5 +1,8 @@
-import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
-import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
+import {
+  GoodsAttributesTemplateEntity,
+  GoodsSkuEntity,
+  GoodsSpuEntity,
+} from '@/goods';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import {
@@ -10,13 +13,12 @@ import {
   OneToMany,
   OneToOne,
 } from 'typeorm';
-import GoodsAttributesTemplateEntity from '@/goods/entity/goods-attributes-template.entity';
 
 @Entity('goods_category')
 @ObjectType('GoodsCategory', {
   description: '商品分类',
 })
-export default class GoodsCategoryEntity extends CommonEntity {
+export class GoodsCategoryEntity extends CommonEntity {
   @Field({
     description: '商品分类名称',
   })

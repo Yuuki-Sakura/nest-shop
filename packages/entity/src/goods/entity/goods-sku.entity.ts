@@ -1,8 +1,10 @@
-import GoodsCategoryEntity from '@/goods/entity/goods-category.entity';
-import GoodsCommentEntity from '@/goods/entity/goods-comment.entity';
-import GoodsSpuEntity from '@/goods/entity/goods-spu.entity';
-import MerchantGoodsCategoryEntity from '@/merchant/entity/merchant-goods-category.entity';
-import MerchantEntity from '@/merchant/entity/merchant.entity';
+import {
+  GoodsAttributesEntity,
+  GoodsCategoryEntity,
+  GoodsCommentEntity,
+  GoodsSpuEntity,
+} from '@/goods';
+import { MerchantEntity, MerchantGoodsCategoryEntity } from '@/merchant';
 import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
@@ -17,7 +19,6 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import GoodsAttributesEntity from '@/goods/entity/goods-attributes.entity';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 
 @ObjectType({
@@ -41,7 +42,7 @@ export class GoodsSkuInfo {
 @ObjectType('GoodsSku', {
   description: '商品SKU',
 })
-export default class GoodsSkuEntity extends CommonEntity {
+export class GoodsSkuEntity extends CommonEntity {
   @ManyToOne(() => MerchantEntity, (merchant) => merchant.id)
   @JoinColumn({
     name: 'merchant_id',

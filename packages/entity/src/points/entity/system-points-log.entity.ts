@@ -1,4 +1,4 @@
-import UserPointsLogEntity from '@/points/entity/user-points-log.entity';
+import { UserPointsLogEntity } from '@/points';
 import { UserEntity } from '@/user';
 import { CommonEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
@@ -15,7 +15,7 @@ import {
 @ObjectType('SystemPointsLog', {
   description: '系统积分记录',
 })
-export default class SystemPointsLogEntity extends CommonEntity {
+export class SystemPointsLogEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '记录所属用户',
   })

@@ -1,10 +1,9 @@
 import { Role } from '@adachi-sakura/nest-shop-entity';
 import { InjectRedis } from '@adachi-sakura/nestjs-redis';
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RoleUpdateDto } from '@/role/dto/role-update.dto';
 import { RoleCreateDto } from '@/role/dto/role-create.dto';
 import { PermissionService } from '@/permission/permission.service';
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
@@ -66,19 +65,6 @@ export class RoleService extends CommonService {
       Object.assign(new Role(), {
         name: role.name,
         permissions: await this.permissionService.findByIds(role.permissionIds),
-      }) as Role,
-    );
-  }
-
-  async update(id: string, roleDto: RoleUpdateDto) {
-    const role = await this.roleRepository.findOne(id);
-    if (!role) throw new BadRequestException('角色Id无效');
-    return this.roleRepository.save(
-      Object.assign({}, role, {
-        name: roleDto.name,
-        permissions: await this.permissionService.findByIds(
-          roleDto.permissionIds,
-        ),
       }) as Role,
     );
   }

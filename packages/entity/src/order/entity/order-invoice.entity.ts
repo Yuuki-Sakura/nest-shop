@@ -1,4 +1,4 @@
-import OrderEntity from '@/order/entity/order.entity';
+import { OrderEntity } from '@/order';
 import { InvoiceType } from '@/user/entity/user-invoice.entity';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
@@ -8,7 +8,7 @@ import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 @ObjectType('OrderInvoice', {
   description: '订单发票信息',
 })
-export default class OrderInvoiceEntity extends CommonEntity {
+export class OrderInvoiceEntity extends CommonEntity {
   @OneToOne(() => OrderEntity, (order) => order.invoice)
   @JoinColumn({
     name: 'order_id',

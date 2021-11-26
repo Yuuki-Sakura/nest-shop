@@ -1,4 +1,4 @@
-import MerchantAddressEntity from '@/address/entity/merchant-address.entity';
+import { MerchantAddressEntity } from '@/address';
 import { MerchantQualification, MerchantType } from '@/merchant';
 import { UserEntity } from '@/user';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';

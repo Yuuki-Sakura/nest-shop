@@ -1,9 +1,8 @@
-import OrderAddressEntity from '@/address/entity/order-address.entity';
-import UserCouponEntity from '@/coupon/entity/user-coupon.entity';
-import MerchantEntity from '@/merchant/entity/merchant.entity';
-import OrderDeliveryInfoEntity from '@/order/entity/order-delivery-info.entity';
-import OrderGroupEntity from '@/order/entity/order-group.entity';
-import OrderInvoiceEntity from '@/order/entity/order-invoice.entity';
+import { OrderAddressEntity } from '@/address/entity/order-address.entity';
+import { UserCouponEntity } from '@/coupon/entity/user-coupon.entity';
+import { MerchantEntity } from '@/merchant';
+import { OrderDeliveryInfoEntity, OrderGroupEntity } from '@/order';
+import { OrderInvoiceEntity } from '@/order/entity/order-invoice.entity';
 import { UserEntity } from '@/user';
 import {
   CommonEntity,
@@ -150,7 +149,7 @@ registerEnumType(OrderStatus, {
 @ObjectType('Order', {
   description: '订单',
 })
-export default class OrderEntity extends CommonEntity {
+export class OrderEntity extends CommonEntity {
   @Field(() => OrderGroupEntity, {
     description: '所属订单组',
   })

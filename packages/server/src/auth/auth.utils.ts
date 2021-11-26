@@ -8,7 +8,7 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { ModuleRef } from '@nestjs/core';
+import { Field, InterfaceType } from '@nestjs/graphql';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@/auth/auth.guard';
 import { PermissionGuard } from '@/auth/permission.guard';
@@ -35,11 +35,30 @@ export function verifyPassword(hashPwd: string, password: string) {
   );
 }
 
-export const getPermissions = async (
-  user: UserEntity,
-  moduleRef: ModuleRef,
-): Promise<PermissionEntity[]> => {
-  let permissions: PermissionEntity[];
+@InterfaceType()
+export class UserTempPermission implements Pick<PermissionEntity, 'resource'> {
+  @Field()
+  resource: string;
+  @Field()
+  expiresAt?: Date;
+}
+
+export const getPermissions = (
+  user: Pick<UserEntity, 'permissions' | 'roles'>,
+): UserTempPermission[] => {
+  const permissions: UserTempPermission[] = [];
+  user.permissions?.forEach((userPerm) => {
+    const { expiresAt } = userPerm;
+    userPerm.permissions.forEach((resource) =>
+      permissions.push({ resource, expiresAt }),
+    );
+  });
+  user.roles?.forEach((role) => {
+    const { expiresAt } = role;
+    role.role.permissions.forEach((resource) =>
+      permissions.push({ resource, expiresAt }),
+    );
+  });
   return permissions;
 };
 

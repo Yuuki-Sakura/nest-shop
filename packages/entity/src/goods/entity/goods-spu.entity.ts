@@ -1,8 +1,9 @@
-import GoodsCategoryEntity from '@/goods/entity/goods-category.entity';
-import GoodsCommentEntity from '@/goods/entity/goods-comment.entity';
-import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
-import MerchantGoodsCategoryEntity from '@/merchant/entity/merchant-goods-category.entity';
-import MerchantEntity from '@/merchant/entity/merchant.entity';
+import {
+  GoodsCategoryEntity,
+  GoodsCommentEntity,
+  GoodsSkuEntity,
+} from '@/goods';
+import { MerchantEntity, MerchantGoodsCategoryEntity } from '@/merchant';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
@@ -20,7 +21,7 @@ import {
 @ObjectType('GoodsSpu', {
   description: '商品SPU',
 })
-export default class GoodsSpuEntity extends CommonEntity {
+export class GoodsSpuEntity extends CommonEntity {
   @ManyToOne(() => MerchantEntity, (merchant) => merchant.id)
   @JoinColumn({
     name: 'merchant_id',

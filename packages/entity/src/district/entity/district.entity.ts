@@ -39,7 +39,7 @@ registerEnumType(DistrictLevel, {
 @ObjectType('District', {
   description: '地区信息列表',
 })
-export default class DistrictEntity {
+export class DistrictEntity {
   @Field(() => ID)
   @ApiProperty()
   @PrimaryGeneratedColumn()

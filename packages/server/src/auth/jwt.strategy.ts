@@ -12,7 +12,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     private readonly appConfig: AppConfig,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromHeader('authorization'),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: appConfig.jwt.secret,
     });

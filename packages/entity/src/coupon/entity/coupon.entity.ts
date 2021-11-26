@@ -1,5 +1,5 @@
-import GoodsSkuEntity from '@/goods/entity/goods-sku.entity';
-import MerchantEntity from '@/merchant/entity/merchant.entity';
+import { GoodsSkuEntity } from '@/goods';
+import { MerchantEntity } from '@/merchant';
 import {
   CommonEntity,
   DecimalTransformer,
@@ -17,7 +17,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 @ObjectType('Coupon', {
   description: '优惠券',
 })
-export default class CouponEntity extends CommonEntity {
+export class CouponEntity extends CommonEntity {
   @Field(() => MerchantEntity, {
     description: '优惠卷关联商户，若为空则为平台券',
     nullable: true,

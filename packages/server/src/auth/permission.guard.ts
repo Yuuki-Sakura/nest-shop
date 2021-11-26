@@ -1,13 +1,15 @@
-import { Role } from '@adachi-sakura/nest-shop-entity';
+import { UserTempPermission } from '@/auth/auth.utils';
 import { InjectRedis } from '@adachi-sakura/nestjs-redis';
 import {
   CanActivate,
   ExecutionContext,
   Inject,
   Injectable,
+  Logger,
 } from '@nestjs/common';
 import { RoleService } from '@/role/role.service';
 import { Redis } from 'ioredis';
+import minimatch from 'minimatch';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
@@ -16,6 +18,8 @@ export class PermissionGuard implements CanActivate {
 
   @InjectRedis()
   private readonly redis: Redis;
+
+  private readonly logger = new Logger('PermissionGuard');
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
@@ -28,10 +32,21 @@ export class PermissionGuard implements CanActivate {
       return true;
     }
     // 获取用户角色
-    const permissions = JSON.parse(
+    const permissions: UserTempPermission[] = JSON.parse(
       await this.redis.get(`user-${request.user.id}-permissions`),
     );
-    // return hasPermission(permission, roles);
-    return true;
+    for (let i = 0; i < permissions.length; i++) {
+      if (minimatch(permission, permissions[i].resource)) {
+        this.logger.verbose(
+          `matching: ${permission} have: ${permissions[i].resource} result: true`,
+        );
+        return true;
+      } else {
+        this.logger.verbose(
+          `matching: ${permission} have: ${permissions[i].resource} result: false`,
+        );
+      }
+    }
+    return false;
   }
 }

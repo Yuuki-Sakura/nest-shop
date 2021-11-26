@@ -28,7 +28,7 @@ registerEnumType(PublishStatus, {
 @ObjectType('Article', {
   description: '文章',
 })
-export default class ArticleEntity extends CommonEntity {
+export class ArticleEntity extends CommonEntity {
   @Field({
     description: '文章标题',
   })

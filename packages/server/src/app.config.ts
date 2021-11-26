@@ -1,10 +1,11 @@
 import { RedisModuleOptions } from '@adachi-sakura/nestjs-redis';
-import { NestApplicationOptions } from '@nestjs/common';
+import { NestApplicationOptions, ValidationPipeOptions } from '@nestjs/common';
 import { ElasticsearchModuleOptions } from '@nestjs/elasticsearch';
 import { GqlModuleOptions } from '@nestjs/graphql';
 import { JwtModuleOptions } from '@nestjs/jwt';
 import { SwaggerCustomOptions } from '@nestjs/swagger';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import session from 'express-session';
 import { ContentSecurityPolicyOptions } from 'helmet/dist/middlewares/content-security-policy';
 import { CrossOriginOpenerPolicyOptions } from 'helmet/dist/middlewares/cross-origin-opener-policy';
 import { CrossOriginResourcePolicyOptions } from 'helmet/dist/middlewares/cross-origin-resource-policy';
@@ -46,6 +47,12 @@ export class AppConfig {
     helmet: HelmetOptions;
     allowOrigins: string[];
     allowReferer: string;
+    rootAccount: {
+      email: string;
+      nickname: string;
+    };
+    session: session.SessionOptions;
+    validator: ValidationPipeOptions;
   };
   graphql: GqlModuleOptions;
   jwt: JwtModuleOptions;

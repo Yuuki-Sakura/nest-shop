@@ -1,4 +1,4 @@
-import SystemPointsLogEntity from '@/points/entity/system-points-log.entity';
+import { SystemPointsLogEntity } from '@/points';
 import { UserEntity } from '@/user';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
@@ -30,7 +30,7 @@ registerEnumType(UserPointsLogAction, {
 @ObjectType('UserPointsLog', {
   description: '用户积分记录',
 })
-export default class UserPointsLogEntity extends CommonEntity {
+export class UserPointsLogEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '记录所属用户',
   })

@@ -21,9 +21,6 @@ import Ajv, { ErrorObject } from 'ajv';
 import merge from 'deepmerge';
 import IORedis, { Command, RedisOptions } from 'ioredis';
 import { fileLoader, TypedConfigModule } from 'nest-typed-config';
-import { OpenTelemetryModule } from '@metinseylan/nestjs-opentelemetry';
-import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
-import { JaegerExporter } from '@opentelemetry/exporter-jaeger';
 import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
 import path from 'path';
 
@@ -122,25 +119,36 @@ import path from 'path';
             }
             return new Proxy(target[property], {
               apply(target, thisArg: IORedis.Redis, argArray: Command[]): any {
-                const command = argArray[0];
                 const invokeAt = Date.now();
+                const command = argArray[0];
                 logger.log(
                   `[invoke-at: ${invokeAt}] [command: ${command.name.toUpperCase()}] args: ${JSON.stringify(
                     command['args'],
                   )}`,
                 );
-                const result = target.apply(thisArg, argArray);
-                (command['promise'] as Promise<any>).then((res) => {
-                  logger.log(
-                    `[invoke-at: ${invokeAt}] [command: ${command.name.toUpperCase()}] args: ${JSON.stringify(
-                      command['args'],
-                    )} result: ${JSON.stringify(res)} time: ${
-                      Date.now() - invokeAt
-                    }ms`,
-                  );
-                  return res;
-                });
-                return result;
+                (command['promise'] as Promise<any>)
+                  .then((res) => {
+                    logger.log(
+                      `[invoke-at: ${invokeAt}] [command: ${command.name.toUpperCase()}] args: ${JSON.stringify(
+                        command['args'],
+                      )} result: ${JSON.stringify(res)} time: ${
+                        Date.now() - invokeAt
+                      }ms`,
+                    );
+                    return res;
+                  })
+                  .catch((err: Error) => {
+                    logger.error(
+                      `[invoke-at: ${invokeAt}] [command: ${command.name.toUpperCase()}] args: ${JSON.stringify(
+                        command['args'],
+                      )} error: ${err.message} time: ${
+                        Date.now() - invokeAt
+                      }ms`,
+                      err,
+                    );
+                    throw err;
+                  });
+                return target.apply(thisArg, argArray);
               },
             });
           },

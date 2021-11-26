@@ -21,7 +21,7 @@ export class MerchantCategoryQualification {
 @ObjectType('MerchantCategory', {
   description: '商户经营类目',
 })
-export default class MerchantCategoryEntity extends CommonEntity {
+export class MerchantCategoryEntity extends CommonEntity {
   @Field({
     description: '商户类目名称',
   })

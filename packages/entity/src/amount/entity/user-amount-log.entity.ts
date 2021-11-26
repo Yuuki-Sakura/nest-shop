@@ -25,7 +25,7 @@ registerEnumType(UserAmountLogAction, {
 @ObjectType('UserAmountLog', {
   description: '用户余额记录',
 })
-export default class UserAmountLogEntity extends CommonEntity {
+export class UserAmountLogEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '记录所属用户',
   })

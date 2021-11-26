@@ -1,11 +1,11 @@
+import { GoodsAttributesTemplateAttributesEntity } from '@/goods';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
-import GoodsAttributesTemplateAttributesEntity from '@/goods/entity/goods-attributes-template-attributes.entity';
 
 @Entity('goods_attributes')
 @ObjectType('GoodsAttributes')
-export default class GoodsAttributesEntity extends CommonEntity {
+export class GoodsAttributesEntity extends CommonEntity {
   @ManyToOne(() => GoodsAttributesTemplateAttributesEntity)
   @JoinColumn({
     name: 'goods_attributes_template_attributes_id',

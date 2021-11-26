@@ -1,5 +1,4 @@
-import OrderGoodsEntity from '@/order/entity/order-goods.entity';
-import OrderEntity from '@/order/entity/order.entity';
+import { OrderEntity, OrderGoodsEntity } from '@/order';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
@@ -32,7 +31,7 @@ registerEnumType(OrderGoodsRefundRequestStatus, {
 @ObjectType('OrderGoodsRefundRequest', {
   description: '退款申请',
 })
-export default class OrderGoodsRefundRequestEntity extends CommonEntity {
+export class OrderGoodsRefundRequestEntity extends CommonEntity {
   @Field(() => OrderEntity, {
     description: '退款关联订单',
   })

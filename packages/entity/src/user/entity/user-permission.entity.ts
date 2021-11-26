@@ -1,22 +1,15 @@
 import { CommonEntity, Timestamp } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Permission } from '@/permission';
 import { UserEntity } from '@/user';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-} from 'typeorm';
+import { GraphQLString } from 'graphql';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity('user_permission')
 @ObjectType({
   description: '用户权限关联信息',
 })
-export default class UserPermission extends CommonEntity {
+export class UserPermission extends CommonEntity {
   @ApiProperty({ type: () => UserEntity })
   @Field(() => UserEntity, {
     description: '权限关联用户',
@@ -25,21 +18,14 @@ export default class UserPermission extends CommonEntity {
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
-  @ApiProperty({ type: () => [Permission] })
-  @Field(() => [Permission], {
-    description: '用户关联权限',
+  @ApiProperty()
+  @Field(() => [GraphQLString], {
+    description: '用户单独授权权限',
   })
-  @ManyToMany(() => Permission)
-  @JoinTable({
-    name: 'user_permission_permissions',
-    joinColumn: {
-      name: 'user_permission_id',
-    },
-    inverseJoinColumn: {
-      name: 'permission_id',
-    },
+  @Column('json', {
+    comment: '用户单独授权权限',
   })
-  permissions: Permission[];
+  permissions: string[];
 
   @ApiProperty()
   @Field({

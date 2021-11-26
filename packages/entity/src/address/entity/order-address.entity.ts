@@ -1,5 +1,5 @@
-import UserAddressEntity from '@/address/entity/user-address.entity';
-import OrderEntity from '@/order/entity/order.entity';
+import { UserAddressEntity } from '@/address';
+import { OrderEntity } from '@/order';
 import { ObjectType } from '@nestjs/graphql';
 import { Entity, JoinColumn, OneToOne } from 'typeorm';
 
@@ -7,7 +7,7 @@ import { Entity, JoinColumn, OneToOne } from 'typeorm';
 @ObjectType('OrderAddress', {
   description: '订单地址',
 })
-export default class OrderAddressEntity extends UserAddressEntity {
+export class OrderAddressEntity extends UserAddressEntity {
   @OneToOne(() => OrderEntity, (order) => order.address)
   @JoinColumn({
     name: 'order_id',

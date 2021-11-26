@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { PermissionService } from '@/permission/permission.service';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -10,10 +10,5 @@ export class PermissionController {
   @Get()
   findAll() {
     return this.permissionService.findAll();
-  }
-
-  @Get(':id')
-  findById(@Param('id') id: string) {
-    return this.permissionService.findById(id);
   }
 }

@@ -690,6 +690,68 @@
             },
             "type": "object"
         },
+        "ClassTransformOptions.b9966958": {
+            "description": "Options to be passed during transformation.",
+            "properties": {
+                "enableCircularCheck": {
+                    "description": "If set to true then class transformer will perform a circular check. (Circular check is turned off by default)\nThis option is useful when you know for sure that your types might have a circular dependency.",
+                    "type": "boolean"
+                },
+                "enableImplicitConversion": {
+                    "description": "If set to true class-transformer will attempt conversion based on TS reflected type",
+                    "type": "boolean"
+                },
+                "excludeExtraneousValues": {
+                    "description": "If set to true class-transformer will exclude properties which are not part of the original class\nand exposing all class properties (with undefined, if nothing else is given)",
+                    "type": "boolean"
+                },
+                "excludePrefixes": {
+                    "description": "Excludes properties with the given prefixes. For example, if you mark your private properties with \"_\" and \"__\"\nyou can set this option's value to [\"_\", \"__\"] and all private properties will be skipped.\nThis works only for \"exposeAll\" strategy.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "exposeDefaultValues": {
+                    "description": "If set to true then class transformer will take default values for unprovided fields.\nThis is useful when you convert a plain object to a class and have an optional field with a default value.",
+                    "type": "boolean"
+                },
+                "exposeUnsetFields": {
+                    "description": "When set to true, fields with `undefined` as value will be included in class to plain transformation. Otherwise\nthose fields will be omitted from the result.\n\nDEFAULT: `true`",
+                    "type": "boolean"
+                },
+                "groups": {
+                    "description": "Only properties with given groups will be transformed.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "ignoreDecorators": {
+                    "description": "If set to true then class transformer will ignore all @Expose and @Exclude decorators and what's inside them.\nThis option is useful if you want to \"clone\" your object but not apply decorators affects.",
+                    "type": "boolean"
+                },
+                "strategy": {
+                    "description": "Exclusion strategy. By default exposeAll is used, which means that it will expose all properties that\nare transformed by default.",
+                    "enum": [
+                        "excludeAll",
+                        "exposeAll"
+                    ],
+                    "type": "string"
+                },
+                "targetMaps": {
+                    "description": "Target maps allows to set a Types of the transforming object without using @Type decorator.\nThis is useful when you are transforming external classes, or if you already have type metadata for\nobjects and you don't want to set it up again.",
+                    "items": {
+                    },
+                    "type": "array"
+                },
+                "version": {
+                    "description": "Only properties with \"since\" > version < \"until\" will be transformed.",
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
         "ClientOptions.392ef7a5": {
             "properties": {
                 "Connection": {
@@ -1596,104 +1658,6 @@
             },
             "type": "object"
         },
-        "CorsOptions.feb4be84": {
-            "description": "Interface describing CORS options that can be set.",
-            "properties": {
-                "allowedHeaders": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ],
-                    "description": "Configures the Access-Control-Allow-Headers CORS header."
-                },
-                "credentials": {
-                    "description": "Configures the Access-Control-Allow-Credentials CORS header.",
-                    "type": "boolean"
-                },
-                "exposedHeaders": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ],
-                    "description": "Configures the Access-Control-Expose-Headers CORS header."
-                },
-                "maxAge": {
-                    "description": "Configures the Access-Control-Max-Age CORS header.",
-                    "type": "number"
-                },
-                "methods": {
-                    "anyOf": [
-                        {
-                            "items": {
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "type": "string"
-                        }
-                    ],
-                    "description": "Configures the Access-Control-Allow-Methods CORS header."
-                },
-                "optionsSuccessStatus": {
-                    "description": "Provides a status code to use for successful OPTIONS requests.",
-                    "type": "number"
-                },
-                "origin": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/definitions/RegExp.00b3a5e4"
-                        },
-                        {
-                            "items": {
-                                "anyOf": [
-                                    {
-                                        "$ref": "#/definitions/RegExp.00b3a5e4"
-                                    },
-                                    {
-                                        "type": "string"
-                                    }
-                                ]
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "description": "Set origin to a function implementing some custom logic. The function takes the\nrequest origin as the first parameter and a callback (which expects the signature\nerr [object], allow [bool]) as the second.",
-                            "type": "object"
-                        },
-                        {
-                            "type": [
-                                "string",
-                                "boolean"
-                            ]
-                        }
-                    ],
-                    "description": "Configures the `Access-Control-Allow-Origins` CORS header.  See [here for more detail.](https://github.com/expressjs/cors#configuration-options)"
-                },
-                "preflightContinue": {
-                    "description": "Whether to pass the CORS preflight response to the next handler.",
-                    "type": "boolean"
-                }
-            },
-            "type": "object"
-        },
-        "CorsOptionsDelegate<any>.0623a5a0": {
-            "type": "object"
-        },
         "CrossOriginOpenerPolicyOptions.597b47c7": {
             "properties": {
                 "policy": {
@@ -2166,7 +2130,7 @@
             },
             "type": "object"
         },
-        "GqlModuleOptions.a3cc53d4": {
+        "GqlModuleOptions.6c987e2a": {
             "properties": {
                 "allowBatchedHttpRequests": {
                     "type": "boolean"
@@ -2343,7 +2307,7 @@
             },
             "type": "object"
         },
-        "HelmetOptions.7ecdff96": {
+        "HelmetOptions.e11835a9": {
             "properties": {
                 "contentSecurityPolicy": {
                     "anyOf": [
@@ -2481,54 +2445,6 @@
                 "sockets": {
                     "$ref": "#/definitions/NodeJS.ReadOnlyDict<Socket[]>.3fc5812c",
                     "description": "An object which contains arrays of sockets currently in use by the\nagent. Do not modify."
-                }
-            },
-            "type": "object"
-        },
-        "HttpsOptions.018dfbe9": {
-            "description": "Interface describing Https Options that can be set.",
-            "properties": {
-                "NPNProtocols": {
-                    "description": "An array or Buffer of possible NPN protocols. (Protocols should be ordered\nby their priority)."
-                },
-                "SNICallback": {
-                    "description": "A function that will be called if the client supports SNI TLS extension. Two\narguments will be passed when called: servername and cb. SNICallback should\ninvoke cb(null, ctx), where ctx is a SecureContext instance. (tls.createSecureContext(...)\ncan be used to get a proper SecureContext.) If SNICallback wasn't provided\nthe default callback with high-level API will be used.",
-                    "type": "object"
-                },
-                "ca": {
-                    "description": "Optionally override the trusted CA certificates. Default is to trust the well-known\nCAs curated by Mozilla. Mozilla's CAs are completely replaced when CAs are\nexplicitly specified using this option. The value can be a string or Buffer,\nor an Array of strings and/or Buffers. Any string or Buffer can contain multiple\nPEM CAs concatenated together. The peer's certificate must be chainable to\na CA trusted by the server for the connection to be authenticated. When using\ncertificates that are not chainable to a well-known CA, the certificate's CA\nmust be explicitly specified as a trusted or the connection will fail to authenticate.\nIf the peer uses a certificate that doesn't match or chain to one of the default\nCAs, use the ca option to provide a CA certificate that the peer's certificate\ncan match or chain to. For self-signed certificates, the certificate is its\nown CA, and must be provided. For PEM encoded certificates, supported types\nare \"TRUSTED CERTIFICATE\", \"X509 CERTIFICATE\", and \"CERTIFICATE\". See also tls.rootCertificates."
-                },
-                "cert": {
-                    "description": "Cert chains in PEM format. One cert chain should be provided per private key.\nEach cert chain should consist of the PEM formatted certificate for a provided\nprivate key, followed by the PEM formatted intermediate certificates (if any),\nin order, and not including the root CA (the root CA must be pre-known to the\npeer, see ca). When providing multiple cert chains, they do not have to be\nin the same order as their private keys in key. If the intermediate certificates\nare not provided, the peer will not be able to validate the certificate, and\nthe handshake will fail."
-                },
-                "ciphers": {
-                    "description": "Cipher suite specification, replacing the default. For more information, see\nmodifying the default cipher suite. Permitted ciphers can be obtained via tls.getCiphers().\nCipher names must be uppercased in order for OpenSSL to accept them.",
-                    "type": "string"
-                },
-                "crl": {
-                    "description": "PEM formatted CRLs (Certificate Revocation Lists)."
-                },
-                "honorCipherOrder": {
-                    "description": "Attempt to use the server's cipher suite preferences instead of the client's.\nWhen true, causes SSL_OP_CIPHER_SERVER_PREFERENCE to be set in secureOptions,\nsee OpenSSL Options for more information.",
-                    "type": "boolean"
-                },
-                "key": {
-                    "description": "Private keys in PEM format. PEM allows the option of private keys being encrypted.\nEncrypted keys will be decrypted with options.passphrase. Multiple keys using\ndifferent algorithms can be provided either as an array of unencrypted key\nstrings or buffers, or an array of objects in the form {pem: <string|buffer>[, passphrase: <string>]}.\nThe object form can only occur in an array. object.passphrase is optional.\nEncrypted keys will be decrypted with object.passphrase if provided, or options.passphrase\nif it is not"
-                },
-                "passphrase": {
-                    "description": "Shared passphrase used for a single private key and/or a PFX.",
-                    "type": "string"
-                },
-                "pfx": {
-                    "description": "PFX or PKCS12 encoded private key and certificate chain. pfx is an alternative\nto providing key and cert individually. PFX is usually encrypted, if it is,\npassphrase will be used to decrypt it. Multiple PFX can be provided either\nas an array of unencrypted PFX buffers, or an array of objects in the form\n{buf: <string|buffer>[, passphrase: <string>]}. The object form can only\noccur in an array. object.passphrase is optional. Encrypted PFX will be decrypted\nwith object.passphrase if provided, or options.passphrase if it is not."
-                },
-                "rejectUnauthorized": {
-                    "description": "If not false the server will reject any connection which is not authorized\nwith the list of supplied CAs. This option only has an effect if requestCert is true. Default: true",
-                    "type": "boolean"
-                },
-                "requestCert": {
-                    "description": "If true the server will request a certificate from clients that connect and\nattempt to verify that certificate. Default: false.",
-                    "type": "boolean"
                 }
             },
             "type": "object"
@@ -2856,9 +2772,6 @@
             "description": "Performs logging of the events in TypeORM.",
             "type": "object"
         },
-        "LoggerService.f697eb92": {
-            "type": "object"
-        },
         "MysqlConnectionCredentialsOptions.9c0bbb9f": {
             "description": "MySQL specific connection credential options.",
             "properties": {
@@ -2933,75 +2846,6 @@
                     }
                 },
                 "type": "object"
-            },
-            "type": "object"
-        },
-        "NestApplicationOptions.cccd1327": {
-            "properties": {
-                "abortOnError": {
-                    "default": true,
-                    "description": "Whether to abort the process on Error. By default, the process is exited.\nPass `false` to override the default behavior. If `false` is passed, Nest will not exit\nthe application and instead will rethrow the exception.",
-                    "type": "boolean"
-                },
-                "autoFlushLogs": {
-                    "default": true,
-                    "description": "If enabled, logs will be automatically flushed and buffer detached when\napplication initialisation process either completes or fails.",
-                    "type": "boolean"
-                },
-                "bodyParser": {
-                    "description": "Whether to use underlying platform body parser.",
-                    "type": "boolean"
-                },
-                "bufferLogs": {
-                    "default": false,
-                    "description": "If enabled, logs will be buffered until the \"Logger#flush\" method is called.",
-                    "type": "boolean"
-                },
-                "cors": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/definitions/CorsOptions.feb4be84"
-                        },
-                        {
-                            "$ref": "#/definitions/CorsOptionsDelegate<any>.0623a5a0"
-                        },
-                        {
-                            "type": "boolean"
-                        }
-                    ],
-                    "description": "CORS options from [CORS package](https://github.com/expressjs/cors#configuration-options)"
-                },
-                "httpsOptions": {
-                    "$ref": "#/definitions/HttpsOptions.018dfbe9",
-                    "description": "Set of configurable HTTPS options"
-                },
-                "logger": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/definitions/LoggerService.f697eb92"
-                        },
-                        {
-                            "items": {
-                                "enum": [
-                                    "debug",
-                                    "error",
-                                    "log",
-                                    "verbose",
-                                    "warn"
-                                ],
-                                "type": "string"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "enum": [
-                                false
-                            ],
-                            "type": "boolean"
-                        }
-                    ],
-                    "description": "Specifies the logger to use.  Pass `false` to turn off logging."
-                }
             },
             "type": "object"
         },
@@ -10087,6 +9931,27 @@
             },
             "type": "object"
         },
+        "TransformerPackage.22419bed": {
+            "type": "object"
+        },
+        "Type<any>.1a7221e6": {
+            "properties": {
+                "arguments": {
+                },
+                "caller": {
+                    "$ref": "#/definitions/Function.26fa9ff2"
+                },
+                "length": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "prototype": {
+                }
+            },
+            "type": "object"
+        },
         "URL.0f55bb67": {
             "description": "Browser-compatible `URL` class, implemented by following the WHATWG URL\nStandard. [Examples of parsed URLs](https://url.spec.whatwg.org/#example-url-parsing) may be found in the Standard itself.\nThe `URL` class is also available on the global object.\n\nIn accordance with browser conventions, all properties of `URL` objects\nare implemented as getters and setters on the class prototype, rather than as\ndata properties on the object itself. Thus, unlike `legacy urlObject` s,\nusing the `delete` keyword on any properties of `URL` objects (e.g. `delete myURL.protocol`, `delete myURL.pathname`, etc) has no effect but will still\nreturn `true`.",
             "properties": {
@@ -10145,6 +10010,124 @@
             "description": "The `URLSearchParams` API provides read and write access to the query of a`URL`. The `URLSearchParams` class can also be used standalone with one of the\nfour following constructors.\nThe `URLSearchParams` class is also available on the global object.\n\nThe WHATWG `URLSearchParams` interface and the `querystring` module have\nsimilar purpose, but the purpose of the `querystring` module is more\ngeneral, as it allows the customization of delimiter characters (`&#x26;` and `=`).\nOn the other hand, this API is designed purely for URL query strings.\n\n```js\nconst myURL = new URL('https://example.org/?abc=123');\nconsole.log(myURL.searchParams.get('abc'));\n// Prints 123\n\nmyURL.searchParams.append('abc', 'xyz');\nconsole.log(myURL.href);\n// Prints https://example.org/?abc=123&#x26;abc=xyz\n\nmyURL.searchParams.delete('abc');\nmyURL.searchParams.set('a', 'b');\nconsole.log(myURL.href);\n// Prints https://example.org/?a=b\n\nconst newSearchParams = new URLSearchParams(myURL.searchParams);\n// The above is equivalent to\n// const newSearchParams = new URLSearchParams(myURL.search);\n\nnewSearchParams.append('a', 'c');\nconsole.log(myURL.href);\n// Prints https://example.org/?a=b\nconsole.log(newSearchParams.toString());\n// Prints a=b&#x26;a=c\n\n// newSearchParams.toString() is implicitly called\nmyURL.search = newSearchParams;\nconsole.log(myURL.href);\n// Prints https://example.org/?a=b&#x26;a=c\nnewSearchParams.delete('a');\nconsole.log(myURL.href);\n// Prints https://example.org/?a=b&#x26;a=c\n```",
             "type": "object"
         },
+        "ValidationPipeOptions.de4832e0": {
+            "properties": {
+                "always": {
+                    "description": "Set default for `always` option of decorators. Default can be overridden in decorator options.",
+                    "type": "boolean"
+                },
+                "disableErrorMessages": {
+                    "type": "boolean"
+                },
+                "dismissDefaultMessages": {
+                    "description": "If set to true, the validation will not use default messages.\nError message always will be undefined if its not explicitly set.",
+                    "type": "boolean"
+                },
+                "enableDebugMessages": {
+                    "description": "If set to true then class-validator will print extra warning messages to the console when something is not right.",
+                    "type": "boolean"
+                },
+                "errorHttpStatusCode": {
+                    "enum": [
+                        400,
+                        401,
+                        403,
+                        404,
+                        405,
+                        406,
+                        408,
+                        409,
+                        410,
+                        412,
+                        413,
+                        415,
+                        418,
+                        422,
+                        500,
+                        501,
+                        502,
+                        503,
+                        504
+                    ],
+                    "type": "number"
+                },
+                "exceptionFactory": {
+                    "type": "object"
+                },
+                "expectedType": {
+                    "$ref": "#/definitions/Type<any>.1a7221e6"
+                },
+                "forbidNonWhitelisted": {
+                    "description": "If set to true, instead of stripping non-whitelisted properties validator will throw an error",
+                    "type": "boolean"
+                },
+                "forbidUnknownValues": {
+                    "description": "Settings true will cause fail validation of unknown objects.",
+                    "type": "boolean"
+                },
+                "groups": {
+                    "description": "Groups to be used during validation of the object.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "skipMissingProperties": {
+                    "description": "If set to true then validator will skip validation of all properties that are null or undefined in the validating object.",
+                    "type": "boolean"
+                },
+                "skipNullProperties": {
+                    "description": "If set to true then validator will skip validation of all properties that are null in the validating object.",
+                    "type": "boolean"
+                },
+                "skipUndefinedProperties": {
+                    "description": "If set to true then validator will skip validation of all properties that are undefined in the validating object.",
+                    "type": "boolean"
+                },
+                "stopAtFirstError": {
+                    "description": "When set to true, validation of the given property will stop after encountering the first error. Defaults to false.",
+                    "type": "boolean"
+                },
+                "strictGroups": {
+                    "description": "If [groups]{@link ValidatorOptions#groups} is not given or is empty,\nignore decorators with at least one group.",
+                    "type": "boolean"
+                },
+                "transform": {
+                    "type": "boolean"
+                },
+                "transformOptions": {
+                    "$ref": "#/definitions/ClassTransformOptions.b9966958"
+                },
+                "transformerPackage": {
+                    "$ref": "#/definitions/TransformerPackage.22419bed"
+                },
+                "validateCustomDecorators": {
+                    "type": "boolean"
+                },
+                "validationError": {
+                    "description": "ValidationError special options.",
+                    "properties": {
+                        "target": {
+                            "description": "Indicates if target should be exposed in ValidationError.",
+                            "type": "boolean"
+                        },
+                        "value": {
+                            "description": "Indicates if validated value should be exposed in ValidationError.",
+                            "type": "boolean"
+                        }
+                    },
+                    "type": "object"
+                },
+                "validatorPackage": {
+                    "$ref": "#/definitions/ValidatorPackage.4196e2f3"
+                },
+                "whitelist": {
+                    "description": "If set to true validator will strip validated object of any properties that do not have any decorators.\n\nTip: if no other decorator is suitable for your property use @Allow decorator.",
+                    "type": "boolean"
+                }
+            },
+            "type": "object"
+        },
         "ValidatorBehavior.7f46e60e": {
             "enum": [
                 "error",
@@ -10152,6 +10135,9 @@
                 "warn"
             ],
             "type": "string"
+        },
+        "ValidatorPackage.4196e2f3": {
+            "type": "object"
         },
         "VerifyOptions.83626cc3": {
             "properties": {
@@ -10918,7 +10904,7 @@
             "$ref": "#/definitions/ClientOptions.392ef7a5"
         },
         "graphql": {
-            "$ref": "#/definitions/GqlModuleOptions.a3cc53d4"
+            "$ref": "#/definitions/GqlModuleOptions.6c987e2a"
         },
         "jwt": {
             "$ref": "#/definitions/JwtModuleOptions.698577c2"
@@ -10938,16 +10924,29 @@
                     "type": "string"
                 },
                 "helmet": {
-                    "$ref": "#/definitions/HelmetOptions.7ecdff96"
-                },
-                "nest": {
-                    "$ref": "#/definitions/NestApplicationOptions.cccd1327"
+                    "$ref": "#/definitions/HelmetOptions.e11835a9"
                 },
                 "port": {
                     "type": "number"
                 },
                 "prefix": {
                     "type": "string"
+                },
+                "rootAccount": {
+                    "properties": {
+                        "email": {
+                            "type": "string"
+                        },
+                        "nickname": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "session": {
+                },
+                "validator": {
+                    "$ref": "#/definitions/ValidationPipeOptions.de4832e0"
                 }
             },
             "type": "object"

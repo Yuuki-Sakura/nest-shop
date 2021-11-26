@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:14-alpine
 MAINTAINER Yuuki-Sakura <admin@zy.ci>
 
 ADD . /app

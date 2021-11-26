@@ -1,6 +1,6 @@
-import DistrictEntity from '@/district/entity/district.entity';
-import FreightTemplateDistrictEntity from '@/freight/entity/freight-template-district.entity';
-import MerchantEntity from '@/merchant/entity/merchant.entity';
+import { DistrictEntity } from '@/district';
+import { FreightTemplateDistrictEntity } from '@/freight';
+import { MerchantEntity } from '@/merchant';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import {
@@ -39,7 +39,7 @@ registerEnumType(FreightTemplateType, {
 @ObjectType('FreightTemplate', {
   description: '运费模板信息',
 })
-export default class FreightTemplateEntity extends CommonEntity {
+export class FreightTemplateEntity extends CommonEntity {
   @Field(() => MerchantEntity, {
     description: '运费模板所属商家',
   })
