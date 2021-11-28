@@ -73,18 +73,25 @@ export class UserService {
         400,
       );
     }
-    if (await this.redis.get(`${user.id}-login-locked`)) {
+    const loginLockTtl = await this.redis.ttl(`${user.id}-login-locked`);
+    if (loginLockTtl > -1) {
       throw new CommonException({
         key: 'user.login.accountLocked',
         args: {
-          time: 30,
+          time: loginLockTtl,
         },
       });
     }
     if (!(await verifyPassword(user.password, password))) {
       const failCount = await this.redis.incr(`${user.id}-login-fail-count`);
       if (failCount >= 3) {
-        await this.redis.set(`${user.id}-login-locked`, 1, 'EX', 30, 'NX');
+        await this.redis.set(
+          `${user.id}-login-locked`,
+          1,
+          'EX',
+          (failCount - 2) * 30,
+          'NX',
+        );
       }
       throw new CommonException(
         { key: 'user.login.accountOrPasswordFail' },
@@ -206,11 +213,13 @@ export class UserService {
   }
 
   logout(user: UserEntity, token: string) {
-    console.log(
-      this.jwtService.decode(token, {
-        complete: true,
-      }),
-    );
-    return this.redis.zadd('expired-token', Date.now(), token);
+    const decoded = this.jwtService.decode(token, {
+      complete: true,
+    }) as {
+      header: Record<string, string | number>;
+      payload: Record<string, string | number>;
+      signature: string;
+    };
+    return this.redis.zadd('expired-token', decoded.payload.exp, token);
   }
 }

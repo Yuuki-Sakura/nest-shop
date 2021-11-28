@@ -2,16 +2,7 @@ import { Auth } from '@/auth/auth.utils';
 import { CommonController } from '@/common/controller/common.controller';
 import { Message } from '@/common/decorator/message.decorator';
 import { UserLoginDto, UserRegisterDto } from '@/user/dto';
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Inject,
-  Post,
-  Req,
-} from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, Req } from '@nestjs/common';
 import { UserService } from '@/user/user.service';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from '@/auth/auth.service';
@@ -35,7 +26,6 @@ export class UserController extends CommonController {
   }
 
   @Post('register')
-  @HttpCode(HttpStatus.OK)
   @Message('user.register.success')
   async register(@Body() registerDto: UserRegisterDto) {
     return this.userService.register(registerDto);
