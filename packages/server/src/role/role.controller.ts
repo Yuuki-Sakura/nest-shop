@@ -1,19 +1,17 @@
+import { Span } from '@/common/decorator/span.decorator';
 import { Role } from '@adachi-sakura/nest-shop-entity';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import { RoleService } from '@/role/role.service';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RoleCreateDto } from '@/role/dto/role-create.dto';
 import { Auth } from '@/auth/auth.utils';
-import { CommonController } from '@/common/controller/common.controller';
-import { EnableMethodListener } from '@/common/decorator/enable-method-listener.decorator';
 
 @ApiTags('角色')
 @Controller('role')
-@EnableMethodListener()
-export class RoleController extends CommonController {
-  constructor(private readonly roleService: RoleService) {
-    super('RoleController');
-  }
+@Span()
+export class RoleController {
+  @Inject()
+  private readonly roleService: RoleService;
 
   @Get()
   @ApiResponse({ type: Role, isArray: true })

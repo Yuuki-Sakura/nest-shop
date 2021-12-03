@@ -4,7 +4,8 @@
  * @module interceptor/logging
  */
 
-import { Observable } from 'rxjs';
+import { context, Span, SpanStatusCode, trace } from '@opentelemetry/api';
+import { catchError, Observable, throwError } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import {
   CallHandler,
@@ -13,7 +14,6 @@ import {
   Logger,
   NestInterceptor,
 } from '@nestjs/common';
-import { isDevMode } from '@/app.environment';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { Response } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
@@ -22,22 +22,21 @@ export class LoggingInterceptor implements NestInterceptor {
   @Inject()
   private readonly logger: Logger;
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const gqlContext = GqlExecutionContext.create(context);
+  intercept(ctx: ExecutionContext, next: CallHandler): Observable<any> {
+    const gqlContext = GqlExecutionContext.create(ctx);
     if (gqlContext.getType() == 'graphql') {
       return next.handle();
     }
-    if (!isDevMode) {
-      return next.handle();
-    }
-    const request = context.switchToHttp().getRequest();
+    const request = ctx.switchToHttp().getRequest();
     this.logger.log(
       `[request-at: ${request.requestAt}] Request: [${request.method} -> ${request.url}]`,
       'Request',
     );
-    const response = context.switchToHttp().getResponse<Response>();
+    const response = ctx.switchToHttp().getResponse<Response>();
+    const span = request.span as Span;
     return next.handle().pipe(
       tap(() => {
+        span.end();
         this.logger.log(
           `[request-at: ${request.requestAt}] Response: [${request.method} -> ${
             request.url

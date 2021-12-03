@@ -1,3 +1,4 @@
+import { Span } from '@/common/decorator/span.decorator';
 import { Role } from '@adachi-sakura/nest-shop-entity';
 import { InjectRedis } from '@adachi-sakura/nestjs-redis';
 import { Inject, Injectable } from '@nestjs/common';
@@ -8,18 +9,13 @@ import { RoleCreateDto } from '@/role/dto/role-create.dto';
 import { PermissionService } from '@/permission/permission.service';
 import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
 import { FindConditions } from 'typeorm/find-options/FindConditions';
-import { CommonService } from '@/common/service/common.service';
-import { EnableMethodListener } from '@/common/decorator/enable-method-listener.decorator';
 
 @Injectable()
-@EnableMethodListener()
-export class RoleService extends CommonService {
-  constructor() {
-    super('RoleService');
-  }
-
+@Span()
+export class RoleService {
   @InjectRepository(Role)
   private readonly roleRepository: Repository<Role>;
+
   @Inject()
   private readonly permissionService: PermissionService;
 

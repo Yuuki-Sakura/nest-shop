@@ -1,7 +1,7 @@
 {
   "login": {
     "accountOrPasswordFail": "账号或密码错误",
-    "accountLocked": "该账号已被锁定{time}秒"
+    "accountLocked": "该账号已被锁定, 剩余{time}秒"
   },
   "register": {
     "fail": {

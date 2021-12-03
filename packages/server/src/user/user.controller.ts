@@ -1,7 +1,7 @@
 import { Auth } from '@/auth/auth.utils';
-import { CommonController } from '@/common/controller/common.controller';
+import { Span } from '@/common/decorator/span.decorator';
 import { Message } from '@/common/decorator/message.decorator';
-import { UserLoginDto, UserRegisterDto } from '@/user/dto';
+import { UserLoginDto, UserLoginResultDto, UserRegisterDto } from '@/user/dto';
 import {
   Body,
   Controller,
@@ -13,16 +13,14 @@ import {
   Req,
 } from '@nestjs/common';
 import { UserService } from '@/user/user.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { AuthService } from '@/auth/auth.service';
 import { Request } from 'express';
 
 @ApiTags('user')
 @Controller('/user')
-export class UserController extends CommonController {
-  constructor() {
-    super('UserController');
-  }
+@Span()
+export class UserController {
   @Inject(UserService)
   private readonly userService: UserService;
 
@@ -30,6 +28,7 @@ export class UserController extends CommonController {
   private readonly authService: AuthService;
 
   @Post('login')
+  @ApiBody({ type: UserLoginDto })
   async login(@Body() loginDto: UserLoginDto, @Req() req: Request) {
     return await this.userService.login(loginDto, req);
   }

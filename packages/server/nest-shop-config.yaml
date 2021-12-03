@@ -12,7 +12,12 @@ database:
   password: 'AhGHNXBFFNKJ'
   database: 'nestshop'
   synchronize: true
-  logging: true
+  logging:
+    - error
+    - log
+    - info
+    - query
+    - warn
   maxQueryExecutionTime: -1
   entities:
     - './node_modules/@adachi-sakura/nest-shop-entity/dist/**/*.js'

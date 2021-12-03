@@ -4,18 +4,15 @@
  * @module app/controllers
  */
 
-import { Controller, Get, Inject, Logger } from '@nestjs/common';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { name, version, author } = require('../package.json');
+import { Span } from '@/common/decorator/span.decorator';
+import { Controller, Get } from '@nestjs/common';
+import { author, name, version } from '../package.json';
 
 @Controller()
+@Span()
 export class AppController {
-  @Inject()
-  private readonly logger: Logger;
-
   @Get()
   root(): any {
-    this.logger.log('Controller Test', 'AppController');
     return {
       name,
       version,

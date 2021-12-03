@@ -1,10 +1,13 @@
 import { permissions } from '@/auth/auth.utils';
+import { WinstonLogger } from '@/common/logger/winston.logger';
 import { PermissionService } from '@/permission/permission.service';
+import otelSDK from '@/tracing';
 import { UserRepository } from '@/user/user.repository';
 import { UserService } from '@/user/user.service';
 import { HttpMethod, Role, UserRole } from '@adachi-sakura/nest-shop-entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { DEFAULT_CONNECTION_NAME } from '@nestjs/typeorm/dist/typeorm.constants';
+import { context, trace } from '@opentelemetry/api';
 import { Repository } from 'typeorm';
 import { AppConfig } from './app.config';
 import clc from 'cli-color';
@@ -113,59 +116,9 @@ async function init(app: NestApplication) {
 }
 
 async function bootstrap() {
+  await otelSDK.start();
   app = await NestFactory.create(AppModule, {
-    logger: WinstonModule.createLogger({
-      exitOnError: false,
-      transports: [
-        new transports.Console({
-          format: format.combine(
-            // format.colorize(),
-            format.timestamp({
-              format: 'YYYY-MM-DD HH:mm:ss.SSS A ZZ',
-            }),
-            // format.ms(),
-            format.printf((info) => {
-              const { context, level, timestamp, message, ms, ...meta } = info;
-              const nestLikeColorScheme: Record<string, bare.Format> = {
-                info: clc.green,
-                error: clc.red,
-                warn: clc.yellow,
-                debug: clc.magentaBright,
-                verbose: clc.cyanBright,
-              };
-              const color =
-                nestLikeColorScheme[level] || ((text: string): string => text);
-
-              const stringifiedMeta = safeStringify(meta);
-              const formattedMeta = inspect(JSON.parse(stringifiedMeta), {
-                colors: true,
-                depth: null,
-              });
-              const requestId = rTracer.id();
-              return (
-                `${clc.yellow(`[Nest Shop]`)} ` +
-                // `[${clc.yellow(
-                //   level.charAt(0).toUpperCase() + level.slice(1),
-                // )}] ` +
-                color(`[${level.toUpperCase()}] `) +
-                ('undefined' !== typeof timestamp
-                  ? clc.green(`[${timestamp}] `)
-                  : '') +
-                ('undefined' !== typeof context
-                  ? `${clc.yellow('[' + context + ']')} `
-                  : '') +
-                ('undefined' !== typeof requestId
-                  ? clc.green(`[request-id: ${requestId}] `)
-                  : '') +
-                `${color(message)} - ` +
-                `${formattedMeta}` +
-                ('undefined' !== typeof ms ? ` ${clc.yellow(ms)}` : '')
-              );
-            }),
-          ),
-        }),
-      ],
-    }),
+    logger: WinstonLogger,
   });
   const config = app.get<AppConfig>(AppConfig);
   app.enableVersioning({
@@ -174,7 +127,18 @@ async function bootstrap() {
   });
   app.use((req, res, next) => {
     req.requestAt = Date.now();
-    next();
+    const tracer = trace.getTracer('default');
+    const span = tracer.startSpan(`Request: ${req.method} -> ${req.url}`, {
+      root: true,
+    });
+    span.setAttributes({
+      url: req.url,
+      method: req.method,
+    });
+    req.span = span;
+    context.with(trace.setSpan(context.active(), span), () => {
+      next();
+    });
   });
   app.use(requestIp.mw());
   app.use(session(config.server.session));

@@ -4,6 +4,7 @@ import {
   getPermissions,
   verifyPassword,
 } from '@/auth/auth.utils';
+import { Span } from '@/common/decorator/span.decorator';
 import { create } from '@/common/utils/create.util';
 import { UserLoginDto, UserLoginResultDto, UserRegisterDto } from '@/user/dto';
 import { CommonException, nanoid } from '@adachi-sakura/nest-shop-common';
@@ -27,6 +28,7 @@ import languageParser from 'accept-language-parser';
 import UAParser from 'ua-parser-js';
 
 @Injectable()
+@Span()
 export class UserService {
   @Inject()
   private readonly authService: AuthService;
@@ -73,18 +75,25 @@ export class UserService {
         400,
       );
     }
-    if (await this.redis.get(`${user.id}-login-locked`)) {
+    const lockTime = await this.redis.ttl(`${user.id}-login-locked`);
+    if (lockTime >= 0) {
       throw new CommonException({
         key: 'user.login.accountLocked',
         args: {
-          time: 30,
+          time: lockTime,
         },
       });
     }
     if (!(await verifyPassword(user.password, password))) {
       const failCount = await this.redis.incr(`${user.id}-login-fail-count`);
       if (failCount >= 3) {
-        await this.redis.set(`${user.id}-login-locked`, 1, 'EX', 30, 'NX');
+        await this.redis.set(
+          `${user.id}-login-locked`,
+          1,
+          'EX',
+          (failCount - 2) * 30,
+          'NX',
+        );
       }
       throw new CommonException(
         { key: 'user.login.accountOrPasswordFail' },
@@ -103,6 +112,7 @@ export class UserService {
         .update(
           JSON.stringify({
             languages: userLanguages,
+            id: user.id,
             ua: {
               browser: {
                 name: userAgent.browser.name,

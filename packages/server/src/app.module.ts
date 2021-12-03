@@ -7,6 +7,7 @@ import { TransformInterceptorProvider } from '@/common/interceptors/transform.in
 import { TypeOrmLogger } from '@/common/logger/type-orm.logger';
 import { CorsMiddleware } from '@/common/middlewares/cors.middleware';
 import { OriginMiddleware } from '@/common/middlewares/origin.middleware';
+import { watchFileLoader } from '@/common/utils/watch-file-loader';
 import { PermissionModule } from '@/permission/permission.module';
 import { RoleModule } from '@/role/role.module';
 import { UserModule } from '@/user/user.module';
@@ -17,6 +18,7 @@ import { Logger, MiddlewareConsumer, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { context, SpanStatusCode, trace } from '@opentelemetry/api';
 import Ajv, { ErrorObject } from 'ajv';
 import merge from 'deepmerge';
 import IORedis, { Command, RedisOptions } from 'ioredis';
@@ -28,7 +30,7 @@ import path from 'path';
   imports: [
     TypedConfigModule.forRoot({
       schema: AppConfig,
-      load: fileLoader({
+      load: watchFileLoader({
         basename: 'nest-shop-config',
       }),
       validate: (rawConfig: any) => {
@@ -79,19 +81,6 @@ import path from 'path';
         watch: true,
       },
     }),
-    // OpenTelemetryModule.forRootAsync({
-    //   imports: [AppConfig],
-    //   useFactory: (config: AppConfig) => {
-    //     return {
-    //       spanProcessor: new SimpleSpanProcessor(
-    //         new JaegerExporter({
-    //           endpoint: 'http://101.34.66.96:14268/api/traces',
-    //         }),
-    //       ),
-    //     };
-    //   },
-    //   inject: [AppConfig],
-    // }),
     TypeOrmModule.forRootAsync({
       useFactory: (config: AppConfig) => {
         return {
@@ -121,34 +110,59 @@ import path from 'path';
               apply(target, thisArg: IORedis.Redis, argArray: Command[]): any {
                 const invokeAt = Date.now();
                 const command = argArray[0];
-                logger.log(
-                  `[invoke-at: ${invokeAt}] [command: ${command.name.toUpperCase()}] args: ${JSON.stringify(
-                    command['args'],
-                  )}`,
-                );
-                (command['promise'] as Promise<any>)
-                  .then((res) => {
+                const commandName = command.name.toUpperCase();
+                const tracer = trace.getTracer('default');
+                const currentSpan =
+                  trace.getSpan(context.active()) ??
+                  tracer.startSpan('default');
+                return context.with(
+                  trace.setSpan(context.active(), currentSpan),
+                  () => {
+                    const span = tracer.startSpan(`Redis: ${commandName}`);
+                    span.setAttributes({
+                      command: commandName,
+                      args: command['args'],
+                    });
                     logger.log(
-                      `[invoke-at: ${invokeAt}] [command: ${command.name.toUpperCase()}] args: ${JSON.stringify(
+                      `[invoke-at: ${invokeAt}] [command: ${commandName}] args: ${JSON.stringify(
                         command['args'],
-                      )} result: ${JSON.stringify(res)} time: ${
-                        Date.now() - invokeAt
-                      }ms`,
+                      )}`,
                     );
-                    return res;
-                  })
-                  .catch((err: Error) => {
-                    logger.error(
-                      `[invoke-at: ${invokeAt}] [command: ${command.name.toUpperCase()}] args: ${JSON.stringify(
-                        command['args'],
-                      )} error: ${err.message} time: ${
-                        Date.now() - invokeAt
-                      }ms`,
-                      err,
-                    );
-                    throw err;
-                  });
-                return target.apply(thisArg, argArray);
+                    (command['promise'] as Promise<any>)
+                      .then((res) => {
+                        span.setAttributes({
+                          result: res,
+                        });
+                        span.end();
+                        logger.log(
+                          `[invoke-at: ${invokeAt}] [command: ${commandName}] args: ${JSON.stringify(
+                            command['args'],
+                          )} result: ${JSON.stringify(res)} time: ${
+                            Date.now() - invokeAt
+                          }ms`,
+                        );
+                        return res;
+                      })
+                      .catch((err: Error) => {
+                        span.recordException(err);
+                        span.setStatus({
+                          code: SpanStatusCode.ERROR,
+                          message: err.message,
+                        });
+                        span.end();
+                        logger.error(
+                          `[invoke-at: ${invokeAt}] [command: ${commandName}] args: ${JSON.stringify(
+                            command['args'],
+                          )} error: ${err.message} time: ${
+                            Date.now() - invokeAt
+                          }ms`,
+                          err,
+                        );
+                        throw err;
+                      });
+                    return target.apply(thisArg, argArray);
+                  },
+                );
               },
             });
           },
