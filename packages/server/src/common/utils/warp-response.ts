@@ -2,15 +2,10 @@
 
 import { CommonResponse } from '@/common/interceptors/transform.interceptor';
 import { Type } from '@nestjs/common';
-import {
-  ApiPropertyOptions,
-  ApiResponseProperty,
-} from '@nestjs/swagger/dist/decorators/api-property.decorator';
+import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptions } from '@nestjs/swagger/dist/decorators/api-property.decorator';
 
-type ApiResponseMetadata<T> = Pick<
-  ApiPropertyOptions,
-  'example' | 'format' | 'enum' | 'deprecated'
-> & {
+type ApiResponseMetadata<T> = ApiPropertyOptions & {
   type: Type<T> | Function | [Function] | string | Record<string, any>;
 };
 
@@ -27,7 +22,7 @@ export const warpResponse = <T, U extends Type<CommonResponse<T>>>(
     }
   })();
   class TempClass<T> extends CommonResponse<T> {
-    @ApiResponseProperty(options)
+    @ApiProperty(options)
     data: T;
   }
   Object.defineProperty(TempClass, 'name', { writable: true });

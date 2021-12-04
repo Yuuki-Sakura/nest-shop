@@ -36,7 +36,13 @@ export class UserController {
   @Post('register')
   @HttpCode(HttpStatus.OK)
   @Message('user.register.success')
-  async register(@Body() registerDto: UserRegisterDto) {
-    return this.userService.register(registerDto);
+  @ApiResponse({
+    type: warpResponse({ type: UserLoginResultDto, nullable: true }),
+  })
+  @ApiBody({
+    type: UserRegisterDto,
+  })
+  async register(@Body() registerDto: UserRegisterDto, @Req() req: Request) {
+    return this.userService.register(registerDto, req);
   }
 }

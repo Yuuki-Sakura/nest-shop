@@ -27,7 +27,7 @@ export class UserLoginDto {
   @ApiPropertyOptional({ type: String, description: '手机号' })
   @IsPhoneNumber()
   @IsOptional()
-  readonly phone?: string;
+  readonly phoneNumber?: string;
 
   @Field({ description: '密码' })
   @ApiProperty({ type: String, description: '密码' })

@@ -10,6 +10,8 @@ import { create } from '@/common/utils/create.util';
 import { UserLoginDto, UserLoginResultDto, UserRegisterDto } from '@/user/dto';
 import { CommonException, nanoid } from '@adachi-sakura/nest-shop-common';
 import { UserDeviceEntity, UserEntity } from '@adachi-sakura/nest-shop-entity';
+import { UserEmailEntity } from '@adachi-sakura/nest-shop-entity/dist/user/entity/user-email.entity';
+import { UserPhoneNumberEntity } from '@adachi-sakura/nest-shop-entity/dist/user/entity/user-phone-number.entity';
 import { InjectRedis } from '@adachi-sakura/nestjs-redis';
 import {
   HttpStatus,
@@ -44,6 +46,12 @@ export class UserService {
   @InjectRepository(UserDeviceEntity)
   private readonly userDeviceRepo: Repository<UserDeviceEntity>;
 
+  @InjectRepository(UserEmailEntity)
+  private readonly userEmailRepo: Repository<UserEmailEntity>;
+
+  @InjectRepository(UserPhoneNumberEntity)
+  private readonly userPhoneNumberRepo: Repository<UserPhoneNumberEntity>;
+
   @InjectRedis()
   private readonly redis: Redis;
 
@@ -64,10 +72,13 @@ export class UserService {
   }
 
   async login(
-    { phone, email, password, fingerprint }: UserLoginDto,
+    { phoneNumber, email, password, fingerprint }: UserLoginDto,
     req: Request,
   ) {
-    const user = await this.userRepository.findOneByPhoneOrEmail(phone, email);
+    const user = await this.userRepository.findOneByPhoneOrEmail(
+      phoneNumber,
+      email,
+    );
     if (!user) {
       throw new CommonException(
         { key: 'user.login.accountOrPasswordFail' },
@@ -157,44 +168,84 @@ export class UserService {
     // console.log(userPermissions);
     const token = this.authService.signToken(user);
     return create(UserLoginResultDto, {
-      ...user,
+      user,
       token,
       permissions: userPermissions,
     });
   }
 
-  async register(registerDto: UserRegisterDto): Promise<void> {
-    if (!registerDto.phone && !registerDto.email) {
+  async register(
+    registerDto: UserRegisterDto,
+    req?: Request,
+  ): Promise<UserLoginResultDto | void> {
+    if (!registerDto.phoneNumber && !registerDto.email) {
       throw new CommonException({
         key: 'user.register.fail.missingParameters',
       });
     }
-    const user = await this.userRepository.findOneByPhoneOrEmail(
-      registerDto.phone,
-      registerDto.email,
-    );
-    if (user) {
-      throw new CommonException({ key: 'user.register.fail.exists' }, 400);
+    {
+      const user = await this.userRepository.findOneByPhoneOrEmail(
+        registerDto.phoneNumber,
+        registerDto.email,
+      );
+      if (user) {
+        throw new CommonException({ key: 'user.register.fail.exists' }, 400);
+      }
     }
     const password = await encryptPassword(registerDto.password);
-    const result = await this.userRepository.insert(
+    const user = await this.userRepository.save(
       this.userRepository.create({
-        ...registerDto,
         password,
         nickname: registerDto.nickname || registerDto.email || nanoid(10),
       }),
     );
-    if (result.identifiers.length === 0) {
-      throw new CommonException({ key: 'common.fail.unknown' }, 500);
+    if (registerDto.email) {
+      const userEmail = this.userEmailRepo.create({
+        user,
+        isPrimary: true,
+        email: registerDto.email,
+      });
+      const result = await this.userEmailRepo.insert(userEmail);
+      if (result.identifiers.length === 0) {
+        throw new CommonException({ key: 'common.fail.unknown' }, 500);
+      }
+      await this.userRepository.update(user, { primaryEmail: userEmail });
+    }
+    if (registerDto.phoneNumber) {
+      const userPhoneNumber = this.userPhoneNumberRepo.create({
+        user,
+        isPrimary: true,
+        phoneNumber: registerDto.phoneNumber,
+      });
+      const result = await this.userPhoneNumberRepo.insert(userPhoneNumber);
+      if (result.identifiers.length === 0) {
+        throw new CommonException({ key: 'common.fail.unknown' }, 500);
+      }
+      await this.userRepository.update(user, {
+        primaryPhoneNumber: userPhoneNumber,
+      });
+    }
+    if (registerDto.andLogin) {
+      return this.login(
+        {
+          phoneNumber: registerDto.phoneNumber,
+          email: registerDto.email,
+          password: registerDto.password,
+          fingerprint: registerDto.fingerprint,
+        },
+        req,
+      );
     }
   }
 
-  logout(user: UserEntity, token: string) {
-    console.log(
-      this.jwtService.decode(token, {
-        complete: true,
-      }),
-    );
-    return this.redis.zadd('expired-token', Date.now(), token);
+  async logout(user: UserEntity, token: string) {
+    const decoded = this.jwtService.decode(token, {
+      complete: true,
+    });
+    if (typeof decoded !== 'string') {
+      console.log(decoded);
+      await this.redis.zadd('expired-token', decoded.exp, token);
+    }
+    return;
   }
 }

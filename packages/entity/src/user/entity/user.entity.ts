@@ -13,6 +13,7 @@ import {
   CommonEntity,
   Timestamp,
   DecimalTransformer,
+  ToDecimal,
 } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
@@ -107,10 +108,9 @@ export class UserEntity extends CommonEntity {
     description: '用户主邮箱',
   })
   @IsEmail()
-  @OneToOne(() => UserEmailEntity, (email) => email.id)
+  @OneToOne(() => UserEmailEntity, (email) => email.id, { eager: true })
   @JoinColumn({
     name: 'primary_user_email_id',
-    referencedColumnName: 'user_id',
   })
   primaryEmail: UserEmailEntity;
 
@@ -132,10 +132,9 @@ export class UserEntity extends CommonEntity {
     description: '用户主手机号码',
   })
   @IsEmail()
-  @OneToOne(() => UserPhoneNumberEntity, (phone) => phone.id)
+  @OneToOne(() => UserPhoneNumberEntity, (phone) => phone.id, { eager: true })
   @JoinColumn({
     name: 'primary_user_phone_number_id',
-    referencedColumnName: 'user_id',
   })
   primaryPhoneNumber: UserPhoneNumberEntity;
 
@@ -257,6 +256,7 @@ export class UserEntity extends CommonEntity {
     default: '0.00',
     transformer: DecimalTransformer(),
   })
+  @ToDecimal()
   balance: Decimal;
 
   @Field(() => Int, {

@@ -9,6 +9,7 @@ import {
   CUSTOM_SUCCESS_MESSAGE_METADATA,
 } from '@adachi-sakura/nest-shop-common';
 import { HTTP_CODE_METADATA } from '@nestjs/common/constants';
+import { ApiResponseProperty } from '@nestjs/swagger/dist/decorators/api-property.decorator';
 import { I18nService } from 'nestjs-i18n';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -16,7 +17,6 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import {
   CallHandler,
   ExecutionContext,
-  HttpStatus,
   Inject,
   Injectable,
   Logger,
@@ -24,11 +24,13 @@ import {
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
-type TResponse<T> = {
-  code: HttpStatus;
+export class CommonResponse<T extends any> {
+  @ApiResponseProperty({ example: 200 })
+  code: number;
+  @ApiResponseProperty()
   message: string;
   data?: T;
-};
+}
 
 /**
  * @class TransformInterceptor
@@ -45,7 +47,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T> {
   intercept(
     context: ExecutionContext,
     next: CallHandler<T>,
-  ): Observable<Promise<TResponse<T>> | TResponse<T> | T> {
+  ): Observable<Promise<CommonResponse<T>> | CommonResponse<T> | T> {
     const ctx = context.switchToHttp();
     const gqlContext = GqlExecutionContext.create(context);
     if (gqlContext.getType() == 'graphql') return next.handle();

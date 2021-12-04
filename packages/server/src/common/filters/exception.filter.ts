@@ -29,10 +29,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     exception: HttpException | CommonException | Error,
     host: ArgumentsHost,
   ) {
-    const gqlHost = GqlArgumentsHost.create(host);
-    if (gqlHost['contextType'] == 'graphql') {
-      return;
-    }
+    // const gqlHost = GqlArgumentsHost.create(host);
+    // if (gqlHost['contextType'] == 'graphql') {
+    //   return;
+    // }
     const response = host.switchToHttp().getResponse<Response>();
     const request = host.switchToHttp().getRequest();
     const span = request.span as Span;

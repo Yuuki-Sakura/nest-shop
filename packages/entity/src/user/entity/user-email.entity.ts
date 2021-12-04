@@ -11,7 +11,7 @@ export class UserEmailEntity extends CommonEntity {
   @Field(() => UserEntity, {
     description: '邮箱所属用户',
   })
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, (user) => user.id)
   @JoinColumn({
     name: 'user_id',
   })

@@ -1,5 +1,7 @@
 import { UserResolver } from '@/user/user.resolver';
 import { UserDeviceEntity, UserRole } from '@adachi-sakura/nest-shop-entity';
+import { UserEmailEntity } from '@adachi-sakura/nest-shop-entity/dist/user/entity/user-email.entity';
+import { UserPhoneNumberEntity } from '@adachi-sakura/nest-shop-entity/dist/user/entity/user-phone-number.entity';
 import { forwardRef, Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
@@ -10,7 +12,13 @@ import { RoleModule } from '@/role/role.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserRepository, UserDeviceEntity, UserRole]),
+    TypeOrmModule.forFeature([
+      UserRepository,
+      UserDeviceEntity,
+      UserRole,
+      UserEmailEntity,
+      UserPhoneNumberEntity,
+    ]),
     forwardRef(() => AuthModule),
     RoleModule,
   ],

@@ -85,7 +85,7 @@ import path from 'path';
       useFactory: (config: AppConfig) => {
         return {
           ...config.database,
-          logger: new TypeOrmLogger(),
+          logger: new TypeOrmLogger(config.database.logging),
         };
       },
       inject: [AppConfig],

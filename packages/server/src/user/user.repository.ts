@@ -14,8 +14,10 @@ export class UserRepository extends Repository<UserEntity> {
   ): Promise<UserEntity | undefined>;
   async findOneByPhoneOrEmail(phoneOrEmail: string, email?: string) {
     return await this.createQueryBuilder('user')
-      .where('user.phone = :phoneOrEmail', { phoneOrEmail })
-      .orWhere('user.email = :email', { email: email || phoneOrEmail })
+      .leftJoinAndSelect('user.phoneNumbers', 'user_phoneNumbers')
+      .leftJoinAndSelect('user.email', 'user_email')
+      .where('user_phoneNumbers.phoneNumber = :phoneOrEmail', { phoneOrEmail })
+      .orWhere('user_email.email = :email', { email: email || phoneOrEmail })
       .getOne();
   }
 }
