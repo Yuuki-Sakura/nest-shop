@@ -6,7 +6,8 @@
 
 import { Span } from '@/common/decorator/span.decorator';
 import { Controller, Get } from '@nestjs/common';
-import { author, name, version } from '../package.json';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { name, version, author } = require('../package.json');
 
 @Controller()
 @Span()

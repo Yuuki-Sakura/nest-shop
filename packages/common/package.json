@@ -30,6 +30,7 @@
     "class-validator": "^0.13.1",
     "dayjs": "^1.10.7",
     "decimal.js": "^10.3.1",
+    "fastify": "^3.24.1",
     "graphql": "^15.7.2",
     "graphql-tools": "^8.2.0",
     "ioredis": "^4.28.0",
@@ -38,7 +39,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.4.0",
-    "typeorm": "^0.2.38"
+    "typeorm": "^0.2.41"
   },
   "devDependencies": {
     "ts-morph": "^12.0.0",

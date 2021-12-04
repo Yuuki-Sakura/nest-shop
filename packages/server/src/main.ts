@@ -10,12 +10,6 @@ import { DEFAULT_CONNECTION_NAME } from '@nestjs/typeorm/dist/typeorm.constants'
 import { context, trace } from '@opentelemetry/api';
 import { Repository } from 'typeorm';
 import { AppConfig } from './app.config';
-import clc from 'cli-color';
-import bare from 'cli-color/bare';
-import safeStringify from 'fast-safe-stringify';
-import { WinstonModule } from 'nest-winston';
-import { inspect } from 'util';
-import { format, transports } from 'winston';
 import { AppModule } from './app.module';
 import { NestApplication, NestFactory, Reflector } from '@nestjs/core';
 import { environment } from '@/app.environment';
@@ -162,9 +156,8 @@ async function bootstrap() {
     app,
     new DocumentBuilder()
       .addBearerAuth()
-      .setTitle('Nest Blog')
-      .setDescription('A Blog System')
-      .setVersion('1.0')
+      .setTitle('Nest Shop')
+      .setVersion('0.0.1')
       .build(),
   );
   SwaggerModule.setup(config.swagger.prefix, app, document, config.swagger);

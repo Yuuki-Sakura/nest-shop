@@ -30,6 +30,9 @@ export class CommonEntity {
   @ApiProperty({
     readOnly: true,
     description: '创建时间',
+    type: 'integer',
+    maximum: 9999999999999,
+    example: Date.now(),
   })
   @CreateDateColumn({
     type: 'timestamp',
@@ -46,6 +49,9 @@ export class CommonEntity {
     nullable: true,
     readOnly: true,
     description: '更新时间',
+    type: 'integer',
+    maximum: 9999999999999,
+    example: Date.now(),
   })
   @UpdateDateColumn({
     type: 'timestamp',
@@ -63,6 +69,9 @@ export class CommonEntity {
     nullable: true,
     readOnly: true,
     description: '删除时间',
+    type: 'integer',
+    maximum: 9999999999999,
+    example: Date.now(),
   })
   @DeleteDateColumn({
     type: 'timestamp',

@@ -18,6 +18,7 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
+  VersionColumn,
 } from 'typeorm';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 
@@ -325,7 +326,7 @@ export class GoodsSkuEntity extends CommonEntity {
   @Field(() => Int, {
     description: '版本',
   })
-  @Column('int', {
+  @VersionColumn({
     comment: '版本',
     default: 0,
   })

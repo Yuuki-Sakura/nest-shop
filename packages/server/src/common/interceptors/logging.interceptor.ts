@@ -4,8 +4,8 @@
  * @module interceptor/logging
  */
 
-import { context, Span, SpanStatusCode, trace } from '@opentelemetry/api';
-import { catchError, Observable, throwError } from 'rxjs';
+import { Span } from '@opentelemetry/api';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import {
   CallHandler,
@@ -23,10 +23,10 @@ export class LoggingInterceptor implements NestInterceptor {
   private readonly logger: Logger;
 
   intercept(ctx: ExecutionContext, next: CallHandler): Observable<any> {
-    const gqlContext = GqlExecutionContext.create(ctx);
-    if (gqlContext.getType() == 'graphql') {
-      return next.handle();
-    }
+    // const gqlContext = GqlExecutionContext.create(ctx);
+    // if (gqlContext.getType() == 'graphql') {
+    //   return next.handle();
+    // }
     const request = ctx.switchToHttp().getRequest();
     this.logger.log(
       `[request-at: ${request.requestAt}] Request: [${request.method} -> ${request.url}]`,

@@ -5,6 +5,7 @@ import {
   verifyPassword,
 } from '@/auth/auth.utils';
 import { Span } from '@/common/decorator/span.decorator';
+import { createDeviceHash } from '@/common/utils/create-device-hash';
 import { create } from '@/common/utils/create.util';
 import { UserLoginDto, UserLoginResultDto, UserRegisterDto } from '@/user/dto';
 import { CommonException, nanoid } from '@adachi-sakura/nest-shop-common';
@@ -20,11 +21,9 @@ import { UserRepository } from '@/user/user.repository';
 import { RoleService } from '@/role/role.service';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as crypto from 'crypto';
 import { Request } from 'express';
 import { Redis } from 'ioredis';
 import { Repository } from 'typeorm';
-import languageParser from 'accept-language-parser';
 import UAParser from 'ua-parser-js';
 
 @Injectable()
@@ -84,6 +83,9 @@ export class UserService {
         },
       });
     }
+    const userLoginAt = new Date();
+    const userDeviceHash =
+      fingerprint || createDeviceHash(req, { user_id: user.id });
     if (!(await verifyPassword(user.password, password))) {
       const failCount = await this.redis.incr(`${user.id}-login-fail-count`);
       if (failCount >= 3) {
@@ -102,45 +104,17 @@ export class UserService {
     }
 
     await this.redis.del(`${user.id}-login-fail-count`);
-    const userLoginAt = new Date();
-    const userLanguages = languageParser.parse(req.header('accept-language'));
-    const userAgent = UAParser(req.header('user-agent'));
-    let userDeviceHash;
-    if (!fingerprint) {
-      userDeviceHash = crypto
-        .createHash('sha256')
-        .update(
-          JSON.stringify({
-            languages: userLanguages,
-            id: user.id,
-            ua: {
-              browser: {
-                name: userAgent.browser.name,
-              },
-              engine: {
-                name: userAgent.engine.name,
-              },
-              os: {
-                name: userAgent.os.name,
-              },
-              device: userAgent.device,
-              cpu: userAgent.cpu,
-            } as UAParser.IResult,
-            httpVersion: req.httpVersion,
-          }),
-        )
-        .digest('hex');
-    }
 
+    const userAgent = UAParser(req.header('user-agent'));
     let userDevice = await this.userDeviceRepo.findOne({
       user,
-      fingerprint: fingerprint || userDeviceHash,
+      fingerprint: userDeviceHash,
     });
     if (!userDevice) {
       userDevice = this.userDeviceRepo.create({
         user,
         userAgent,
-        fingerprint: fingerprint || userDeviceHash,
+        fingerprint: userDeviceHash,
         firstLoginIp: req.clientIp,
         lastLoginIp: req.clientIp,
         firstLoginAt: userLoginAt,
