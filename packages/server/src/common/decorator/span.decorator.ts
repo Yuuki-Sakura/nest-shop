@@ -30,7 +30,19 @@ export const Span = (): ClassDecorator => (target) => {
         if (originMethod.constructor.name === 'AsyncFunction') {
           return originMethod
             .apply(this, args)
+            .then((res) => {
+              logger.log(
+                `method: ${key} invoke-time: ${Date.now() - invokeAt}ms`,
+                name,
+              );
+              return res;
+            })
             .catch((e) => {
+              logger.error(
+                `method: ${key} invoke-time: ${Date.now() - invokeAt}ms`,
+                e.stack,
+                name,
+              );
               span?.recordException(e);
               span?.setStatus({
                 code: SpanStatusCode.ERROR,
@@ -40,15 +52,21 @@ export const Span = (): ClassDecorator => (target) => {
             })
             .finally(() => {
               span?.end();
-              logger.log(
-                `method: ${key} invoke-time: ${Date.now() - invokeAt}ms`,
-                name,
-              );
             });
         } else {
           try {
-            return originMethod.apply(this, args);
+            const result = originMethod.apply(this, args);
+            logger.log(
+              `method: ${key} invoke-time: ${Date.now() - invokeAt}ms`,
+              name,
+            );
+            return result;
           } catch (e) {
+            logger.error(
+              `method: ${key} invoke-time: ${Date.now() - invokeAt}ms`,
+              e.stack,
+              name,
+            );
             span?.recordException(e);
             span?.setStatus({
               code: SpanStatusCode.ERROR,
@@ -57,10 +75,6 @@ export const Span = (): ClassDecorator => (target) => {
             throw e;
           } finally {
             span?.end();
-            logger.log(
-              `method: ${key} invoke-time: ${Date.now() - invokeAt}ms`,
-              name,
-            );
           }
         }
       });

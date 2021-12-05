@@ -6,7 +6,7 @@ import {
   MerchantCategoryQualification,
 } from '@/merchant/entity/merchant-category.entity';
 import { UserEntity } from '@/user';
-import { CommonEntity } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity, ToDecimal } from '@adachi-sakura/nest-shop-common';
 import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
@@ -198,6 +198,7 @@ export class MerchantEntity extends CommonEntity {
     name: 'handling_fee',
     transformer: DecimalTransformer(4),
   })
+  @ToDecimal()
   handlingFee: Decimal;
 
   @ApiProperty()
@@ -211,6 +212,7 @@ export class MerchantEntity extends CommonEntity {
     scale: 2,
     transformer: DecimalTransformer(),
   })
+  @ToDecimal()
   guarantee: Decimal;
 
   @Field({
@@ -232,6 +234,7 @@ export class MerchantEntity extends CommonEntity {
     scale: 2,
     transformer: DecimalTransformer(),
   })
+  @ToDecimal()
   money: Decimal;
 
   @ApiProperty()
@@ -268,6 +271,7 @@ export class MerchantEntity extends CommonEntity {
     name: 'product_ratings',
     transformer: DecimalTransformer(),
   })
+  @ToDecimal()
   productRatings: Decimal;
 
   @ApiProperty()
@@ -282,6 +286,7 @@ export class MerchantEntity extends CommonEntity {
     name: 'service_ratings',
     transformer: DecimalTransformer(),
   })
+  @ToDecimal()
   serviceRatings: Decimal;
 
   @ApiProperty()
@@ -296,6 +301,7 @@ export class MerchantEntity extends CommonEntity {
     name: 'logistics_ratings',
     transformer: DecimalTransformer(),
   })
+  @ToDecimal()
   logisticsRatings: Decimal;
 
   @Field(() => [CouponEntity])

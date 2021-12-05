@@ -1,7 +1,7 @@
 import { MerchantAddressEntity } from '@/address';
 import { MerchantQualification, MerchantType } from '@/merchant';
 import { UserEntity } from '@/user';
-import { CommonEntity } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity, ToDecimal } from '@adachi-sakura/nest-shop-common';
 import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
@@ -98,5 +98,6 @@ export default class MerchantRequestEntity extends CommonEntity {
     scale: 2,
     transformer: DecimalTransformer(),
   })
+  @ToDecimal()
   guarantee: Decimal;
 }

@@ -5,7 +5,7 @@ import {
   GoodsSpuEntity,
 } from '@/goods';
 import { MerchantEntity, MerchantGoodsCategoryEntity } from '@/merchant';
-import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
+import { DecimalTransformer, ToDecimal } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import { Decimal } from 'decimal.js';
@@ -173,6 +173,7 @@ export class GoodsSkuEntity extends CommonEntity {
     transformer: DecimalTransformer(2),
     nullable: true,
   })
+  @ToDecimal()
   price: Decimal;
 
   @ApiProperty()
@@ -187,6 +188,7 @@ export class GoodsSkuEntity extends CommonEntity {
     name: 'cost_price',
     transformer: DecimalTransformer(2),
   })
+  @ToDecimal()
   costPrice: Decimal;
 
   @ApiProperty()
@@ -201,6 +203,7 @@ export class GoodsSkuEntity extends CommonEntity {
     name: 'line_price',
     transformer: DecimalTransformer(2),
   })
+  @ToDecimal()
   linePrice: Decimal;
 
   @ApiProperty()

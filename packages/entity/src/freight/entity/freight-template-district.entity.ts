@@ -1,6 +1,6 @@
 import { DistrictEntity } from '@/district';
 import { FreightTemplateEntity } from '@/freight';
-import { CommonEntity } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity, ToDecimal } from '@adachi-sakura/nest-shop-common';
 import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Decimal } from 'decimal.js';
@@ -39,6 +39,7 @@ export class FreightTemplateDistrictEntity extends CommonEntity {
     unsigned: true,
     transformer: DecimalTransformer(),
   })
+  @ToDecimal()
   first: Decimal;
 
   @Field({
@@ -52,6 +53,7 @@ export class FreightTemplateDistrictEntity extends CommonEntity {
     name: 'first_price',
     transformer: DecimalTransformer(),
   })
+  @ToDecimal()
   firstPrice: Decimal;
 
   @Field({
@@ -64,6 +66,7 @@ export class FreightTemplateDistrictEntity extends CommonEntity {
     unsigned: true,
     transformer: DecimalTransformer(),
   })
+  @ToDecimal()
   additional: Decimal;
 
   @Field({
@@ -77,5 +80,6 @@ export class FreightTemplateDistrictEntity extends CommonEntity {
     name: 'additional_price',
     transformer: DecimalTransformer(),
   })
+  @ToDecimal()
   additionalPrice: Decimal;
 }

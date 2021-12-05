@@ -6,6 +6,7 @@ import {
   generateSn,
   OrderPrefixEnum,
   Timestamp,
+  ToDecimal,
 } from '@adachi-sakura/nest-shop-common';
 import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
@@ -59,6 +60,7 @@ export class OrderGroupEntity extends CommonEntity {
     name: 'total_price',
     transformer: DecimalTransformer(),
   })
+  @ToDecimal()
   totalPrice: Decimal;
 
   @Field({
@@ -72,6 +74,7 @@ export class OrderGroupEntity extends CommonEntity {
     name: 'freight',
     transformer: DecimalTransformer(),
   })
+  @ToDecimal()
   freight: Decimal;
 
   @Field(() => Int, {
@@ -95,6 +98,7 @@ export class OrderGroupEntity extends CommonEntity {
     name: 'use_points_amount',
     transformer: DecimalTransformer(2),
   })
+  @ToDecimal()
   usePointsAmount: Decimal;
 
   @Field(() => PayMethod, {
@@ -142,6 +146,7 @@ export class OrderGroupEntity extends CommonEntity {
     name: 'pay_amount',
     transformer: DecimalTransformer(2),
   })
+  @ToDecimal()
   payAmount: Decimal;
 
   @Field(() => UserCouponEntity, {

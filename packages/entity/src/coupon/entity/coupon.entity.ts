@@ -6,6 +6,7 @@ import {
   JexlExpression,
   JexlExpressionScalar,
   Timestamp,
+  ToDecimal,
 } from '@adachi-sakura/nest-shop-common';
 import { JexlExpressionTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
@@ -67,6 +68,7 @@ export class CouponEntity extends CommonEntity {
     transformer: DecimalTransformer(2),
     nullable: true,
   })
+  @ToDecimal()
   parValue: Decimal;
 
   @Field(() => JexlExpressionScalar, {

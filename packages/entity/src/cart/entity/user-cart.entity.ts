@@ -1,6 +1,6 @@
 import { GoodsSkuEntity } from '@/goods';
 import { UserEntity } from '@/user';
-import { CommonEntity } from '@adachi-sakura/nest-shop-common';
+import { CommonEntity, ToDecimal } from '@adachi-sakura/nest-shop-common';
 import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Decimal } from 'decimal.js';
@@ -38,6 +38,7 @@ export class UserCartEntity extends CommonEntity {
     name: 'add_price',
     transformer: DecimalTransformer(),
   })
+  @ToDecimal()
   addPrice: Decimal;
 
   @Field({
