@@ -10,6 +10,7 @@ import {
 } from '@adachi-sakura/nest-shop-common';
 import { JexlExpressionTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { ApiProperty } from '@nestjs/swagger';
 import { Decimal } from 'decimal.js';
 import Expression from 'jexl/dist/Expression';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
@@ -59,6 +60,11 @@ export class CouponEntity extends CommonEntity {
 
   @Field({
     description: '优惠券面值',
+  })
+  @ApiProperty({
+    description: '优惠券面值',
+    type: String,
+    example: '0.00',
   })
   @Column('decimal', {
     comment: '优惠券面值',

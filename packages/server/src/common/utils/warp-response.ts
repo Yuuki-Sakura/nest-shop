@@ -29,7 +29,5 @@ export const warpResponse = <T, U extends Type<CommonResponse<T>>>(
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   TempClass.name = `${CommonResponse.name}<${typeName}>`;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  return TempClass;
+  return TempClass as U;
 };

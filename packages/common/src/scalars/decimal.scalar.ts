@@ -17,7 +17,8 @@ export class DecimalScalar implements CustomScalar<string, Decimal> {
     return new Decimal(value);
   }
 
-  public serialize(value: Decimal): string {
+  public serialize(value: Decimal | string): string {
+    if (typeof value === 'string') return value;
     return value.toFixed();
   }
 }

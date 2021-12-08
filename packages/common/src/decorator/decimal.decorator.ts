@@ -3,7 +3,6 @@ import { Decimal } from 'decimal.js';
 
 export const ToDecimal = () => {
   return Transform(({ value, type }) => {
-    console.log(value, type);
     if (value)
       return type === 1
         ? (value as Decimal).toJSON()

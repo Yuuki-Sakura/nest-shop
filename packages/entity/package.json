@@ -20,24 +20,25 @@
     "decimal.js": "^10.3.1"
   },
   "dependencies": {
-    "@adachi-sakura/nest-shop-common": "workspace:^1.0.0",
+    "@adachi-sakura/nest-shop-common": "^1.0.0",
     "@nestjs/common": "^8.2.2",
     "@nestjs/core": "^8.2.2",
-    "@nestjs/graphql": "^9.0.6",
+    "@nestjs/graphql": "^9.1.2",
     "@nestjs/swagger": "^5.1.5",
     "@types/jexl": "^2.3.0",
-    "class-transformer": "^0.4.0",
+    "class-transformer": "^0.5.1",
     "class-validator": "^0.13.1",
     "decimal.js": "^10.3.1",
     "graphql": "^15.7.2",
-    "graphql-tools": "^8.2.0",
     "jexl": "^2.3.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.4.0",
-    "typeorm": "^0.2.41"
+    "typeorm": "^0.2.41",
+    "ua-parser-js": "^1.0.2"
   },
   "devDependencies": {
+    "@types/ua-parser-js": "^0.7.36",
     "@types/validator": "^13.7.0",
     "ts-loader": "^8.3.0",
     "ts-morph": "^12.0.0",

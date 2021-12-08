@@ -4,8 +4,8 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { ApiResponseProperty } from '@nestjs/swagger/dist/decorators/api-property.decorator';
 import { Type } from 'class-transformer';
 
-@ObjectType('UserLoginResult')
-export class UserLoginResultDto {
+@ObjectType('AuthLoginResult')
+export class AuthLoginResultDto {
   @Field()
   @ApiResponseProperty()
   token: string;

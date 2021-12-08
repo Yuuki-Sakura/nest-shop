@@ -11,6 +11,7 @@ import {
   Inject,
   Logger,
 } from '@nestjs/common';
+import { ContextType } from '@nestjs/common/interfaces/features/arguments-host.interface';
 import { APP_FILTER } from '@nestjs/core';
 import { GqlArgumentsHost } from '@nestjs/graphql';
 import { Span, SpanStatusCode } from '@opentelemetry/api';
@@ -29,12 +30,16 @@ export class HttpExceptionFilter implements ExceptionFilter {
     exception: HttpException | CommonException | Error,
     host: ArgumentsHost,
   ) {
-    // const gqlHost = GqlArgumentsHost.create(host);
-    // if (gqlHost['contextType'] == 'graphql') {
-    //   return;
-    // }
-    const response = host.switchToHttp().getResponse<Response>();
-    const request = host.switchToHttp().getRequest();
+    const gqlHost = GqlArgumentsHost.create(host);
+    const contextType: ContextType | 'graphql' = gqlHost.getType();
+    const request =
+      contextType === 'graphql'
+        ? gqlHost.getContext().req
+        : host.switchToHttp().getRequest();
+    const response =
+      contextType === 'graphql'
+        ? request.res
+        : host.switchToHttp().getResponse<Response>();
     const span = request.span as Span;
     let httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
     span.setAttributes({
@@ -104,15 +109,29 @@ export class HttpExceptionFilter implements ExceptionFilter {
           : JSON.stringify(data.message),
     });
     span.end();
-    this.logger.error(
-      `[request-at: ${request.requestAt}] Response: [${request.method} -> ${
-        request.url
-      }] http-status: ${httpStatus}  error-code: ${code} time: ${
-        Date.now() - request.requestAt
-      }ms`,
-      exception.stack,
-      'Response',
-    );
+    if (contextType === 'graphql') {
+      const info = gqlHost.getInfo();
+      this.logger.error(
+        `[request-at: ${request.requestAt}] GraphQLResponse: [${
+          info.path.typename
+        } -> ${info.path.key}] error-code: ${code} time: ${
+          Date.now() - request.requestAt
+        }ms`,
+        exception.stack,
+        'GraphQLResponse',
+      );
+      throw new Error(data.message as string);
+    } else {
+      this.logger.error(
+        `[request-at: ${request.requestAt}] Response: [${request.method} -> ${
+          request.url
+        }] http-status: ${httpStatus} error-code: ${code} time: ${
+          Date.now() - request.requestAt
+        }ms`,
+        exception.stack,
+        'Response',
+      );
+    }
     return response.status(httpStatus).jsonp(data);
   }
 }

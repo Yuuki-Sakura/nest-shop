@@ -92,6 +92,7 @@ export class UserEntity extends CommonEntity {
 
   @Field(() => [UserEmailEntity], {
     description: '用户邮箱',
+    nullable: true,
   })
   @ApiProperty({
     description: '用户邮箱',
@@ -103,6 +104,7 @@ export class UserEntity extends CommonEntity {
 
   @Field({
     description: '用户主邮箱',
+    nullable: true,
   })
   @ApiProperty({
     description: '用户主邮箱',
@@ -116,6 +118,7 @@ export class UserEntity extends CommonEntity {
 
   @Field(() => [UserPhoneNumberEntity], {
     description: '用户手机号码',
+    nullable: true,
   })
   @ApiProperty({
     description: '用户手机号码',
@@ -130,6 +133,7 @@ export class UserEntity extends CommonEntity {
   })
   @ApiProperty({
     description: '用户主手机号码',
+    nullable: true,
   })
   @IsEmail()
   @OneToOne(() => UserPhoneNumberEntity, (phone) => phone.id, { eager: true })
@@ -274,33 +278,21 @@ export class UserEntity extends CommonEntity {
 
   @Field(() => [UserDeviceEntity], {
     description: '用户设备',
-  })
-  @ApiProperty({
-    description: '用户设备',
-    type: UserDeviceEntity,
-    isArray: true,
+    nullable: true,
   })
   @OneToMany(() => UserDeviceEntity, (device) => device.user, { cascade: true })
   devices: UserDeviceEntity[];
 
   @Field(() => [UserRole], {
     description: '用户拥有角色',
-  })
-  @ApiProperty({
-    description: '用户拥有角色',
-    type: UserRole,
-    isArray: true,
+    nullable: true,
   })
   @OneToMany(() => UserRole, (role) => role.user, { cascade: true })
   roles: UserRole[];
 
   @Field(() => [UserPermission], {
     description: '用户拥有权限',
-  })
-  @ApiProperty({
-    description: '用户拥有权限',
-    type: UserPermission,
-    isArray: true,
+    nullable: true,
   })
   @OneToMany(() => UserPermission, (permission) => permission.user, {
     cascade: true,
@@ -309,11 +301,7 @@ export class UserEntity extends CommonEntity {
 
   @Field(() => [UserAddressEntity], {
     description: '用户收货地址',
-  })
-  @ApiProperty({
-    description: '用户收货地址',
-    type: UserAddressEntity,
-    isArray: true,
+    nullable: true,
   })
   @OneToMany(() => UserAddressEntity, (address) => address.user, {
     cascade: true,
@@ -322,11 +310,7 @@ export class UserEntity extends CommonEntity {
 
   @Field(() => [GoodsSkuEntity], {
     description: '用户收藏商品',
-  })
-  @ApiProperty({
-    description: '用户收藏商品',
-    type: GoodsSkuEntity,
-    isArray: true,
+    nullable: true,
   })
   @ManyToMany(() => GoodsSkuEntity, (sku) => sku.id)
   @JoinTable({
@@ -341,12 +325,8 @@ export class UserEntity extends CommonEntity {
   favorites: GoodsSkuEntity[];
 
   @Field(() => [UserCouponEntity], {
+    nullable: true,
     description: '用户优惠券',
-  })
-  @ApiProperty({
-    description: '用户优惠券',
-    type: UserCouponEntity,
-    isArray: true,
   })
   @ManyToMany(() => UserCouponEntity, (coupon) => coupon.id)
   @JoinTable({
@@ -361,12 +341,8 @@ export class UserEntity extends CommonEntity {
   coupons: UserCouponEntity[];
 
   @Field(() => [UserInvoiceEntity], {
+    nullable: true,
     description: '用户发票信息',
-  })
-  @ApiProperty({
-    description: '用户发票信息',
-    type: UserInvoiceEntity,
-    isArray: true,
   })
   @OneToMany(() => UserInvoiceEntity, (invoice) => invoice.user)
   invoice: UserInvoiceEntity[];

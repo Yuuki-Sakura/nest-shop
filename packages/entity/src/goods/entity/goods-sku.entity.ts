@@ -149,11 +149,11 @@ export class GoodsSkuEntity extends CommonEntity {
   })
   sliderImages: string[];
 
-  @ApiProperty()
   @Field({
     description: '商品视频链接',
     nullable: true,
   })
+  @ApiProperty()
   @Column({
     comment: '商品视频链接',
     nullable: true,
@@ -161,9 +161,13 @@ export class GoodsSkuEntity extends CommonEntity {
   })
   videoLink: string;
 
-  @ApiProperty()
   @Field({
     description: '商品价格',
+  })
+  @ApiProperty({
+    description: '商品价格',
+    type: String,
+    example: '0.00',
   })
   @Column('decimal', {
     comment: '商品价格',
@@ -176,9 +180,13 @@ export class GoodsSkuEntity extends CommonEntity {
   @ToDecimal()
   price: Decimal;
 
-  @ApiProperty()
   @Field({
     description: '商品成本价',
+  })
+  @ApiProperty({
+    description: '商品成本价',
+    type: String,
+    example: '0.00',
   })
   @Column('decimal', {
     comment: '商品成本价',
@@ -191,9 +199,13 @@ export class GoodsSkuEntity extends CommonEntity {
   @ToDecimal()
   costPrice: Decimal;
 
-  @ApiProperty()
   @Field({
     description: '商品划线价',
+  })
+  @ApiProperty({
+    description: '商品划线价',
+    type: String,
+    example: '0.00',
   })
   @Column('decimal', {
     comment: '商品划线价',

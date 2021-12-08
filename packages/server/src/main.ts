@@ -1,3 +1,4 @@
+import { AuthService } from '@/auth/auth.service';
 import { permissions } from '@/auth/auth.utils';
 import { WinstonLogger } from '@/common/logger/winston.logger';
 import { PermissionService } from '@/permission/permission.service';
@@ -74,6 +75,7 @@ async function init(app: NestApplication) {
 
   //创建管理员用户
   const userService: UserService = app.get<UserService>(UserService);
+  const authService: AuthService = app.get<AuthService>(AuthService);
   const userRepo: UserRepository = app.get<UserRepository>(
     getRepositoryToken(UserRepository, DEFAULT_CONNECTION_NAME),
   );
@@ -81,7 +83,7 @@ async function init(app: NestApplication) {
   if (
     !(await userRepo.findOneByPhoneOrEmail(config.server.rootAccount.email))
   ) {
-    await userService.register({
+    await authService.register({
       email: config.server.rootAccount.email,
       password: '12345678',
     });

@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "declaration": true,
+    "declaration": false,
     "downlevelIteration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "module": "esnext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "newLine": "LF",
     "noEmitHelpers": true,
@@ -14,17 +14,21 @@
     "noUnusedParameters": true,
     "removeComments": true,
     "strict": true,
-    "skipLibCheck": true,
     "suppressImplicitAnyIndexErrors": true,
     "suppressExcessPropertyErrors": true,
     "forceConsistentCasingInFileNames": true,
-    "target": "ES5",
+    "target": "ES2017",
     "inlineSourceMap": true,
     "esModuleInterop": true,
     "stripInternal": true,
     "importsNotUsedAsValues": "remove",
     "lib": ["dom", "ES5", "ES2015", "ES2016", "ES2017", "ES2018", "ES2019", "ES2020", "esnext"],
-    "baseUrl": "./packages"
+    "baseUrl": "./",
+    "paths": {
+      "@adachi-sakura/nest-shop-common": ["./packages/common"],
+      "@adachi-sakura/nest-shop-entity": ["./packages/entity"]
+    }
   },
-  "exclude": ["node_modules"]
+  "include": ["packages/**/*", "integration/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

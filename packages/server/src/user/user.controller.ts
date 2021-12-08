@@ -1,20 +1,16 @@
+import { Auth } from '@/auth/auth.utils';
 import { Span } from '@/common/decorator/span.decorator';
-import { Message } from '@/common/decorator/message.decorator';
-import { warpResponse } from '@/common/utils/warp-response';
-import { UserLoginDto, UserLoginResultDto, UserRegisterDto } from '@/user/dto';
 import {
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Inject,
-  Post,
-  Req,
-} from '@nestjs/common';
+  createSwaggerPaginateQuery,
+  warpPaginated,
+} from '@/common/utils/warp-paginated';
+import { warpResponse } from '@/common/utils/warp-response';
+import { UserPaginateConfig } from '@/user/paginate-config';
+import { Paginate, PaginateQuery } from '@adachi-sakura/nest-shop-common';
+import { UserEntity } from '@adachi-sakura/nest-shop-entity';
+import { Controller, Get, Inject } from '@nestjs/common';
 import { UserService } from '@/user/user.service';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AuthService } from '@/auth/auth.service';
-import { Request } from 'express';
+import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('user')
 @Controller('/user')
@@ -23,26 +19,17 @@ export class UserController {
   @Inject(UserService)
   private readonly userService: UserService;
 
-  @Inject(AuthService)
-  private readonly authService: AuthService;
-
-  @Post('login')
-  @ApiBody({ type: UserLoginDto })
-  @ApiResponse({ type: warpResponse({ type: UserLoginResultDto }) })
-  async login(@Body() loginDto: UserLoginDto, @Req() req: Request) {
-    return await this.userService.login(loginDto, req);
-  }
-
-  @Post('register')
-  @HttpCode(HttpStatus.OK)
-  @Message('user.register.success')
+  @Get()
+  @ApiQuery({
+    type: createSwaggerPaginateQuery(UserPaginateConfig.find, 'FindUser'),
+  })
   @ApiResponse({
-    type: warpResponse({ type: UserLoginResultDto, nullable: true }),
+    type: warpResponse({
+      type: warpPaginated({ type: UserEntity }, UserPaginateConfig.find),
+    }),
   })
-  @ApiBody({
-    type: UserRegisterDto,
-  })
-  async register(@Body() registerDto: UserRegisterDto, @Req() req: Request) {
-    return this.userService.register(registerDto, req);
+  @Auth('user.find', '查找用户')
+  find(@Paginate() query: PaginateQuery) {
+    return this.userService.find(query);
   }
 }

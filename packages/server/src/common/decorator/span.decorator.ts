@@ -26,7 +26,7 @@ export const Span = (): ClassDecorator => (target) => {
           method: key,
         });
         const invokeAt = Date.now();
-        logger.log(`method: ${key} args: ${args}`, name);
+        logger.log(`method: ${key}`, name);
         if (originMethod.constructor.name === 'AsyncFunction') {
           return originMethod
             .apply(this, args)
@@ -54,12 +54,40 @@ export const Span = (): ClassDecorator => (target) => {
               span?.end();
             });
         } else {
+          let isPromise = false;
           try {
             const result = originMethod.apply(this, args);
             logger.log(
               `method: ${key} invoke-time: ${Date.now() - invokeAt}ms`,
               name,
             );
+            if (result instanceof Promise) {
+              isPromise = true;
+              result
+                .then((res) => {
+                  logger.log(
+                    `method: ${key} invoke-time: ${Date.now() - invokeAt}ms`,
+                    name,
+                  );
+                  return res;
+                })
+                .catch((e) => {
+                  logger.error(
+                    `method: ${key} invoke-time: ${Date.now() - invokeAt}ms`,
+                    e.stack,
+                    name,
+                  );
+                  span?.recordException(e);
+                  span?.setStatus({
+                    code: SpanStatusCode.ERROR,
+                    message: e.message,
+                  });
+                  throw e;
+                })
+                .finally(() => {
+                  span?.end();
+                });
+            }
             return result;
           } catch (e) {
             logger.error(
@@ -74,7 +102,7 @@ export const Span = (): ClassDecorator => (target) => {
             });
             throw e;
           } finally {
-            span?.end();
+            if (!isPromise) span?.end();
           }
         }
       });

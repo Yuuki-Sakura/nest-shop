@@ -1,4 +1,6 @@
 import { UserTempPermission } from '@/auth/auth.utils';
+import { Span } from '@/common/decorator/span.decorator';
+import { CommonException } from '@adachi-sakura/nest-shop-common';
 import { InjectRedis } from '@adachi-sakura/nestjs-redis';
 import {
   CanActivate,
@@ -8,10 +10,12 @@ import {
   Logger,
 } from '@nestjs/common';
 import { RoleService } from '@/role/role.service';
+import { GqlExecutionContext } from '@nestjs/graphql';
 import { Redis } from 'ioredis';
 import minimatch from 'minimatch';
 
 @Injectable()
+@Span()
 export class PermissionGuard implements CanActivate {
   @Inject()
   private readonly roleService: RoleService;
@@ -22,7 +26,7 @@ export class PermissionGuard implements CanActivate {
   private readonly logger = new Logger('PermissionGuard');
 
   async canActivate(context: ExecutionContext) {
-    const request = context.switchToHttp().getRequest();
+    const request = this.getRequest(context);
     const permission: string = Reflect.getMetadata(
       'resource',
       context.getHandler(),
@@ -47,6 +51,27 @@ export class PermissionGuard implements CanActivate {
         );
       }
     }
-    return false;
+    throw new CommonException(
+      {
+        key: 'auth.noPermission',
+      },
+      401,
+    );
+  }
+
+  getRequest<T = any>(context: ExecutionContext): T {
+    const gqlContext = GqlExecutionContext.create(context);
+    if (gqlContext.getType() === 'graphql') {
+      return gqlContext.getContext().req;
+    }
+    return context.switchToHttp().getRequest();
+  }
+
+  getResponse<T = any>(context: ExecutionContext): T {
+    const gqlContext = GqlExecutionContext.create(context);
+    if (gqlContext.getType() === 'graphql') {
+      return gqlContext.getContext().req.res;
+    }
+    return context.switchToHttp().getResponse();
   }
 }

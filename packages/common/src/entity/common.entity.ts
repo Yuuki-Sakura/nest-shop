@@ -68,6 +68,7 @@ export class CommonEntity {
   @ApiProperty({
     nullable: true,
     readOnly: true,
+    required: false,
     description: '删除时间',
     type: 'integer',
     maximum: 9999999999999,

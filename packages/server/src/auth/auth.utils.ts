@@ -1,5 +1,9 @@
-import { Permission as PermissionEntity } from '@adachi-sakura/nest-shop-entity';
-import { UserEntity } from '@adachi-sakura/nest-shop-entity';
+import { AuthGuard } from '@/auth/auth.guard';
+import { PermissionGuard } from '@/auth/permission.guard';
+import {
+  Permission as PermissionEntity,
+  UserEntity,
+} from '@adachi-sakura/nest-shop-entity';
 import {
   applyDecorators,
   createParamDecorator,
@@ -8,13 +12,11 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { Field, InterfaceType } from '@nestjs/graphql';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { AuthGuard } from '@/auth/auth.guard';
-import { PermissionGuard } from '@/auth/permission.guard';
-import { GqlAuthGuard } from '@/auth/gqlAuth.guard';
-import * as crypto from 'crypto';
+import { Field, GqlExecutionContext, InterfaceType } from '@nestjs/graphql';
+import { ApiBearerAuth, ApiProperty } from '@nestjs/swagger';
 import * as argon2 from 'argon2';
+import * as crypto from 'crypto';
+import { Request } from 'express';
 
 export function encryptPassword(password: string) {
   const hash = crypto.createHash('sha256').update(password).digest('hex');
@@ -38,8 +40,19 @@ export function verifyPassword(hashPwd: string, password: string) {
 @InterfaceType()
 export class UserTempPermission implements Pick<PermissionEntity, 'resource'> {
   @Field()
+  @ApiProperty({
+    description: '权限标识',
+    readOnly: true,
+  })
   resource: string;
   @Field()
+  @ApiProperty({
+    description: '过期时间',
+    readOnly: true,
+    type: 'integer',
+    maximum: 9999999999999,
+    example: Date.now(),
+  })
   expiresAt?: Date;
 }
 
@@ -75,10 +88,10 @@ export const Auth = (resource?: string, name?: string) => {
 export const GqlAuth = (resource?: string, name?: string) => {
   if (resource) {
     return applyDecorators(
-      UseGuards(GqlAuthGuard, PermissionGuard),
+      UseGuards(AuthGuard, PermissionGuard),
       Permission('gql.' + resource, name),
     );
-  } else return applyDecorators(UseGuards(GqlAuthGuard, PermissionGuard));
+  } else return applyDecorators(UseGuards(AuthGuard));
 };
 
 export const permissions: {
@@ -112,12 +125,14 @@ export const User = (required = true) =>
     return request.user;
   })();
 
-export const Token = createParamDecorator(
-  (data: unknown, ctx: ExecutionContext) => {
-    const token = ctx.switchToHttp().getRequest().headers?.authorization;
-    if (!token) {
-      throw new UnauthorizedException('请登录');
-    }
-    return token;
-  },
-);
+export const Token = () =>
+  createParamDecorator((data: unknown, ctx: ExecutionContext) => {
+    const request: Request = (() => {
+      const gqlContext = GqlExecutionContext.create(ctx);
+      if (gqlContext.getType() === 'graphql') {
+        return gqlContext.getContext().req;
+      }
+      return ctx.switchToHttp().getRequest();
+    })();
+    return request.header('authorization')?.replace(/^Bearer\s+/i, '');
+  })();

@@ -4,6 +4,7 @@ import { UserEntity } from '@/user';
 import { CommonEntity, ToDecimal } from '@adachi-sakura/nest-shop-common';
 import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { ApiProperty } from '@nestjs/swagger';
 import { Decimal } from 'decimal.js';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
@@ -64,7 +65,14 @@ export class OrderGoodsEntity extends CommonEntity {
   })
   quantity: number;
 
-  @Field()
+  @Field({
+    description: '购买时价格',
+  })
+  @ApiProperty({
+    description: '购买时价格',
+    type: String,
+    example: '0.00',
+  })
   @Column('decimal', {
     comment: '购买时价格',
     unsigned: true,

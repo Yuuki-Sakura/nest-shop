@@ -10,6 +10,7 @@ import {
 } from '@adachi-sakura/nest-shop-common';
 import { DecimalTransformer } from '@adachi-sakura/nest-shop-common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { ApiProperty } from '@nestjs/swagger';
 import { Decimal } from 'decimal.js';
 import {
   Column,
@@ -52,6 +53,11 @@ export class OrderGroupEntity extends CommonEntity {
   @Field({
     description: '订单总价',
   })
+  @ApiProperty({
+    description: '订单总价',
+    type: String,
+    example: '0.00',
+  })
   @Column('decimal', {
     comment: '订单总价',
     unsigned: true,
@@ -65,6 +71,11 @@ export class OrderGroupEntity extends CommonEntity {
 
   @Field({
     description: '总运费',
+  })
+  @ApiProperty({
+    description: '总运费',
+    type: String,
+    example: '0.00',
   })
   @Column('decimal', {
     comment: '总运费',
@@ -89,6 +100,11 @@ export class OrderGroupEntity extends CommonEntity {
 
   @Field({
     description: '使用积分抵扣金额',
+  })
+  @ApiProperty({
+    description: '使用积分抵扣金额',
+    type: String,
+    example: '0.00',
   })
   @Column('decimal', {
     comment: '使用积分抵扣金额',
@@ -137,6 +153,11 @@ export class OrderGroupEntity extends CommonEntity {
 
   @Field({
     description: '实际支付金额',
+  })
+  @ApiProperty({
+    description: '实际支付金额',
+    type: String,
+    example: '0.00',
   })
   @Column('decimal', {
     comment: '实际支付金额',

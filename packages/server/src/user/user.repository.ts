@@ -1,8 +1,6 @@
 import { UserEntity } from '@adachi-sakura/nest-shop-entity';
-import { Injectable } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 
-@Injectable()
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
   async findOneByPhoneOrEmail(

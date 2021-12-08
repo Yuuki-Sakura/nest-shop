@@ -91,7 +91,9 @@ import path from 'path';
       inject: [AppConfig],
     }),
     GraphQLModule.forRootAsync({
-      useFactory: (config: AppConfig) => config.graphql,
+      useFactory: (config: AppConfig) => ({
+        ...config.graphql,
+      }),
       inject: [AppConfig],
     }),
     RedisModule.forRootAsync({
