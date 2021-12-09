@@ -1,7 +1,7 @@
 # Nest Shop
 
 ## 简介
-使用[NestJs](https://nestjs.com),PostgreSQL,TypeORM,Redis,ELK构建的B2B2C商城系统
+使用[NestJs](https://nestjs.com), PostgreSQL, TypeORM, Redis, ELK, OpenTelemetry构建的B2B2C商城系统
 
 ### 功能
 
@@ -9,15 +9,16 @@
 ## 安装依赖
 
 ```bash
-$ pnpm install
+$ yarn set version berry
+$ yarn
 ```
 
 ## 启动
 
 ```bash
 # development
-$ pnpm dev
+$ yarn dev
 
 # production mode
-$ pnpm start
+$ yarn start
 ```
