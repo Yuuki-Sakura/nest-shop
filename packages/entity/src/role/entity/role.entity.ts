@@ -1,10 +1,18 @@
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { ApiProperty } from '@nestjs/swagger';
 import { GraphQLString } from 'graphql';
-import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  Tree,
+  TreeChildren,
+  TreeParent,
+} from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @Entity('role')
+@Tree('materialized-path')
 @ObjectType()
 export class Role extends CommonEntity {
   @ApiProperty()
@@ -23,18 +31,19 @@ export class Role extends CommonEntity {
   })
   permissions: string[];
 
-  @ApiProperty({ type: () => [Role] })
+  @ApiProperty({
+    type: () => [Role],
+    description: '继承角色',
+  })
   @Field(() => [Role], {
     description: '继承角色',
   })
-  @ManyToMany(() => Role)
-  @JoinTable({
-    joinColumn: {
-      name: 'parent_role_id',
-    },
-    inverseJoinColumn: {
-      name: 'role_id',
-    },
-  })
+  @TreeChildren()
   extends: Role[];
+
+  @TreeParent()
+  @JoinColumn({
+    name: 'parent_id',
+  })
+  parent: Role;
 }

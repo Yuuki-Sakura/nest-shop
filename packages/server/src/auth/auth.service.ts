@@ -10,6 +10,7 @@ import { AuthLoginDto, AuthLoginResultDto, AuthRegisterDto } from '@/auth/dto';
 import { UserRepository } from '@/user/user.repository';
 import { CommonException, nanoid } from '@adachi-sakura/nest-shop-common';
 import {
+  Role,
   UserDeviceEntity,
   UserEmailEntity,
   UserEntity,
@@ -46,6 +47,9 @@ export class AuthService {
 
   @InjectRepository(UserPhoneNumberEntity)
   private readonly userPhoneNumberRepo: Repository<UserPhoneNumberEntity>;
+
+  @InjectRepository(Role)
+  private readonly roleRepo: Repository<Role>;
 
   @InjectRedis()
   private readonly redis: Redis;
@@ -131,18 +135,21 @@ export class AuthService {
     user.lastLoginIp = req.clientIp;
     user.lastLoginAt = userLoginAt;
     await this.userRepository.save(user);
-
-    const userPermissions = getPermissions(
-      await this.userRepository
-        .createQueryBuilder('user')
-        .select(['user.id'])
-        .where('user.id = :id', { id: user.id })
-        .leftJoinAndSelect('user.roles', 'roles')
-        .leftJoinAndSelect('roles.role', 'role')
-        .leftJoinAndSelect('role.extends', 'role_extends')
-        .leftJoinAndSelect('user.permissions', 'permissions')
-        .getOne(),
-    );
+    const userWithRole = await this.userRepository
+      .createQueryBuilder('user')
+      .select(['user.id'])
+      .leftJoinAndSelect('user.roles', 'user_role')
+      .leftJoinAndSelect('user_role.role', 'role')
+      .leftJoinAndMapMany(
+        'role.extends',
+        'role',
+        'role_extends',
+        "role_extends.mpath LIKE role.mpath || '%'",
+      )
+      .leftJoinAndSelect('user.permissions', 'permissions')
+      .where('user.id = :id', { id: user.id })
+      .getOne();
+    const userPermissions = getPermissions(userWithRole);
 
     await this.redis.set(
       `user-${user.id}-permissions`,

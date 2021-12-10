@@ -6,7 +6,12 @@ import { JwtStrategy } from '@/auth/jwt.strategy';
 import { RoleModule } from '@/role/role.module';
 import { UserModule } from '@/user/user.module';
 import { UserRepository } from '@/user/user.repository';
-import { UserDeviceEntity, UserRole } from '@adachi-sakura/nest-shop-entity';
+import {
+  Role,
+  UserDeviceEntity,
+  UserPermission,
+  UserRole,
+} from '@adachi-sakura/nest-shop-entity';
 import { UserEmailEntity } from '@adachi-sakura/nest-shop-entity/dist/user/entity/user-email.entity';
 import { UserPhoneNumberEntity } from '@adachi-sakura/nest-shop-entity/dist/user/entity/user-phone-number.entity';
 import { Module } from '@nestjs/common';
@@ -25,8 +30,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       UserRepository,
       UserDeviceEntity,
       UserRole,
+      Role,
       UserEmailEntity,
       UserPhoneNumberEntity,
+      UserPermission,
     ]),
     UserModule,
     RoleModule,

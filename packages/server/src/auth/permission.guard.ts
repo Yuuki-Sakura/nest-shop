@@ -40,6 +40,10 @@ export class PermissionGuard implements CanActivate {
       await this.redis.get(`user-${request.user.id}-permissions`),
     );
     for (let i = 0; i < permissions.length; i++) {
+      if (permissions[i].expiresAt.getTime() < Date.now()) {
+        this.logger.verbose(`permission: ${permissions[i].resource} expired`);
+        continue;
+      }
       if (minimatch(permission, permissions[i].resource)) {
         this.logger.verbose(
           `matching: ${permission} have: ${permissions[i].resource} result: true`,

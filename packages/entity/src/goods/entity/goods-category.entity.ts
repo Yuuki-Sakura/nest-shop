@@ -9,12 +9,15 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
   OneToMany,
   OneToOne,
+  Tree,
+  TreeChildren,
+  TreeParent,
 } from 'typeorm';
 
 @Entity('goods_category')
+@Tree('materialized-path')
 @ObjectType('GoodsCategory', {
   description: '商品分类',
 })
@@ -30,17 +33,16 @@ export class GoodsCategoryEntity extends CommonEntity {
   @Field(() => GoodsCategoryEntity, {
     description: '商品父分类',
   })
-  @ManyToOne(() => GoodsCategoryEntity, (category) => category.children)
-  @JoinColumn({ name: 'parent_id' })
+  @TreeParent()
+  @JoinColumn({
+    name: 'parent_id',
+  })
   parent: GoodsCategoryEntity;
 
   @Field(() => [GoodsCategoryEntity], {
     description: '商品子分类',
   })
-  @OneToMany(() => GoodsCategoryEntity, (category) => category.parent, {
-    cascade: true,
-    eager: true,
-  })
+  @TreeChildren()
   children: GoodsCategoryEntity[];
 
   @OneToOne(() => GoodsAttributesTemplateEntity)
