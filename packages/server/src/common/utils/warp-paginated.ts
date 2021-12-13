@@ -22,6 +22,7 @@ import {
 } from '@nestjs/swagger/dist/decorators/api-property.decorator';
 import { SchemaObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 import { GraphQLString } from 'graphql';
+import { IPaginateConfig } from '../interfaces/query-config.interface';
 
 type ApiResponseMetadata<T> = Pick<
   ApiPropertyOptions,
@@ -209,9 +210,9 @@ class SwaggerPaginated<T> implements Paginated<T> {
 }
 
 export const createSwaggerPaginateQuery = <T, U extends IPaginateQuery>(
-  config: PaginateConfig<T>,
-  name: string,
+  config: IPaginateConfig<T>,
 ): Type<U> => {
+  const name = config.name;
   const filter: Record<string, SchemaObject> = (() => {
     const obj: Record<string, SchemaObject> = {};
     Object.keys(config.filterableColumns).forEach((column) => {
@@ -423,9 +424,9 @@ const createGraphQLPaginateQueryFilter = <T, U extends Type<T>>(
 };
 
 export const createGraphQLPaginateQuery = <T>(
-  config: PaginateConfig<T>,
-  name: string,
+  config: IPaginateConfig<T>,
 ): Type<IPaginateQuery> => {
+  const name = config.name;
   const filterType = createGraphQLPaginateQueryFilter(config, name);
   const searchByEnum = (() => {
     const obj: Record<string, string> = {};

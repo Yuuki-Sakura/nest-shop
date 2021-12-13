@@ -11,7 +11,7 @@ database:
   username: 'nest_shop'
   password: 'AhGHNXBFFNKJ'
   database: 'nestshop'
-  synchronize: true
+  synchronize: false
   logging:
     - error
     - log
@@ -19,7 +19,6 @@ database:
     - query
     - warn
   maxQueryExecutionTime: -1
-  migrationsRun: true
   entities:
     - '../../node_modules/@adachi-sakura/nest-shop-entity/dist/**/*.js'
   cache:

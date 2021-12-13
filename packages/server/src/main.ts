@@ -107,7 +107,6 @@ async function init(app: NestApplication) {
       }),
     );
   }
-
   return;
 }
 

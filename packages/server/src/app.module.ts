@@ -8,6 +8,7 @@ import { TypeOrmLogger } from '@/common/logger/type-orm.logger';
 import { CorsMiddleware } from '@/common/middlewares/cors.middleware';
 import { OriginMiddleware } from '@/common/middlewares/origin.middleware';
 import { watchFileLoader } from '@/common/utils/watch-file-loader';
+import { DistrictModule } from '@/district/district.module';
 import { PermissionModule } from '@/permission/permission.module';
 import { RoleModule } from '@/role/role.module';
 import { UserModule } from '@/user/user.module';
@@ -183,6 +184,7 @@ import path from 'path';
     AuthModule,
     RoleModule,
     PermissionModule,
+    DistrictModule,
   ],
   providers: [
     Logger,

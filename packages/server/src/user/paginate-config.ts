@@ -1,9 +1,10 @@
-import { IPaginateConfig } from '@/common/interfaces/query-config.interface';
+import { IPaginateConfigMap } from '@/common/interfaces/query-config.interface';
 import { FilterOperator } from '@adachi-sakura/nest-shop-common';
 import { UserEntity } from '@adachi-sakura/nest-shop-entity';
 
-export const UserPaginateConfig: IPaginateConfig<UserEntity> = {
+export const UserPaginateConfig: IPaginateConfigMap<UserEntity> = {
   find: {
+    name: 'FindUser',
     filterableColumns: {
       id: [FilterOperator.EQ, FilterOperator.NOT],
       nickname: [FilterOperator.EQ, FilterOperator.NOT],

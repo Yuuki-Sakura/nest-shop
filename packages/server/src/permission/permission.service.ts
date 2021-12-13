@@ -1,36 +1,24 @@
+import { PermissionCreateDto } from '@/permission/dto/permission-create.dto';
+import { PermissionUpdateDto } from '@/permission/dto/permission-update.dto';
+import { PermissionPaginateConfig } from '@/permission/paginate-config';
+import { paginate, PaginateQuery } from '@adachi-sakura/nest-shop-common';
 import { Permission } from '@adachi-sakura/nest-shop-entity';
 import { Injectable } from '@nestjs/common';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { PermissionCreateDto } from '@/permission/dto/permission-create.dto';
-import { PermissionUpdateDto } from '@/permission/dto/permission-update.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindConditions } from 'typeorm/find-options/FindConditions';
 
 @Injectable()
 export class PermissionService {
-  constructor(
-    @InjectRepository(Permission)
-    private readonly permissionRepo: Repository<Permission>,
-  ) {}
+  @InjectRepository(Permission)
+  private readonly permissionRepo: Repository<Permission>;
 
-  findAll() {
-    return this.permissionRepo.find();
-  }
-
-  findById(id: string) {
-    return this.permissionRepo.findOne({ id });
-  }
-
-  findByName(name: string) {
-    return this.permissionRepo.findOne({ name });
+  find(query: PaginateQuery = {}) {
+    return paginate(query, this.permissionRepo, PermissionPaginateConfig.find);
   }
 
   findOne(conditions?: FindConditions<Permission>) {
     return this.permissionRepo.findOne(conditions);
-  }
-
-  findByIds(ids: string[]) {
-    return this.permissionRepo.findByIds(ids);
   }
 
   save(permission: PermissionCreateDto) {

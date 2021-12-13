@@ -120,6 +120,7 @@ export class DistrictEntity {
 
   @Field(() => DistrictEntity, {
     description: '父级地区',
+    nullable: true,
   })
   @ApiProperty({
     description: '父级地区',
@@ -132,6 +133,7 @@ export class DistrictEntity {
 
   @Field(() => [DistrictEntity], {
     description: '子级地区',
+    nullable: true,
   })
   @ApiProperty({
     description: '子级地区',

@@ -140,14 +140,9 @@ export class AuthService {
       .select(['user.id'])
       .leftJoinAndSelect('user.roles', 'user_role')
       .leftJoinAndSelect('user_role.role', 'role')
-      .leftJoinAndMapMany(
-        'role.extends',
-        'role',
-        'role_extends',
-        "role_extends.mpath LIKE role.mpath || '%'",
-      )
       .leftJoinAndSelect('user.permissions', 'permissions')
       .where('user.id = :id', { id: user.id })
+      .cache(true)
       .getOne();
     const userPermissions = getPermissions(userWithRole);
 
@@ -155,7 +150,6 @@ export class AuthService {
       `user-${user.id}-permissions`,
       JSON.stringify(userPermissions),
     );
-    // console.log(userPermissions);
     const token = this.signToken(user);
     return create(AuthLoginResultDto, {
       user,

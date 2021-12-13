@@ -10,10 +10,7 @@ import { UserEntity } from '@adachi-sakura/nest-shop-entity';
 import { Inject } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { UserPaginateConfig } from './paginate-config';
-const findArgs = createGraphQLPaginateQuery(
-  UserPaginateConfig.find,
-  'FindUser',
-);
+const findArgs = createGraphQLPaginateQuery(UserPaginateConfig.find);
 const findResult = warpGqlPaginated(UserEntity, UserPaginateConfig.find);
 
 @Resolver(() => UserEntity)

@@ -21,7 +21,7 @@ export class UserController {
 
   @Get()
   @ApiQuery({
-    type: createSwaggerPaginateQuery(UserPaginateConfig.find, 'FindUser'),
+    type: createSwaggerPaginateQuery(UserPaginateConfig.find),
   })
   @ApiResponse({
     type: warpResponse({
