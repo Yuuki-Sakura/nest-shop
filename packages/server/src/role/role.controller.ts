@@ -8,9 +8,24 @@ import { RoleUpdateDto } from '@/role/dto/role-update.dto';
 import { RolePaginateConfig } from '@/role/paginate-config';
 import { Paginate, PaginateQuery } from '@adachi-sakura/nest-shop-common';
 import { Role } from '@adachi-sakura/nest-shop-entity';
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { RoleService } from '@/role/role.service';
-import { ApiBody, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOkResponse, ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiTags
+} from '@nestjs/swagger';
 import { RoleCreateDto } from '@/role/dto/role-create.dto';
 import { Auth } from '@/auth/auth.utils';
 
@@ -49,10 +64,24 @@ export class RoleController {
     return this.roleService.create(role);
   }
 
-  @Post()
+  @Put()
   @Auth('role.update', '更新角色')
   @ApiBody({ type: RoleUpdateDto })
   update(@Body() role: RoleUpdateDto) {
     return this.roleService.update(role);
+  }
+
+  @Delete(':id')
+  @ApiParam({ name: 'id', description: '删除的角色id' })
+  @Auth('role.delete', '删除角色')
+  delete(@Param('id') id: string) {
+    return this.roleService.remove(id);
+  }
+
+  @Delete()
+  @Auth('role.deleteMany', '批量删除角色')
+  @ApiBody({ type: [String], description: '删除的角色id数组' })
+  deleteMany(@Body() ids: string[]) {
+    return this.roleService.remove(ids);
   }
 }

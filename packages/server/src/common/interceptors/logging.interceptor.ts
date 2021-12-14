@@ -24,11 +24,14 @@ export class LoggingInterceptor implements NestInterceptor {
 
   intercept(ctx: ExecutionContext, next: CallHandler): Observable<any> {
     const gqlContext = GqlExecutionContext.create(ctx);
-    const contextType = gqlContext.getType();
-    if (contextType == 'graphql') {
-      const request = gqlContext.getContext().req;
-      const span = request.span as Span;
-      const info = gqlContext.getInfo();
+    const isGraphQL = gqlContext.getType() === 'graphql';
+    const request = isGraphQL
+      ? gqlContext.getContext().req
+      : ctx.switchToHttp().getRequest();
+    const span = request.span as Span;
+    const info = gqlContext.getInfo();
+
+    if (isGraphQL) {
       span.updateName(
         `GraphQLRequest: ${info.path.typename} -> ${info.path.key}`,
       );
@@ -41,36 +44,33 @@ export class LoggingInterceptor implements NestInterceptor {
         `[request-at: ${request.requestAt}] GraphQLRequest: [${info.path.typename} -> ${info.path.key}]`,
         'GraphQLRequest',
       );
-      return next.handle().pipe(
-        tap(() => {
-          span.end();
+    } else {
+      this.logger.log(
+        `[request-at: ${request.requestAt}] Request: [${request.method} -> ${request.url}]`,
+        'Request',
+      );
+    }
+    return next.handle().pipe(
+      tap(() => {
+        const response = ctx.switchToHttp().getResponse<Response>();
+        span.end();
+        if (isGraphQL) {
           this.logger.log(
             `[request-at: ${request.requestAt}] GraphQLResponse: [${
               info.path.typename
             } -> ${info.path.key}] time: ${Date.now() - request.requestAt}ms`,
             'GraphQLResponse',
           );
-        }),
-      );
-    }
-    const request = ctx.switchToHttp().getRequest();
-    this.logger.log(
-      `[request-at: ${request.requestAt}] Request: [${request.method} -> ${request.url}]`,
-      'Request',
-    );
-    const span = request.span as Span;
-    return next.handle().pipe(
-      tap(() => {
-        const response = ctx.switchToHttp().getResponse<Response>();
-        span.end();
-        this.logger.log(
-          `[request-at: ${request.requestAt}] Response: [${request.method} -> ${
-            request.url
-          }] code: ${response.statusCode} time: ${
-            Date.now() - request.requestAt
-          }ms`,
-          'Response',
-        );
+        } else {
+          this.logger.log(
+            `[request-at: ${request.requestAt}] Response: [${
+              request.method
+            } -> ${request.url}] code: ${response.statusCode} time: ${
+              Date.now() - request.requestAt
+            }ms`,
+            'Response',
+          );
+        }
       }),
     );
   }

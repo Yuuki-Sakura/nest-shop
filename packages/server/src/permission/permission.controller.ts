@@ -19,6 +19,12 @@ export class PermissionController {
   private readonly permissionService: PermissionService;
 
   @Get()
+  @ApiOkResponse({ type: [Permission] })
+  find() {
+    return this.permissionService.find();
+  }
+
+  @Get('paginate')
   @ApiQuery({
     type: createSwaggerPaginateQuery(PermissionPaginateConfig.find),
   })
@@ -27,7 +33,7 @@ export class PermissionController {
       type: warpPaginated({ type: Permission }, PermissionPaginateConfig.find),
     }),
   })
-  find(@Paginate() query: PaginateQuery) {
-    return this.permissionService.find(query);
+  findPaginate(@Paginate() query: PaginateQuery) {
+    return this.permissionService.findPaginate(query);
   }
 }

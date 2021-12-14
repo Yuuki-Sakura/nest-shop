@@ -32,6 +32,11 @@ export class RoleService {
   }
 
   async update(role: RoleUpdateDto) {
-    return this.roleRepo.save(role);
+    return this.roleRepo.update(role.id, role);
+  }
+
+  async remove(idOrIds: string | string[]) {
+    await this.roleRepo.softDelete(idOrIds);
+    return 'OK';
   }
 }

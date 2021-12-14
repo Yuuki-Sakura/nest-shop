@@ -1,15 +1,18 @@
 import { AppConfig } from '@/app.config';
 import { WinstonLogger } from '@/common/logger/winston.logger';
+import { schemaValidator } from '@/common/utils/schema-validator';
 import { Logger } from '@nestjs/common';
 import type {
   OptionsSync,
   cosmiconfigSync as _cosmiconfigSync,
 } from 'cosmiconfig';
 import { CosmiconfigResult } from 'cosmiconfig/dist/types';
+import deepProxy from 'deep-proxy-polyfill';
 import { loadPackage } from 'nest-typed-config/dist/utils/load-package.util';
 import { basename, dirname } from 'path';
 import chokidar from 'chokidar';
 import { diff } from 'deep-diff';
+import _ from 'lodash';
 
 let parseToml: any;
 let cosmiconfig: any;
@@ -118,35 +121,50 @@ export const watchFileLoader = (
         persistent: true,
       })
       .on('change', () => {
-        const newConfig = loadFile().config;
-        const oldConfig = result.config;
-        const differences = diff(oldConfig, newConfig);
-        differences.forEach((item) => {
-          switch (item.kind) {
-            case 'N':
-              logger.log(item);
-              break;
-            case 'D':
-              logger.log(item);
-              break;
-            case 'E':
-              logger.log(item);
-              break;
-            case 'A':
-              logger.log(item);
-              break;
-          }
-        });
-        logger.log(differences);
-        result.config = newConfig;
+        try {
+          const newConfig = schemaValidator(loadFile().config);
+          const oldConfig = result.config;
+          const differences = diff(oldConfig, newConfig);
+          differences?.forEach((item) => {
+            switch (item.kind) {
+              case 'N':
+                logger.log(item);
+                break;
+              case 'D':
+                logger.log(item);
+                break;
+              case 'E':
+                logger.log(item);
+                break;
+              case 'A':
+                logger.log(item);
+                break;
+            }
+          });
+          logger.log(differences);
+          result.config = newConfig;
 
-        logger.log(
-          `File-loader has reloaded a configuration file from ${result.filepath}`,
-        );
+          logger.log(
+            `File-loader has reloaded a configuration file from ${result.filepath}`,
+          );
+        } catch (e) {
+          logger.error(e.message, e, 'ConfigLoader');
+        }
       });
-    return new Proxy(result.config, {
-      get(target: any, p: string | symbol): any {
-        return result.config[p];
+    return deepProxy(result.config, {
+      get: (obj, key, root, keys) => {
+        if (keys?.length == 0) {
+          return result.config[key];
+        }
+        const res = _.get(result.config, keys)[key];
+        if (res.constructor == Array) {
+          return new Proxy(res, {
+            get: (target, p) => {
+              return _.get(result.config, keys)[key][p];
+            },
+          });
+        }
+        return res;
       },
     });
   };

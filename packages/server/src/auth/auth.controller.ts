@@ -1,4 +1,4 @@
-import { Auth, Token, User } from '@/auth/auth.utils';
+import { Auth, Token } from '@/auth/auth.utils';
 import { Span } from '@/common/decorator/span.decorator';
 import { Message } from '@/common/decorator/message.decorator';
 import { warpResponse } from '@/common/utils/warp-response';

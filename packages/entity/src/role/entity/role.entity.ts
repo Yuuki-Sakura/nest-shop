@@ -1,7 +1,9 @@
+import { UserRole } from '@/user';
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import { GraphQLString } from 'graphql';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @Entity('role')
@@ -22,4 +24,10 @@ export class Role extends CommonEntity {
     comment: '角色包含权限',
   })
   permissions: string[];
+
+  @OneToMany(() => UserRole, (userRole) => userRole.role, {
+    cascade: ['soft-remove'],
+  })
+  @Exclude()
+  user: UserRole[];
 }

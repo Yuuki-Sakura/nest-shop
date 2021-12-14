@@ -1,10 +1,9 @@
 import { PermissionCreateDto } from '@/permission/dto/permission-create.dto';
-import { PermissionUpdateDto } from '@/permission/dto/permission-update.dto';
 import { PermissionPaginateConfig } from '@/permission/paginate-config';
 import { paginate, PaginateQuery } from '@adachi-sakura/nest-shop-common';
 import { Permission } from '@adachi-sakura/nest-shop-entity';
 import { Injectable } from '@nestjs/common';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindConditions } from 'typeorm/find-options/FindConditions';
 
@@ -13,7 +12,11 @@ export class PermissionService {
   @InjectRepository(Permission)
   private readonly permissionRepo: Repository<Permission>;
 
-  find(query: PaginateQuery = {}) {
+  find() {
+    return this.permissionRepo.find();
+  }
+
+  findPaginate(query: PaginateQuery = {}) {
     return paginate(query, this.permissionRepo, PermissionPaginateConfig.find);
   }
 
@@ -22,18 +25,7 @@ export class PermissionService {
   }
 
   save(permission: PermissionCreateDto) {
-    return this.permissionRepo.save({
-      ...this.permissionRepo.create(),
-      ...permission,
-    });
-  }
-
-  update(id: string, permission: PermissionUpdateDto): Promise<UpdateResult> {
-    return this.permissionRepo.update(id, permission);
-  }
-
-  delete(id: string | string[]): Promise<DeleteResult> {
-    return this.permissionRepo.delete(id);
+    return this.permissionRepo.save(this.permissionRepo.create(permission));
   }
 
   async clear() {

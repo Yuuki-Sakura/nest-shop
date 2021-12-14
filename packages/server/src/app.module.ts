@@ -7,6 +7,8 @@ import { TransformInterceptorProvider } from '@/common/interceptors/transform.in
 import { TypeOrmLogger } from '@/common/logger/type-orm.logger';
 import { CorsMiddleware } from '@/common/middlewares/cors.middleware';
 import { OriginMiddleware } from '@/common/middlewares/origin.middleware';
+import { redisProxyHandler } from '@/common/utils/redis-proxy-handler';
+import { schemaValidator } from '@/common/utils/schema-validator';
 import { watchFileLoader } from '@/common/utils/watch-file-loader';
 import { DistrictModule } from '@/district/district.module';
 import { PermissionModule } from '@/permission/permission.module';
@@ -19,11 +21,8 @@ import { Logger, MiddlewareConsumer, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { context, SpanStatusCode, trace } from '@opentelemetry/api';
-import Ajv, { ErrorObject } from 'ajv';
-import merge from 'deepmerge';
-import IORedis, { Command, RedisOptions } from 'ioredis';
-import { fileLoader, TypedConfigModule } from 'nest-typed-config';
+import { RedisOptions } from 'ioredis';
+import { TypedConfigModule } from 'nest-typed-config';
 import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
 import path from 'path';
 
@@ -34,45 +33,7 @@ import path from 'path';
       load: watchFileLoader({
         basename: 'nest-shop-config',
       }),
-      validate: (rawConfig: any) => {
-        const schema = fileLoader({
-          basename: 'nest-shop-config.schema',
-        })();
-        const validate = new Ajv({
-          allowUnionTypes: true,
-          verbose: true,
-        }).compile(schema);
-        validate(rawConfig);
-        if (validate.errors) {
-          throw new Error(
-            TypedConfigModule.getConfigErrorMessage(
-              validate.errors
-                .reduce((prev: ErrorObject[], current) => {
-                  const findIndex = prev.findIndex(
-                    (item) => item.instancePath === current.instancePath,
-                  );
-                  if (findIndex === -1) {
-                    prev.push(current);
-                  } else {
-                    const error = prev[findIndex];
-                    const mergedParams = merge(error.params, current.params);
-                    prev.splice(findIndex, 1, {
-                      ...error,
-                      params: mergedParams,
-                    });
-                  }
-                  return prev;
-                }, [])
-                .map((item) => ({
-                  property: item.instancePath,
-                  value: item.data,
-                  constraints: item.params,
-                })),
-            ),
-          );
-        }
-        return rawConfig;
-      },
+      validate: schemaValidator,
     }),
     I18nModule.forRoot({
       fallbackLanguage: 'zh-CN',
@@ -104,72 +65,7 @@ import path from 'path';
         logger: Logger = new Logger('Redis'),
       ) => ({
         ...config.redis,
-        proxyHandler: {
-          get(target: IORedis.Redis, property: keyof IORedis.Redis): any {
-            if (property !== 'sendCommand') {
-              return target[property];
-            }
-            return new Proxy(target[property], {
-              apply(target, thisArg: IORedis.Redis, argArray: Command[]): any {
-                const invokeAt = Date.now();
-                const command = argArray[0];
-                const commandName = command.name.toUpperCase();
-                const tracer = trace.getTracer('default');
-                const currentSpan =
-                  trace.getSpan(context.active()) ??
-                  tracer.startSpan('default');
-                return context.with(
-                  trace.setSpan(context.active(), currentSpan),
-                  () => {
-                    const span = tracer.startSpan(`Redis: ${commandName}`);
-                    span.setAttributes({
-                      command: commandName,
-                      args: command['args'],
-                    });
-                    logger.log(
-                      `[invoke-at: ${invokeAt}] [command: ${commandName}] args: ${JSON.stringify(
-                        command['args'],
-                      )}`,
-                    );
-                    (command['promise'] as Promise<any>)
-                      .then((res) => {
-                        span.setAttributes({
-                          result: res,
-                        });
-                        span.end();
-                        logger.log(
-                          `[invoke-at: ${invokeAt}] [command: ${commandName}] args: ${JSON.stringify(
-                            command['args'],
-                          )} result: ${JSON.stringify(res)} time: ${
-                            Date.now() - invokeAt
-                          }ms`,
-                        );
-                        return res;
-                      })
-                      .catch((err: Error) => {
-                        span.recordException(err);
-                        span.setStatus({
-                          code: SpanStatusCode.ERROR,
-                          message: err.message,
-                        });
-                        span.end();
-                        logger.error(
-                          `[invoke-at: ${invokeAt}] [command: ${commandName}] args: ${JSON.stringify(
-                            command['args'],
-                          )} error: ${err.message} time: ${
-                            Date.now() - invokeAt
-                          }ms`,
-                          err,
-                        );
-                        throw err;
-                      });
-                    return target.apply(thisArg, argArray);
-                  },
-                );
-              },
-            });
-          },
-        },
+        proxyHandler: redisProxyHandler(logger),
       }),
       inject: [AppConfig],
     }),

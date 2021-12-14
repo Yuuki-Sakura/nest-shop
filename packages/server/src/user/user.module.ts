@@ -1,5 +1,9 @@
 import { UserResolver } from '@/user/user.resolver';
-import { UserDeviceEntity, UserEntity, UserRole } from "@adachi-sakura/nest-shop-entity";
+import {
+  UserDeviceEntity,
+  UserEntity,
+  UserRole,
+} from '@adachi-sakura/nest-shop-entity';
 import { UserEmailEntity } from '@adachi-sakura/nest-shop-entity/dist/user/entity/user-email.entity';
 import { UserPhoneNumberEntity } from '@adachi-sakura/nest-shop-entity/dist/user/entity/user-phone-number.entity';
 import { Module } from '@nestjs/common';

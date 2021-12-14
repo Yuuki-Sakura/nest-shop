@@ -29,7 +29,7 @@ export class CorsMiddleware implements NestMiddleware {
     const origins = request.headers.origin;
     const origin = (Array.isArray(origins) ? origins[0] : origins) || '';
 
-    const allowOrigins = [...this.appConfig.server.allowOrigins];
+    const allowOrigins = this.appConfig.server.allowOrigins;
     const allowMethods = [
       RequestMethod.GET,
       RequestMethod.HEAD,

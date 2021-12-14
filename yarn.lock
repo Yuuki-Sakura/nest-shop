@@ -138,6 +138,7 @@ __metadata:
     "@types/jexl": ^2.3.0
     "@types/lodash": 4.14.177
     "@types/lru-cache": ^5.1.1
+    "@types/multer": ^1.4.7
     "@types/node": ^16.11.1
     "@types/passport-jwt": ^3.0.6
     "@types/passport-local": ^1.0.34
@@ -160,11 +161,13 @@ __metadata:
     cross-env: ^7.0.3
     decimal.js: ^10.3.1
     deep-diff: ^1.0.2
+    deep-proxy-polyfill: ^1.0.4
     deepmerge: ^4.2.2
     express: 4.17.1
     express-session: ^1.17.2
     fast-safe-stringify: ^2.1.1
     graphql: ^15.7.2
+    graphql-ws: ^5.5.5
     helmet: ^4.6.0
     ioredis: ^4.28.0
     jest: ^27.3.0
@@ -4390,6 +4393,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/multer@npm:^1.4.7":
+  version: 1.4.7
+  resolution: "@types/multer@npm:1.4.7"
+  dependencies:
+    "@types/express": "*"
+  checksum: 680cb0710aa25264d20cdcdaf34c212b636b55ea141310f06c25354ab1401193c7aa6839f9d22abf64a223fab1f2b8287f2512b0bef7e1628c4e9ffe54b4aeb2
+  languageName: node
+  linkType: hard
+
 "@types/mysql@npm:2.15.19":
   version: 2.15.19
   resolution: "@types/mysql@npm:2.15.19"
@@ -7410,6 +7422,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"deep-proxy-polyfill@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "deep-proxy-polyfill@npm:1.0.4"
+  checksum: 5c8035abdd5b09c2351f250e18c27774df466755b87dc47dc901172cc8d68202aa3cc05bf63c880375ef488263b77a31ff37421b978cb942aa34c29f1f50fa58
+  languageName: node
+  linkType: hard
+
 "deepmerge@npm:^4.2.2":
   version: 4.2.2
   resolution: "deepmerge@npm:4.2.2"
@@ -9746,7 +9765,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-ws@npm:5.5.5":
+"graphql-ws@npm:5.5.5, graphql-ws@npm:^5.5.5":
   version: 5.5.5
   resolution: "graphql-ws@npm:5.5.5"
   peerDependencies:

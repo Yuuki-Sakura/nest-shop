@@ -12,7 +12,7 @@ import { Controller, Get, Inject } from '@nestjs/common';
 import { UserService } from '@/user/user.service';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('user')
+@ApiTags('用户')
 @Controller('/user')
 @Span()
 export class UserController {

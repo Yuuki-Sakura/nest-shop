@@ -9,15 +9,15 @@ import { ApiParam, ApiTags } from '@nestjs/swagger';
 export class DistrictController {
   @Inject()
   private readonly districtService: DistrictService;
-  @Get(['', ':parentId'])
-  @ApiParam({ name: 'id', type: String, required: false })
+  @Get(['list', 'list/:parentId'])
+  @ApiParam({ name: 'parentId', type: String, required: false })
   find(@Param('parentId') id?: string) {
     return this.districtService.findChildren(id && +id);
   }
 
   @Get(['tree', 'tree/:parentId'])
   @ApiParam({ name: 'parentId', type: String, required: false })
-  findDescendants(@Param('id') id?: string) {
+  findDescendants(@Param('parentId') id?: string) {
     return this.districtService.findDescendants(id && +id);
   }
 

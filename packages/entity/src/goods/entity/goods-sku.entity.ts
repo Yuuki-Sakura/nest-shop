@@ -90,6 +90,7 @@ export class GoodsSkuEntity extends CommonEntity {
   })
   @Column('json', {
     comment: '商品SKU属性',
+    name: 'sku_info',
   })
   skuInfo: GoodsSkuInfo[];
 
@@ -264,6 +265,7 @@ export class GoodsSkuEntity extends CommonEntity {
   @Column('boolean', {
     comment: '是否为虚拟商品',
     default: false,
+    name: 'is_virtual',
   })
   isVirtual: boolean;
 
@@ -273,6 +275,7 @@ export class GoodsSkuEntity extends CommonEntity {
   })
   @Column('json', {
     comment: '商品详情图',
+    name: 'desc_images',
   })
   descImages: string[];
 
@@ -281,7 +284,14 @@ export class GoodsSkuEntity extends CommonEntity {
     description: '商品SKU属性',
   })
   @ManyToMany(() => GoodsAttributesEntity)
-  @JoinTable()
+  @JoinTable({
+    joinColumn: {
+      name: 'goods_sku_id',
+    },
+    inverseJoinColumn: {
+      name: 'goods_attributes_id',
+    },
+  })
   attributes: GoodsAttributesEntity[];
 
   @ApiProperty({ type: () => [GoodsCommentEntity] })

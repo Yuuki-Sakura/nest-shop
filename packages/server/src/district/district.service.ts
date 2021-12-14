@@ -25,10 +25,16 @@ export class DistrictService {
   async findChildren(parentId?: number) {
     if (!parentId) {
       return this.districtRepo.find({
-        parent: await this.districtRepo.findOne({ parent: null }),
+        where: {
+          parent: null,
+        },
+        cache: true,
       });
     }
-    return this.districtRepo.find({ parent: { id: parentId } });
+    return this.districtRepo.find({
+      where: { parent: { id: parentId } },
+      cache: true,
+    });
   }
 
   async findDescendants(parentId?: number) {

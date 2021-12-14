@@ -4,8 +4,9 @@
  * @module middleware/origin
  */
 
+import { AppConfig } from '@/app.config';
 import { Request, Response } from 'express';
-import { HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { isProdMode } from '@/app.environment';
 
 /**
@@ -14,12 +15,15 @@ import { isProdMode } from '@/app.environment';
  */
 @Injectable()
 export class OriginMiddleware implements NestMiddleware {
+  @Inject()
+  appConfig: AppConfig;
+
   use(request: Request, response: Response, next: () => void) {
     // 如果是生产环境，需要验证用户来源渠道，防止非正常请求
     if (isProdMode) {
       const { origin, referer } = request.headers;
       const checkHeader = (field) =>
-        !field || field.includes(process.env.ALLOW_REFERER);
+        !field || field.includes(this.appConfig.server.allowReferer);
       const isVerifiedOrigin = checkHeader(origin);
       const isVerifiedReferer = checkHeader(referer);
       if (!isVerifiedOrigin && !isVerifiedReferer) {

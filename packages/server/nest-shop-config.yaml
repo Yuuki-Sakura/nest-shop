@@ -11,7 +11,7 @@ database:
   username: 'nest_shop'
   password: 'AhGHNXBFFNKJ'
   database: 'nestshop'
-  synchronize: false
+  synchronize: true
   logging:
     - error
     - log
@@ -47,6 +47,8 @@ graphql:
   autoSchemaFile: true
   installSubscriptionHandlers: true
   useGlobalPrefix: true
+  subscriptions:
+    graphql-ws: true
   path: '/graphql'
 swagger:
   prefix: '/doc'

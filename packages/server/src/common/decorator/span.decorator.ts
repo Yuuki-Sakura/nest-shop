@@ -68,10 +68,6 @@ export const Span =
               let isPromise = false;
               try {
                 const result = originMethod.apply(this, args);
-                logger.log(
-                  `method: ${key} invoke-time: ${Date.now() - invokeAt}ms`,
-                  name,
-                );
                 if (result instanceof Promise) {
                   isPromise = true;
                   result
@@ -102,6 +98,11 @@ export const Span =
                     .finally(() => {
                       span?.end();
                     });
+                } else {
+                  logger.log(
+                    `method: ${key} invoke-time: ${Date.now() - invokeAt}ms`,
+                    name,
+                  );
                 }
                 return result;
               } catch (e) {

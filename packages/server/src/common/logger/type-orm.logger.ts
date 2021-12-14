@@ -8,10 +8,18 @@ import { PlatformTools } from 'typeorm/platform/PlatformTools';
 @Injectable()
 export class TypeOrmLogger implements Logger {
   private readonly logger = new NestLogger('TypeORM');
-  constructor(private options?: LoggerOptions) {}
+  constructor(private options?: LoggerOptions) {
+    console.log(options);
+  }
   log(level: 'log' | 'info' | 'warn', message: any): any {
-    if (level === 'info') level = 'log';
-    this.logger[level](message);
+    if (
+      this.options === 'all' ||
+      this.options === true ||
+      (Array.isArray(this.options) && this.options.indexOf(level) !== -1)
+    ) {
+      if (level === 'info') level = 'log';
+      this.logger[level](message);
+    }
   }
 
   logMigration(message: string): any {
@@ -39,16 +47,22 @@ export class TypeOrmLogger implements Logger {
       queryRunner.data.queryId = nanoid(20);
       queryRunner.data.queryAt = Date.now();
     }
-    this.logger.log(
-      (!queryRunner ? '' : `[query-id: ${queryRunner.data.queryId}] `) +
-        `query: ` +
-        PlatformTools.highlightSql(
-          `${query}` +
-            (parameters && parameters.length
-              ? ` -- PARAMETERS: ${this.stringifyParams(parameters)}`
-              : ''),
-        ),
-    );
+    if (
+      this.options === 'all' ||
+      this.options === true ||
+      (Array.isArray(this.options) && this.options.indexOf('query') !== -1)
+    ) {
+      this.logger.log(
+        (!queryRunner ? '' : `[query-id: ${queryRunner.data.queryId}] `) +
+          `query: ` +
+          PlatformTools.highlightSql(
+            `${query}` +
+              (parameters && parameters.length
+                ? ` -- PARAMETERS: ${this.stringifyParams(parameters)}`
+                : ''),
+          ),
+      );
+    }
   }
 
   logQueryError(

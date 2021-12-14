@@ -13,7 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Field, GqlExecutionContext, InterfaceType } from '@nestjs/graphql';
-import { ApiBearerAuth, ApiProperty } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiProperty } from '@nestjs/swagger';
 import * as argon2 from 'argon2';
 import * as crypto from 'crypto';
 import { Request } from 'express';
@@ -79,6 +79,7 @@ export const Auth = (resource?: string, name?: string) => {
   if (resource) {
     return applyDecorators(
       ApiBearerAuth(),
+      ApiOperation({ summary: name }),
       UseGuards(AuthGuard, PermissionGuard),
       Permission(resource, name),
     );
