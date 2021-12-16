@@ -73,6 +73,14 @@ registerEnumType(UserStatus, {
   },
 });
 
+// @ObjectType()
+export class OtpInfo {
+  // @Field()
+  secret: string;
+  // @Field(() => [String])
+  backupCodes?: string[];
+}
+
 @Entity('user')
 @ObjectType('User', {
   description: '用户信息',
@@ -155,9 +163,6 @@ export class UserEntity extends CommonEntity {
     name: 'pay_password',
     nullable: true,
   })
-  @ApiProperty({
-    description: '支付密码',
-  })
   @Exclude()
   payPassword: string;
 
@@ -212,6 +217,30 @@ export class UserEntity extends CommonEntity {
     comment: '用户状态',
   })
   status: UserStatus;
+
+  @Column('json', {
+    comment: 'OTP信息',
+    name: 'otp_info',
+    nullable: true,
+  })
+  @Exclude()
+  otpInfo: OtpInfo;
+
+  @Field({
+    description: 'OTP启用时间',
+    nullable: true,
+  })
+  @ApiProperty({
+    description: 'OTP启用时间',
+    nullable: true,
+  })
+  @Column('timestamp', {
+    comment: 'OTP启用时间',
+    name: 'otp_enabled_at',
+    nullable: true,
+  })
+  @Timestamp()
+  otpEnabledAt: Date;
 
   @Field({
     description: '上次登陆时间',

@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
     ];
     const token = request.header('authorization')?.replace(/^Bearer\s+/i, '');
     if (!token) {
-      new CommonException(
+      throw new CommonException(
         {
           key: 'auth.pleaseLogin',
         },

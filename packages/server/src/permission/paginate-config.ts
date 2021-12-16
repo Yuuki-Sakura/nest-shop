@@ -13,7 +13,7 @@ export const PermissionPaginateConfig: IPaginateConfigMap<Permission> = {
       method: [FilterOperator.EQ, FilterOperator.NOT],
     },
     searchableColumns: ['name', 'resource', 'route'],
-    defaultSortBy: [['createAt', 'DESC']],
-    sortableColumns: ['id', 'createAt', 'resource', 'route', 'method', 'sort'],
+    defaultSortBy: [['id', 'DESC']],
+    sortableColumns: ['id', 'resource', 'route', 'method'],
   },
 };

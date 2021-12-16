@@ -1,8 +1,10 @@
 import { AppConfig } from '@/app.config';
-import { AuthController } from '@/auth/auth.controller';
+import { AuthController } from '@/auth/controller/auth.controller';
 import { AuthResolver } from '@/auth/auth.resolver';
-import { AuthService } from '@/auth/auth.service';
+import { AuthService } from '@/auth/service/auth.service';
 import { JwtStrategy } from '@/auth/jwt.strategy';
+import { OtpController } from '@/auth/controller/otp.controller';
+import { OtpService } from '@/auth/service/otp.service';
 import { RoleModule } from '@/role/role.module';
 import { UserModule } from '@/user/user.module';
 import { UserRepository } from '@/user/user.repository';
@@ -38,8 +40,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     UserModule,
     RoleModule,
   ],
-  providers: [AuthService, JwtStrategy, AuthResolver],
-  controllers: [AuthController],
+  providers: [AuthService, JwtStrategy, AuthResolver, OtpService],
+  controllers: [AuthController, OtpController],
   exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

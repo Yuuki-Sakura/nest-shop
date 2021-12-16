@@ -27,6 +27,7 @@ database:
 server:
   port: 4000
   prefix: '/api'
+  name: 'Nest Shop'
   allowReferer: 'zy.ci'
   allowOrigins:
     - "https://zy.ci"

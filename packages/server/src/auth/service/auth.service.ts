@@ -3,6 +3,8 @@ import {
   getPermissions,
   verifyPassword,
 } from '@/auth/auth.utils';
+import { AuthPermissionDto } from '@/auth/dto/auth-permission.dto';
+import { AuthRoleDto } from '@/auth/dto/auth-role.dto';
 import { Span } from '@/common/decorator/span.decorator';
 import { createDeviceHash } from '@/common/utils/create-device-hash';
 import { create } from '@/common/utils/create.util';
@@ -14,7 +16,9 @@ import {
   UserDeviceEntity,
   UserEmailEntity,
   UserEntity,
+  UserPermission,
   UserPhoneNumberEntity,
+  UserRole,
 } from '@adachi-sakura/nest-shop-entity';
 import { InjectRedis } from '@adachi-sakura/nestjs-redis';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
@@ -50,6 +54,12 @@ export class AuthService {
 
   @InjectRepository(Role)
   private readonly roleRepo: Repository<Role>;
+
+  @InjectRepository(UserRole)
+  private readonly userRoleRepo: Repository<UserRole>;
+
+  @InjectRepository(UserPermission)
+  private readonly userPermissionRepo: Repository<UserPermission>;
 
   @InjectRedis()
   private readonly redis: Redis;
@@ -108,6 +118,7 @@ export class AuthService {
       user,
       fingerprint: userDeviceHash,
     });
+    const token = this.signToken(user);
     if (!userDevice) {
       userDevice = this.userDeviceRepo.create({
         user,
@@ -117,6 +128,7 @@ export class AuthService {
         lastLoginIp: req.clientIp,
         firstLoginAt: userLoginAt,
         lastLoginAt: userLoginAt,
+        token,
         name: !userAgent.device.vendor
           ? `${userAgent.os.name} ${userAgent.os.version} ${userAgent.cpu.architecture}`
           : `${userAgent.device.vendor} ${userAgent.device.model}` +
@@ -130,6 +142,7 @@ export class AuthService {
     } else {
       userDevice.lastLoginIp = req.clientIp;
       userDevice.lastLoginAt = userLoginAt;
+      userDevice.token = token;
       await this.userDeviceRepo.save(userDevice);
     }
     user.lastLoginIp = req.clientIp;
@@ -150,7 +163,6 @@ export class AuthService {
       `user-${user.id}-permissions`,
       JSON.stringify(userPermissions),
     );
-    const token = this.signToken(user);
     return create(AuthLoginResultDto, {
       user,
       token,
@@ -193,7 +205,8 @@ export class AuthService {
       if (result.identifiers.length === 0) {
         throw new CommonException({ key: 'common.fail.unknown' }, 500);
       }
-      await this.userRepository.update(user, { primaryEmail: userEmail });
+      user.primaryEmail = userEmail;
+      await this.userRepository.save(user);
     }
     if (registerDto.phoneNumber) {
       const userPhoneNumber = this.userPhoneNumberRepo.create({
@@ -205,9 +218,8 @@ export class AuthService {
       if (result.identifiers.length === 0) {
         throw new CommonException({ key: 'common.fail.unknown' }, 500);
       }
-      await this.userRepository.update(user, {
-        primaryPhoneNumber: userPhoneNumber,
-      });
+      user.primaryPhoneNumber = userPhoneNumber;
+      await this.userRepository.save(user);
     }
     if (registerDto.andLogin) {
       return this.login(
@@ -247,5 +259,25 @@ export class AuthService {
     return create(AuthRefreshResultDto, {
       token: this.jwtService.sign({ id }),
     });
+  }
+
+  async permission(dto: AuthPermissionDto) {
+    await this.userPermissionRepo.save(
+      this.userPermissionRepo.create({
+        user: await this.userRepository.findOne({ id: dto.userId }),
+        permissions: dto.permissions,
+        expiresAt: dto.expiresAt,
+      }),
+    );
+  }
+
+  async role(dto: AuthRoleDto) {
+    await this.userRoleRepo.save(
+      this.userRoleRepo.create({
+        user: await this.userRepository.findOne({ id: dto.userId }),
+        role: await this.roleRepo.findOne({ id: dto.roleId }),
+        expiresAt: dto.expiresAt,
+      }),
+    );
   }
 }

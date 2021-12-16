@@ -1,5 +1,5 @@
 {
-  "name": "@adachi-sakura/nest-blog",
+  "name": "@adachi-sakura/nest-shop",
   "version": "0.0.1",
   "description": "",
   "author": {
@@ -9,10 +9,10 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "pnpm recursive run build",
-    "dev": "pnpm recursive run dev --no-sort",
-    "start": "pnpm recursive run start",
-    "precommit": "pnpm run lint && pnpm run format",
+    "build": "yarn workspaces foreach run build",
+    "dev": "yarn workspaces foreach -pvi run dev",
+    "start": "yarn workspaces foreach -vi run start",
+    "precommit": "yarn run lint && yarn run format",
     "lint": "eslint \"packages/**/{src,apps,libs,test}/**/*.ts\" --fix",
     "format": "prettier --write \"packages/**/{src,apps,libs,test}/**/*.{js,ts}\""
   },

@@ -27,7 +27,6 @@ const otelSDK = new NodeSDK({
   // ),
   resource: new Resource({
     [SemanticResourceAttributes.SERVICE_NAME]: 'nest-shop',
-    [SemanticResourceAttributes.SERVICE_VERSION]: '0.0.1',
   }),
   contextManager: new AsyncLocalStorageContextManager(),
   textMapPropagator: new CompositePropagator({

@@ -9,9 +9,14 @@ import { Paginate, PaginateQuery } from '@adachi-sakura/nest-shop-common';
 import { Permission } from '@adachi-sakura/nest-shop-entity';
 import { Controller, Get, Inject } from '@nestjs/common';
 import { PermissionService } from '@/permission/permission.service';
-import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 
-@ApiTags('权限')
+@ApiTags('permission')
 @Controller('permission')
 @Span()
 export class PermissionController {
@@ -19,12 +24,20 @@ export class PermissionController {
   private readonly permissionService: PermissionService;
 
   @Get()
+  @ApiOperation({
+    summary: '获取权限列表',
+    operationId: 'permission.find',
+  })
   @ApiOkResponse({ type: [Permission] })
   find() {
     return this.permissionService.find();
   }
 
   @Get('paginate')
+  @ApiOperation({
+    summary: '获取权限列表(分页)',
+    operationId: 'permission.findPaginate',
+  })
   @ApiQuery({
     type: createSwaggerPaginateQuery(PermissionPaginateConfig.find),
   })

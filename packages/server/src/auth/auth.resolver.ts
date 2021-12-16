@@ -1,4 +1,4 @@
-import { AuthService } from '@/auth/auth.service';
+import { AuthService } from '@/auth/service/auth.service';
 import { Auth, Token } from '@/auth/auth.utils';
 import {
   AuthLoginDto,

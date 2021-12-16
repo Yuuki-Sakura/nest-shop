@@ -43,6 +43,10 @@ export class AppConfig {
   server: {
     port: number;
     prefix: string;
+    name: string;
+    otp: {
+      backupCodeNumber: number;
+    };
     nest: NestApplicationOptions;
     helmet: HelmetOptions;
     allowOrigins: string[];

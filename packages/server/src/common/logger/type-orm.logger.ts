@@ -8,9 +8,7 @@ import { PlatformTools } from 'typeorm/platform/PlatformTools';
 @Injectable()
 export class TypeOrmLogger implements Logger {
   private readonly logger = new NestLogger('TypeORM');
-  constructor(private options?: LoggerOptions) {
-    console.log(options);
-  }
+  constructor(private options?: LoggerOptions) {}
   log(level: 'log' | 'info' | 'warn', message: any): any {
     if (
       this.options === 'all' ||

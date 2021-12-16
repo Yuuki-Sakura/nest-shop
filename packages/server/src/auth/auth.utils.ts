@@ -1,5 +1,6 @@
-import { AuthGuard } from '@/auth/auth.guard';
-import { PermissionGuard } from '@/auth/permission.guard';
+import { AuthGuard } from '@/auth/guard/auth.guard';
+import { PermissionGuard } from '@/auth/guard/permission.guard';
+import { CommonException } from '@adachi-sakura/nest-shop-common';
 import {
   Permission as PermissionEntity,
   UserEntity,
@@ -79,7 +80,7 @@ export const Auth = (resource?: string, name?: string) => {
   if (resource) {
     return applyDecorators(
       ApiBearerAuth(),
-      ApiOperation({ summary: name }),
+      ApiOperation({ summary: name, operationId: resource }),
       UseGuards(AuthGuard, PermissionGuard),
       Permission(resource, name),
     );
@@ -90,7 +91,7 @@ export const GqlAuth = (resource?: string, name?: string) => {
   if (resource) {
     return applyDecorators(
       UseGuards(AuthGuard, PermissionGuard),
-      Permission('gql.' + resource, name),
+      Permission('gql.' + resource, name, 'GraphQL'),
     );
   } else return applyDecorators(UseGuards(AuthGuard));
 };
@@ -98,15 +99,20 @@ export const GqlAuth = (resource?: string, name?: string) => {
 export const permissions: {
   name: string;
   resource: string;
+  type: 'HTTP' | 'GraphQL';
   target: object;
   descriptor: TypedPropertyDescriptor<any>;
 }[] = [];
 
-export const Permission = (resource: string, name?: string) => {
+export const Permission = (
+  resource: string,
+  name?: string,
+  type: 'HTTP' | 'GraphQL' = 'HTTP',
+) => {
   return applyDecorators(
     SetMetadata('resource', resource),
     (target, propertyKey, descriptor) => {
-      permissions.push({ resource, name, target, descriptor });
+      permissions.push({ resource, name, type, target, descriptor });
     },
   );
 };
@@ -119,10 +125,9 @@ export const GetPermission = createParamDecorator(
 
 export { GetPermission as Perm };
 
-export const User = (required = true) =>
+export const User = () =>
   createParamDecorator((data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
-    if (!request.user && required) throw new UnauthorizedException('请登录');
     return request.user;
   })();
 

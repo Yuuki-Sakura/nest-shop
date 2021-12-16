@@ -28,6 +28,6 @@ export const warpResponse = <T, U extends Type<CommonResponse<T>>>(
   Object.defineProperty(TempClass, 'name', { writable: true });
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  TempClass.name = `${CommonResponse.name}<${typeName}>`;
+  TempClass.name = `Response<${typeName}>`;
   return TempClass as U;
 };

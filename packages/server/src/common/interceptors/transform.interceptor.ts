@@ -29,7 +29,7 @@ export class CommonResponse<T extends any> {
   code: number;
   @ApiResponseProperty()
   message: string;
-  data?: T;
+  data?: T | 'OK';
 }
 
 /**
@@ -47,10 +47,11 @@ export class TransformInterceptor<T> implements NestInterceptor<T> {
   intercept(
     context: ExecutionContext,
     next: CallHandler<T>,
-  ): Observable<Promise<CommonResponse<T>> | CommonResponse<T> | T> {
+  ): Observable<Promise<CommonResponse<T>> | CommonResponse<T> | T | 'OK'> {
     const ctx = context.switchToHttp();
     const gqlContext = GqlExecutionContext.create(context);
-    if (gqlContext.getType() == 'graphql') return next.handle();
+    if (gqlContext.getType() == 'graphql')
+      return next.handle().pipe(map((data) => data || 'OK'));
     const target = context.getHandler();
     return next.handle().pipe(
       map(async (data: T) => {
@@ -69,7 +70,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T> {
             args: message.args || {},
             lang: ctx.getRequest().i18nLang,
           }),
-          data,
+          data: data || 'OK',
         };
       }),
     );

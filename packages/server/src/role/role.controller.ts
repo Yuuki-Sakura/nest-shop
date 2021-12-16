@@ -21,15 +21,15 @@ import {
 import { RoleService } from '@/role/role.service';
 import {
   ApiBody,
-  ApiOkResponse, ApiOperation,
+  ApiOkResponse,
   ApiParam,
   ApiQuery,
-  ApiTags
+  ApiTags,
 } from '@nestjs/swagger';
 import { RoleCreateDto } from '@/role/dto/role-create.dto';
 import { Auth } from '@/auth/auth.utils';
 
-@ApiTags('角色')
+@ApiTags('role')
 @Controller('role')
 @Span()
 export class RoleController {

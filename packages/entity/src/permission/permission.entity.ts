@@ -1,7 +1,7 @@
 import { CommonEntity } from '@adachi-sakura/nest-shop-common';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 
 export enum HttpMethod {
   GET = 'GET',
@@ -19,7 +19,25 @@ registerEnumType(HttpMethod, {
 
 @Entity('permission')
 @ObjectType()
-export class Permission extends CommonEntity {
+export class Permission {
+  @Field(() => ID, {
+    description: '权限ID',
+  })
+  @ApiProperty({
+    description: '权限ID',
+  })
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Field({
+    description: '权限类型',
+  })
+  @ApiProperty({
+    description: '权限类型',
+  })
+  @Column()
+  type: 'HTTP' | 'GraphQL';
+
   @Field({
     description: '权限名称',
   })

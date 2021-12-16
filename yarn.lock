@@ -5,25 +5,6 @@ __metadata:
   version: 5
   cacheKey: 8
 
-"@adachi-sakura/nest-blog@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@adachi-sakura/nest-blog@workspace:."
-  dependencies:
-    "@typescript-eslint/eslint-plugin": ^4.33.0
-    "@typescript-eslint/parser": ^4.33.0
-    commitizen: ^4.2.4
-    concurrently: ^6.3.0
-    cz-conventional-changelog: ^3.3.0
-    eslint: ^7.32.0
-    eslint-config-prettier: ^8.3.0
-    eslint-plugin-prettier: ^3.4.1
-    husky: ^6.0.0
-    lerna: ^4.0.0
-    prettier: ^2.4.1
-    typescript: ^4.4.4
-  languageName: unknown
-  linkType: soft
-
 "@adachi-sakura/nest-shop-common@^1.0.0, @adachi-sakura/nest-shop-common@workspace:packages/common":
   version: 0.0.0-use.local
   resolution: "@adachi-sakura/nest-shop-common@workspace:packages/common"
@@ -142,6 +123,7 @@ __metadata:
     "@types/node": ^16.11.1
     "@types/passport-jwt": ^3.0.6
     "@types/passport-local": ^1.0.34
+    "@types/qrcode-svg": ^1.1.1
     "@types/request-ip": ^0.0.37
     "@types/supertest": ^2.0.11
     "@types/ua-parser-js": ^0.7.36
@@ -187,6 +169,7 @@ __metadata:
     passport-jwt: ^4.0.0
     passport-local: ^1.0.0
     pg: ^8.7.1
+    qrcode-svg: ^1.1.0
     reflect-metadata: ^0.1.13
     request-ip: ^2.1.3
     rimraf: ^3.0.2
@@ -202,6 +185,25 @@ __metadata:
     typescript: ^4.4.4
     ua-parser-js: ^1.0.2
     winston: ^3.3.3
+  languageName: unknown
+  linkType: soft
+
+"@adachi-sakura/nest-shop@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@adachi-sakura/nest-shop@workspace:."
+  dependencies:
+    "@typescript-eslint/eslint-plugin": ^4.33.0
+    "@typescript-eslint/parser": ^4.33.0
+    commitizen: ^4.2.4
+    concurrently: ^6.3.0
+    cz-conventional-changelog: ^3.3.0
+    eslint: ^7.32.0
+    eslint-config-prettier: ^8.3.0
+    eslint-plugin-prettier: ^3.4.1
+    husky: ^6.0.0
+    lerna: ^4.0.0
+    prettier: ^2.4.1
+    typescript: ^4.4.4
   languageName: unknown
   linkType: soft
 
@@ -4535,6 +4537,13 @@ __metadata:
   version: 2.0.4
   resolution: "@types/pug@npm:2.0.4"
   checksum: 26743ea4d778e9c429af62aa396a0454086c01e3d2d1a8961b9a35e2a219856a8d917196a93b56b41f44f9169c4481e0bbd983a502df41dc395129bf4e93fe16
+  languageName: node
+  linkType: hard
+
+"@types/qrcode-svg@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@types/qrcode-svg@npm:1.1.1"
+  checksum: 4da63890f33fee6a449fddebd9ba75b788ac2d4c76e2048b178fe18c2bd109627c5fdbc093bb8c72234c00a04830b86b016dd22b528b8c319ae2df36bd44c659
   languageName: node
   linkType: hard
 
@@ -14894,6 +14903,15 @@ __metadata:
   version: 1.5.1
   resolution: "q@npm:1.5.1"
   checksum: 147baa93c805bc1200ed698bdf9c72e9e42c05f96d007e33a558b5fdfd63e5ea130e99313f28efc1783e90e6bdb4e48b67a36fcc026b7b09202437ae88a1fb12
+  languageName: node
+  linkType: hard
+
+"qrcode-svg@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "qrcode-svg@npm:1.1.0"
+  bin:
+    qrcode-svg: bin/qrcode-svg.js
+  checksum: 07f9dcdea55fe11a5264aad6c576ab91a37968bace6997d8cde868aeb8dfb87fd3fb352715ee6f8f26a732231c194af5e2b8fa550103abdb20ed5c8ad0a1bd3e
   languageName: node
   linkType: hard
 

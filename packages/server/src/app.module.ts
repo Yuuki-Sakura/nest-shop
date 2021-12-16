@@ -19,6 +19,7 @@ import { RedisModule } from '@adachi-sakura/nestjs-redis';
 import { BullModule } from '@nestjs/bull';
 import { Logger, MiddlewareConsumer, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
+import { MulterModule } from '@nestjs/platform-express';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RedisOptions } from 'ioredis';
@@ -76,6 +77,9 @@ import path from 'path';
       }),
       inject: [AppConfig],
     }),
+    MulterModule.register({
+      dest: path.join(process.cwd(), '/public/upload'),
+    }),
     UserModule,
     AuthModule,
     RoleModule,
@@ -90,7 +94,7 @@ import path from 'path';
     DateScalar,
     DecimalScalar,
   ],
-  controllers: [AppController],
+  // controllers: [AppController],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

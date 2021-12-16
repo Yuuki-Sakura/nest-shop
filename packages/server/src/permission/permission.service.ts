@@ -29,7 +29,7 @@ export class PermissionService {
   }
 
   async clear() {
-    const ids: string[] = [];
+    const ids: number[] = [];
     (await this.permissionRepo.find()).forEach((prem) => ids.push(prem.id));
     return ids.length === 0 ? undefined : this.permissionRepo.delete(ids);
   }

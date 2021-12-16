@@ -73,6 +73,17 @@ export class UserDeviceEntity extends CommonEntity {
 
   @ApiProperty()
   @Field({
+    description: '登录token',
+    nullable: true,
+  })
+  @Column({
+    comment: '登录token',
+    nullable: true,
+  })
+  token: string;
+
+  @ApiProperty()
+  @Field({
     description: '设备名称',
   })
   @Column({

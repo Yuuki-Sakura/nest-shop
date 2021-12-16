@@ -167,7 +167,7 @@ class SwaggerPaginatedMetadata<T> {
   filter?: { [column: string]: string | string[] };
 }
 
-class SwaggerPaginatedLinks {
+class PaginatedLinks {
   @ApiProperty({
     required: false,
     nullable: true,
@@ -201,12 +201,12 @@ class SwaggerPaginated<T> implements Paginated<T> {
   @ApiResponseProperty({ type: SwaggerPaginatedMetadata })
   meta: SwaggerPaginatedMetadata<T>;
   @ApiProperty({
-    type: SwaggerPaginatedLinks,
+    type: PaginatedLinks,
     readOnly: true,
     required: false,
     nullable: true,
   })
-  links?: SwaggerPaginatedLinks;
+  links?: PaginatedLinks;
 }
 
 export const createSwaggerPaginateQuery = <T, U extends IPaginateQuery>(
@@ -395,6 +395,10 @@ export const warpPaginated = <T, U extends Type<SwaggerPaginated<T>>>(
       })
       filter?: { [column: string]: string | string[] };
     }
+    Object.defineProperty(SwaggerPaginatedMetadata, 'name', {
+      writable: true,
+      value: `PaginatedMetadata<${typeName}>`,
+    });
     ApiResponseProperty({ type: SwaggerPaginatedMetadata })(
       TempClass.prototype,
       'meta',

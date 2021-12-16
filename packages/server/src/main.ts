@@ -1,4 +1,4 @@
-import { AuthService } from '@/auth/auth.service';
+import { AuthService } from '@/auth/service/auth.service';
 import { permissions } from '@/auth/auth.utils';
 import { WinstonLogger } from '@/common/logger/winston.logger';
 import { PermissionService } from '@/permission/permission.service';
@@ -34,7 +34,7 @@ let app: NestApplication;
 async function init(app: NestApplication) {
   const permissionService: PermissionService =
     app.get<PermissionService>(PermissionService);
-  for (const { resource, name, target, descriptor } of permissions) {
+  for (const { resource, name, type, target, descriptor } of permissions) {
     const route = (() => {
       let controllerPath: string = Reflect.getMetadata(
           'path',
@@ -55,7 +55,7 @@ async function init(app: NestApplication) {
       Reflect.getMetadata('method', descriptor.value) as number
     ] as HttpMethod;
     if (!(await permissionService.findOne({ resource })))
-      await permissionService.save({ resource, name, route, method });
+      await permissionService.save({ resource, name, route, method, type });
   }
 
   //添加AdminRole

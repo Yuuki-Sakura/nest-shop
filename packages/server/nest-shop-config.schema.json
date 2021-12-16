@@ -10926,6 +10926,17 @@
                 "helmet": {
                     "$ref": "#/definitions/HelmetOptions.e11835a9"
                 },
+                "name": {
+                    "type": "string"
+                },
+                "otp": {
+                    "properties": {
+                        "backupCodeNumber": {
+                            "type": "number"
+                        }
+                    },
+                    "type": "object"
+                },
                 "port": {
                     "type": "number"
                 },
