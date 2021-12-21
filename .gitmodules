@@ -1,3 +1,6 @@
 [submodule "packages/nestjs-redis"]
 	path = packages/nestjs-redis
 	url = https://github.com/Yuuki-Sakura/nestjs-redis.git
+[submodule "packages/nestjs-oss"]
+	path = packages/nestjs-oss
+	url = https://github.com/Yuuki-Sakura/nestjs-oss

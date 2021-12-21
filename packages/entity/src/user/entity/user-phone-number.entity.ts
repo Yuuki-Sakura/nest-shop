@@ -28,6 +28,7 @@ export class UserPhoneNumberEntity extends CommonEntity {
     length: 50,
     comment: '手机号',
     unique: true,
+    name: 'phone_number',
   })
   phoneNumber: string;
 

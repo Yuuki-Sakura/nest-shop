@@ -1,5 +1,6 @@
 import { UserTempPermission } from '@/auth/auth.utils';
 import { Span } from '@/common/decorator/span.decorator';
+import { RedisKey } from '@/redis-key.constants';
 import { CommonException } from '@adachi-sakura/nest-shop-common';
 import { InjectRedis } from '@adachi-sakura/nestjs-redis';
 import {
@@ -36,9 +37,15 @@ export class PermissionGuard implements CanActivate {
       return true;
     }
     // 获取用户角色
-    const permissions: UserTempPermission[] = JSON.parse(
-      await this.redis.get(`user-${request.user.id}-permissions`),
-    );
+    const permissions: UserTempPermission[] = await (async () => {
+      try {
+        return JSON.parse(
+          await this.redis.get(RedisKey.User.Permissions(request.user)),
+        );
+      } catch {
+        return [];
+      }
+    })();
     for (let i = 0; i < permissions.length; i++) {
       if (permissions[i].expiresAt?.getTime() < Date.now()) {
         this.logger.verbose(`permission: ${permissions[i].resource} expired`);

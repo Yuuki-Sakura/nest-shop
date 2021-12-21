@@ -1,4 +1,4 @@
-import { Auth, User } from '@/auth/auth.utils';
+import { Auth } from '@/auth/auth.utils';
 import { Span } from '@/common/decorator/span.decorator';
 import {
   createSwaggerPaginateQuery,
@@ -8,9 +8,10 @@ import { warpResponse } from '@/common/utils/warp-response';
 import { UserPaginateConfig } from '@/user/paginate-config';
 import { Paginate, PaginateQuery } from '@adachi-sakura/nest-shop-common';
 import { UserEntity } from '@adachi-sakura/nest-shop-entity';
-import { Controller, Get, Inject } from '@nestjs/common';
+import { Controller, Get, Inject, Req } from '@nestjs/common';
 import { UserService } from '@/user/user.service';
 import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 
 @ApiTags('user')
 @Controller('/user')
@@ -29,7 +30,7 @@ export class UserController {
     }),
   })
   @Auth('user.find', '查找用户')
-  find(@Paginate() query: PaginateQuery) {
+  find(@Paginate() query: PaginateQuery, @Req() req: Request) {
     return this.userService.find(query);
   }
 }

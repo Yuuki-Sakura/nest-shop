@@ -6,10 +6,18 @@ import otelSDK from '@/tracing';
 import { UserRepository } from '@/user/user.repository';
 import { UserService } from '@/user/user.service';
 import { HttpMethod, Role, UserRole } from '@adachi-sakura/nest-shop-entity';
+import { ExpressAdapter } from '@nestjs/platform-express';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { DEFAULT_CONNECTION_NAME } from '@nestjs/typeorm/dist/typeorm.constants';
 import { context, trace } from '@opentelemetry/api';
+import * as fs from 'fs';
+import { Redis } from 'ioredis';
+import path from 'path';
 import { Repository } from 'typeorm';
+import {
+  DEFAULT_REDIS_NAMESPACE,
+  getRedisToken,
+} from '@adachi-sakura/nestjs-redis';
 import { AppConfig } from './app.config';
 import { AppModule } from './app.module';
 import { NestApplication, NestFactory, Reflector } from '@nestjs/core';
@@ -24,10 +32,10 @@ import {
   ValidationPipe,
   VersioningType,
 } from '@nestjs/common';
-import rTracer from 'cls-rtracer';
-import { nanoid } from '@adachi-sakura/nest-shop-common';
 import requestIp from 'request-ip';
 import session from 'express-session';
+import express from 'express';
+import spdy from 'spdy';
 
 let app: NestApplication;
 
@@ -112,7 +120,8 @@ async function init(app: NestApplication) {
 
 async function bootstrap() {
   await otelSDK.start();
-  app = await NestFactory.create(AppModule, {
+  const server = express();
+  app = await NestFactory.create(AppModule, new ExpressAdapter(server), {
     logger: WinstonLogger,
   });
   const config = app.get<AppConfig>(AppConfig);
@@ -143,11 +152,6 @@ async function bootstrap() {
         process.env.NODE_ENV === 'production' ? undefined : false,
     }),
   );
-  app.use(
-    rTracer.expressMiddleware({
-      requestIdFactory: () => nanoid(20),
-    }),
-  );
   app.use(compression());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(new Reflector()));
   app.useGlobalPipes(new ValidationPipe(config.server.validator));
@@ -163,14 +167,47 @@ async function bootstrap() {
   );
   SwaggerModule.setup(config.swagger.prefix, app, document, config.swagger);
 
-  // logger = app.get<AppLogger>(AppLogger);
-  // logger.setContext('Nest Blog');
-  // app.useLogger(logger);
-  return await app.listen(config.server.port);
+  await init(app);
+  await app.init();
+  const redis = app.get<Redis>(getRedisToken(DEFAULT_REDIS_NAMESPACE));
+  const logger = app.get<Logger>(Logger);
+  spdy
+    .createServer(
+      {
+        key: fs.readFileSync(path.join(process.cwd(), './localhost.key')),
+        cert: fs.readFileSync(path.join(process.cwd(), './localhost.crt')),
+      },
+      server,
+    )
+    .on('newSession', (sessionId: Buffer, sessionData: Buffer, callback) => {
+      logger.log(`New Session id: ${sessionId.toString('hex')}`, 'TLS Session');
+      redis.setBuffer(sessionId.toString('hex'), sessionData).then(() => {
+        callback(null, sessionData);
+      });
+    })
+    .on('resumeSession', (sessionId: Buffer, callback) => {
+      redis.getBuffer(sessionId.toString('hex')).then((sessionData) => {
+        logger.log(
+          `Resume Session ${
+            sessionData ? 'success' : 'failure'
+          } id: ${sessionId.toString('hex')}`,
+          'TLS Session',
+        );
+        callback(null, sessionData);
+      });
+    })
+    .listen(4443, () => {
+      logger.log(
+        `Nest Shop Run！at https://localhost:${
+          4443 + config.server.prefix
+        } env:${environment}`,
+        'NestApplication',
+      );
+    });
+  return app.listen(config.server.port);
 }
 
 bootstrap().then(async () => {
-  await init(app);
   const logger = app.get<Logger>(Logger);
   const config = app.get<AppConfig>(AppConfig);
   // await init(app);

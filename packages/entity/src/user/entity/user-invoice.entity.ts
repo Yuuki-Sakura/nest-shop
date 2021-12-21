@@ -57,6 +57,7 @@ export class UserInvoiceEntity extends CommonEntity {
   @Column({
     comment: '纳税人识别号',
     nullable: true,
+    name: 'tax_no',
   })
   taxNo?: string;
 
@@ -87,6 +88,7 @@ export class UserInvoiceEntity extends CommonEntity {
   @Column({
     comment: '开户银行',
     nullable: true,
+    name: 'opening_bank',
   })
   openingBank?: string;
 
@@ -97,6 +99,7 @@ export class UserInvoiceEntity extends CommonEntity {
   @Column({
     comment: '银行账号',
     nullable: true,
+    name: 'account_number',
   })
   accountNumber?: string;
 }

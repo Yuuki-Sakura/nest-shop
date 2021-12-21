@@ -1,0 +1,10 @@
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = localhost # Be sure to include the domain name here because Common Name is not so commonly honoured by itself
+DNS.2 = *.zy.ci # Optionally, add additional domains (I've added a subdomain here)
+DNS.3 = zy.ci # Optionally, add additional domains (I've added a subdomain here)
+IP.1 = 127.0.0.1 # Optionally, add an IP address (if the connection which you have planned requires it)
+IP.2 = 101.34.66.96 # Optionally, add an IP address (if the connection which you have planned requires it)

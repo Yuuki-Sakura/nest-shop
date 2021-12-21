@@ -11,6 +11,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
+    "build:watch": "nest build --watch",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
     "dev": "cross-env NODE_ENV=development nest start --watch",
     "debug": "cross-env NODE_ENV=development nest start --debug --watch",
@@ -104,11 +105,13 @@
     "request-ip": "^2.1.3",
     "rimraf": "^3.0.2",
     "rxjs": "^7.4.0",
+    "spdy": "^4.0.2",
     "svg-captcha": "^1.4.0",
     "swagger-ui-express": "^4.2.0",
     "typeorm": "^0.2.41",
     "ua-parser-js": "^1.0.2",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.1.2",
@@ -129,6 +132,7 @@
     "@types/passport-local": "^1.0.34",
     "@types/qrcode-svg": "^1.1.1",
     "@types/request-ip": "^0.0.37",
+    "@types/spdy": "^3.4.5",
     "@types/supertest": "^2.0.11",
     "@types/validator": "^13.7.0",
     "jest": "^27.3.0",

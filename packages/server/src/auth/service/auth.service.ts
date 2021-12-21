@@ -9,6 +9,7 @@ import { Span } from '@/common/decorator/span.decorator';
 import { createDeviceHash } from '@/common/utils/create-device-hash';
 import { create } from '@/common/utils/create.util';
 import { AuthLoginDto, AuthLoginResultDto, AuthRegisterDto } from '@/auth/dto';
+import { RedisKey } from '@/redis-key.constants';
 import { UserRepository } from '@/user/user.repository';
 import { CommonException, nanoid } from '@adachi-sakura/nest-shop-common';
 import {
@@ -82,7 +83,8 @@ export class AuthService {
         400,
       );
     }
-    const lockTime = await this.redis.ttl(`${user.id}-login-locked`);
+
+    const lockTime = await this.redis.ttl(RedisKey.Auth.LoginLock(user));
     if (lockTime >= 0) {
       throw new CommonException({
         key: 'user.login.accountLocked',
@@ -94,11 +96,14 @@ export class AuthService {
     const userLoginAt = new Date();
     const userDeviceHash =
       fingerprint || createDeviceHash(req, { user_id: user.id });
+
     if (!(await verifyPassword(user.password, password))) {
-      const failCount = await this.redis.incr(`${user.id}-login-fail-count`);
+      const failCount = await this.redis.incr(
+        RedisKey.Auth.LoginFailCount(user),
+      );
       if (failCount >= 3) {
         await this.redis.set(
-          `${user.id}-login-locked`,
+          RedisKey.Auth.LoginLock(user),
           1,
           'EX',
           (failCount - 2) * 30,
@@ -111,7 +116,7 @@ export class AuthService {
       );
     }
 
-    await this.redis.del(`${user.id}-login-fail-count`);
+    await this.redis.del(RedisKey.Auth.LoginFailCount(user));
 
     const userAgent = UAParser(req.header('user-agent'));
     let userDevice = await this.userDeviceRepo.findOne({
@@ -160,7 +165,7 @@ export class AuthService {
     const userPermissions = getPermissions(userWithRole);
 
     await this.redis.set(
-      `user-${user.id}-permissions`,
+      RedisKey.User.Permissions(user),
       JSON.stringify(userPermissions),
     );
     return create(AuthLoginResultDto, {
@@ -242,7 +247,11 @@ export class AuthService {
       payload: Record<string, string | number>;
       signature: string;
     };
-    await this.redis.zadd('expired-token', decoded.payload.exp, token);
+    await this.redis.zadd(
+      RedisKey.Auth.ExpiredToken,
+      decoded.payload.exp,
+      token,
+    );
     return 'OK';
   }
 
@@ -255,7 +264,7 @@ export class AuthService {
       signature: string;
     };
     const { exp, id } = decoded.payload;
-    await this.redis.zadd('expired-token', exp, token);
+    await this.redis.zadd(RedisKey.Auth.ExpiredToken, exp, token);
     return create(AuthRefreshResultDto, {
       token: this.jwtService.sign({ id }),
     });

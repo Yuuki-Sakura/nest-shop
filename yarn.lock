@@ -125,6 +125,7 @@ __metadata:
     "@types/passport-local": ^1.0.34
     "@types/qrcode-svg": ^1.1.1
     "@types/request-ip": ^0.0.37
+    "@types/spdy": ^3.4.5
     "@types/supertest": ^2.0.11
     "@types/ua-parser-js": ^0.7.36
     "@types/validator": ^13.7.0
@@ -174,6 +175,7 @@ __metadata:
     request-ip: ^2.1.3
     rimraf: ^3.0.2
     rxjs: ^7.4.0
+    spdy: ^4.0.2
     supertest: ^6.1.6
     svg-captcha: ^1.4.0
     swagger-ui-express: ^4.2.0
@@ -185,6 +187,7 @@ __metadata:
     typescript: ^4.4.4
     ua-parser-js: ^1.0.2
     winston: ^3.3.3
+    winston-daily-rotate-file: ^4.5.5
   languageName: unknown
   linkType: soft
 
@@ -4596,6 +4599,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/spdy@npm:^3.4.5":
+  version: 3.4.5
+  resolution: "@types/spdy@npm:3.4.5"
+  dependencies:
+    "@types/node": "*"
+  checksum: 4924a11426af587e10a1924c20f6cf8b4a5443b05829352d3653aaf7b2cbd215e86595b201b8f7c14193f2340631d8beda4b6c04a65e37c0e1311ecdd118c0c8
+  languageName: node
+  linkType: hard
+
 "@types/stack-utils@npm:^2.0.0":
   version: 2.0.1
   resolution: "@types/stack-utils@npm:2.0.1"
@@ -7574,6 +7586,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"detect-node@npm:^2.0.4":
+  version: 2.1.0
+  resolution: "detect-node@npm:2.1.0"
+  checksum: 832184ec458353e41533ac9c622f16c19f7c02d8b10c303dfd3a756f56be93e903616c0bb2d4226183c9351c15fc0b3dba41a17a2308262afabcfa3776e6ae6e
+  languageName: node
+  linkType: hard
+
 "dezalgo@npm:^1.0.0":
   version: 1.0.3
   resolution: "dezalgo@npm:1.0.3"
@@ -9041,6 +9060,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"file-stream-rotator@npm:^0.5.7":
+  version: 0.5.7
+  resolution: "file-stream-rotator@npm:0.5.7"
+  dependencies:
+    moment: ^2.11.2
+  checksum: 2e76726780803186f5851da596d7b3d0306649114f25e95689a269668f7a8b58528695b2cbbd8ffcee4f220e682eb58630ac19c7e3cc6eda5a139d9a72883cca
+  languageName: node
+  linkType: hard
+
 "file-uri-to-path@npm:2":
   version: 2.0.0
   resolution: "file-uri-to-path@npm:2.0.0"
@@ -9797,6 +9825,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"handle-thing@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "handle-thing@npm:2.0.1"
+  checksum: 68071f313062315cd9dce55710e9496873945f1dd425107007058fc1629f93002a7649fcc3e464281ce02c7e809a35f5925504ab8105d972cf649f1f47cb7d6c
+  languageName: node
+  linkType: hard
+
 "handlebars@npm:^4.7.6":
   version: 4.7.7
   resolution: "handlebars@npm:4.7.7"
@@ -9961,6 +9996,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hpack.js@npm:^2.1.6":
+  version: 2.1.6
+  resolution: "hpack.js@npm:2.1.6"
+  dependencies:
+    inherits: ^2.0.1
+    obuf: ^1.0.0
+    readable-stream: ^2.0.1
+    wbuf: ^1.1.0
+  checksum: 2de144115197967ad6eeee33faf41096c6ba87078703c5cb011632dcfbffeb45784569e0cf02c317bd79c48375597c8ec88c30fff5bb0b023e8f654fb6e9c06e
+  languageName: node
+  linkType: hard
+
 "hpagent@npm:^0.1.1":
   version: 0.1.2
   resolution: "hpagent@npm:0.1.2"
@@ -10039,6 +10086,13 @@ __metadata:
   version: 4.1.0
   resolution: "http-cache-semantics@npm:4.1.0"
   checksum: 974de94a81c5474be07f269f9fd8383e92ebb5a448208223bfb39e172a9dbc26feff250192ecc23b9593b3f92098e010406b0f24bd4d588d631f80214648ed42
+  languageName: node
+  linkType: hard
+
+"http-deceiver@npm:^1.2.7":
+  version: 1.2.7
+  resolution: "http-deceiver@npm:1.2.7"
+  checksum: 64d7d1ae3a6933eb0e9a94e6f27be4af45a53a96c3c34e84ff57113787105a89fff9d1c3df263ef63add823df019b0e8f52f7121e32393bb5ce9a713bf100b41
   languageName: node
   linkType: hard
 
@@ -12806,6 +12860,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"minimalistic-assert@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "minimalistic-assert@npm:1.0.1"
+  checksum: cc7974a9268fbf130fb055aff76700d7e2d8be5f761fb5c60318d0ed010d839ab3661a533ad29a5d37653133385204c503bfac995aaa4236f4e847461ea32ba7
+  languageName: node
+  linkType: hard
+
 "minimatch@npm:^3.0.4":
   version: 3.0.4
   resolution: "minimatch@npm:3.0.4"
@@ -12986,7 +13047,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:>= 2.9.0, moment@npm:>=2.14.0":
+"moment@npm:>= 2.9.0, moment@npm:>=2.14.0, moment@npm:^2.11.2":
   version: 2.29.1
   resolution: "moment@npm:2.29.1"
   checksum: 1e14d5f422a2687996be11dd2d50c8de3bd577c4a4ca79ba5d02c397242a933e5b941655de6c8cb90ac18f01cc4127e55b4a12ae3c527a6c0a274e455979345e
@@ -13633,7 +13694,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-hash@npm:2.2.0":
+"object-hash@npm:2.2.0, object-hash@npm:^2.0.1":
   version: 2.2.0
   resolution: "object-hash@npm:2.2.0"
   checksum: 55ba841e3adce9c4f1b9b46b41983eda40f854e0d01af2802d3ae18a7085a17168d6b81731d43fdf1d6bcbb3c9f9c56d22c8fea992203ad90a38d7d919bc28f1
@@ -13691,6 +13752,13 @@ __metadata:
     define-properties: ^1.1.3
     es-abstract: ^1.19.1
   checksum: 1467873456fd367a0eb91350caff359a8f05ceb069b4535a1846aa1f74f477a49ae704f6c89c0c14cc0ae1518ee3a0aa57c7f733a8e7b2b06b34a818e9593d2f
+  languageName: node
+  linkType: hard
+
+"obuf@npm:^1.0.0, obuf@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "obuf@npm:1.1.2"
+  checksum: 41a2ba310e7b6f6c3b905af82c275bf8854896e2e4c5752966d64cbcd2f599cfffd5932006bcf3b8b419dfdacebb3a3912d5d94e10f1d0acab59876c8757f27f
   languageName: node
   linkType: hard
 
@@ -15178,7 +15246,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:3, readable-stream@npm:^3.0.0, readable-stream@npm:^3.0.2, readable-stream@npm:^3.1.1, readable-stream@npm:^3.4.0, readable-stream@npm:^3.6.0":
+"readable-stream@npm:3, readable-stream@npm:^3.0.0, readable-stream@npm:^3.0.2, readable-stream@npm:^3.0.6, readable-stream@npm:^3.1.1, readable-stream@npm:^3.4.0, readable-stream@npm:^3.6.0":
   version: 3.6.0
   resolution: "readable-stream@npm:3.6.0"
   dependencies:
@@ -15669,6 +15737,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"select-hose@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "select-hose@npm:2.0.0"
+  checksum: d7e5fcc695a4804209d232a1b18624a5134be334d4e1114b0721f7a5e72bd73da483dcf41528c1af4f4f4892ad7cfd6a1e55c8ffb83f9c9fe723b738db609dbb
+  languageName: node
+  linkType: hard
+
 "semver-store@npm:^0.3.0":
   version: 0.3.0
   resolution: "semver-store@npm:0.3.0"
@@ -16111,6 +16186,33 @@ __metadata:
   version: 3.0.11
   resolution: "spdx-license-ids@npm:3.0.11"
   checksum: 1da1acb090257773e60b022094050e810ae9fec874dc1461f65dc0400cd42dd830ab2df6e64fb49c2db3dce386dd0362110780e1b154db7c0bb413488836aaeb
+  languageName: node
+  linkType: hard
+
+"spdy-transport@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "spdy-transport@npm:3.0.0"
+  dependencies:
+    debug: ^4.1.0
+    detect-node: ^2.0.4
+    hpack.js: ^2.1.6
+    obuf: ^1.1.2
+    readable-stream: ^3.0.6
+    wbuf: ^1.7.3
+  checksum: 0fcaad3b836fb1ec0bdd39fa7008b9a7a84a553f12be6b736a2512613b323207ffc924b9551cef0378f7233c85916cff1118652e03a730bdb97c0e042243d56c
+  languageName: node
+  linkType: hard
+
+"spdy@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "spdy@npm:4.0.2"
+  dependencies:
+    debug: ^4.1.0
+    handle-thing: ^2.0.0
+    http-deceiver: ^1.2.7
+    select-hose: ^2.0.0
+    spdy-transport: ^3.0.0
+  checksum: 2c739d0ff6f56ad36d2d754d0261d5ec358457bea7cbf77b1b05b0c6464f2ce65b85f196305f50b7bd9120723eb94bae9933466f28e67e5cd8cde4e27f1d75f8
   languageName: node
   linkType: hard
 
@@ -17810,6 +17912,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"wbuf@npm:^1.1.0, wbuf@npm:^1.7.3":
+  version: 1.7.3
+  resolution: "wbuf@npm:1.7.3"
+  dependencies:
+    minimalistic-assert: ^1.0.0
+  checksum: 2abc306c96930b757972a1c4650eb6b25b5d99f24088714957f88629e137db569368c5de0e57986c89ea70db2f1df9bba11a87cb6d0c8694b6f53a0159fab3bf
+  languageName: node
+  linkType: hard
+
 "wcwidth@npm:^1.0.0, wcwidth@npm:^1.0.1":
   version: 1.0.1
   resolution: "wcwidth@npm:1.0.1"
@@ -18004,6 +18115,20 @@ __metadata:
   dependencies:
     execa: ^4.0.2
   checksum: 77c87d332d9e8ad94a72844c0bee169babd63ab06636521fc6ffacb2f1fb2ec3f38b81bc3fcb53ec76b57c1add33348c16660a38ac6aed381190d9c2b95c39e6
+  languageName: node
+  linkType: hard
+
+"winston-daily-rotate-file@npm:^4.5.5":
+  version: 4.5.5
+  resolution: "winston-daily-rotate-file@npm:4.5.5"
+  dependencies:
+    file-stream-rotator: ^0.5.7
+    object-hash: ^2.0.1
+    triple-beam: ^1.3.0
+    winston-transport: ^4.4.0
+  peerDependencies:
+    winston: ^3
+  checksum: ba02643a2a4a2f1586d48f5fa67deccb502687ec73f365f38f4c9ebf969a5c641f32e0acbd8717923ed2379cd8115737ff8dee4d06b7a6dd81d841d6217daa4f
   languageName: node
   linkType: hard
 

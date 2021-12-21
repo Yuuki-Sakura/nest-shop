@@ -1,4 +1,5 @@
 import { Span } from '@/common/decorator/span.decorator';
+import { RedisKey } from '@/redis-key.constants';
 import { CommonException } from '@adachi-sakura/nest-shop-common';
 import { InjectRedis } from '@adachi-sakura/nestjs-redis';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
@@ -8,6 +9,7 @@ import { defaultOptions } from '@nestjs/passport/dist/options';
 import { Request, Response } from 'express';
 import { Redis } from 'ioredis';
 import passport from 'passport';
+import { TLSSocket } from 'tls';
 
 @Injectable()
 @Span()
@@ -29,7 +31,7 @@ export class AuthGuard implements CanActivate {
         401,
       );
     }
-    if (await this.redisService.zscore('expired-token', token))
+    if (await this.redisService.zscore(RedisKey.Auth.ExpiredToken, token))
       throw new CommonException(
         {
           key: 'auth.tokenExpired',

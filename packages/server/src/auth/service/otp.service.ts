@@ -3,6 +3,7 @@ import { create } from '@/common/utils/create.util';
 import { AuthEnableOtpStep2ResultDto } from '@/auth/dto/otp/auth-enable-otp-step-2-result.dto';
 import { AuthEnableOtpStep2Dto } from '@/auth/dto/otp/auth-enable-otp-step-2.dto';
 import { AuthEnableOtpStep1ResultDto } from '@/auth/dto/otp/auth-enable-otp-step-1-result.dto';
+import { RedisKey } from '@/redis-key.constants';
 import { UserRepository } from '@/user/user.repository';
 import { CommonException } from '@adachi-sakura/nest-shop-common';
 import { UserEntity } from '@adachi-sakura/nest-shop-entity';
@@ -32,7 +33,7 @@ export class OtpService {
     const secret = authenticator.generateSecret();
     const enableToken = nanoid(20);
     await this.redis.set(
-      enableToken,
+      RedisKey.Auth.OTP.Info(enableToken),
       JSON.stringify({ secret, userId: user.id }),
       'EX',
       1800,
@@ -46,7 +47,7 @@ export class OtpService {
         return user.id;
       }
     })();
-    const uri = totp.keyuri(accountName, 'nest shop', secret);
+    const uri = totp.keyuri(accountName, this.config.server.name, secret);
     return create(AuthEnableOtpStep1ResultDto, {
       secret,
       uri,
@@ -60,14 +61,16 @@ export class OtpService {
   }
 
   async enableOtpStep2(user: UserEntity, dto: AuthEnableOtpStep2Dto) {
-    const otpInfo = await this.redis.get(dto.enableToken);
+    const otpInfo = await this.redis.get(
+      RedisKey.Auth.OTP.Info(dto.enableToken),
+    );
     if (!otpInfo) {
       throw new CommonException({
-        key: 'user.otp.error.confirmTokenInvalid',
+        key: 'user.otp.error.enableTokenInvalid',
       });
     }
     const { secret, userId } = JSON.parse(
-      await this.redis.get(dto.enableToken),
+      await this.redis.get(`otp:${dto.enableToken}`),
     );
     if (user.id != userId) {
       throw new CommonException({
@@ -83,7 +86,8 @@ export class OtpService {
     const backupCodes = (() => {
       const arr: string[] = [];
       const gen = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 6);
-      for (let i = 0; i < this.config.server.otp.backupCodeNumber || 5; i++) {
+      const limit = this.config.server?.otp?.backupCodeNumber || 5;
+      for (let i = 0; i < limit; i++) {
         arr.push(gen());
       }
       return arr;
@@ -94,7 +98,7 @@ export class OtpService {
     };
     user.otpEnabledAt = new Date();
     await this.userRepository.save(user);
-    await this.redis.del(dto.enableToken);
+    await this.redis.del(RedisKey.Auth.OTP.Info(dto.enableToken));
     return create(AuthEnableOtpStep2ResultDto, {
       backupCodes,
     });
