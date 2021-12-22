@@ -4,3 +4,6 @@
 [submodule "packages/nestjs-oss"]
 	path = packages/nestjs-oss
 	url = https://github.com/Yuuki-Sakura/nestjs-oss
+[submodule "packages/nestjs-consul"]
+	path = packages/nestjs-consul
+	url = https://github.com/Yuuki-Sakura/nestjs-consul.git

@@ -41,7 +41,9 @@ export class DistrictService {
     if (!parentId) {
       const cacheResult = this.cache.get(`descendants`);
       if (cacheResult) return cacheResult;
-      const result = await this.districtRepo.findTrees();
+      const result = await this.districtRepo.findTrees({
+        depth: 3,
+      });
       this.cache.set(`descendants`, result);
       return result;
     }
@@ -53,7 +55,9 @@ export class DistrictService {
         key: 'district.notFound',
       });
     }
-    const result = await this.districtRepo.findDescendantsTree(current);
+    const result = await this.districtRepo.findDescendantsTree(current, {
+      depth: 3,
+    });
     this.cache.set(`${parentId}-descendants`, result);
     return result;
   }

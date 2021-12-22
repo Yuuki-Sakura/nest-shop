@@ -1,5 +1,4 @@
 import { AppConfig } from '@/app.config';
-import { AppController } from '@/app.controller';
 import { AuthModule } from '@/auth/auth.module';
 import { ExceptionFilterProvider } from '@/common/filters/exception.filter';
 import { LoggingInterceptorProvider } from '@/common/interceptors/logging.interceptor';
