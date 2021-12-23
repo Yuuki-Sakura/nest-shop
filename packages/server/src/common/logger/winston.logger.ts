@@ -1,4 +1,4 @@
-import { LoggerService } from '@nestjs/common';
+import { Logger, LoggerService } from '@nestjs/common';
 import { context as traceContext, trace } from '@opentelemetry/api';
 import clc from 'cli-color';
 import bare from 'cli-color/bare';
@@ -74,3 +74,5 @@ export const WinstonLogger: LoggerService = WinstonModule.createLogger({
     }),
   ],
 });
+
+Logger.overrideLogger(WinstonLogger);

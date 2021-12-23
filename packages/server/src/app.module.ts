@@ -14,6 +14,7 @@ import { PermissionModule } from '@/permission/permission.module';
 import { RoleModule } from '@/role/role.module';
 import { UserModule } from '@/user/user.module';
 import { DateScalar, DecimalScalar } from '@adachi-sakura/nest-shop-common';
+import { ConsulModule } from '@adachi-sakura/nestjs-consul';
 import { RedisModule } from '@adachi-sakura/nestjs-redis';
 import { BullModule } from '@nestjs/bull';
 import { Logger, MiddlewareConsumer, Module } from '@nestjs/common';
@@ -28,6 +29,20 @@ import path from 'path';
 
 @Module({
   imports: [
+    ConsulModule.forRoot({
+      config: {
+        host: '101.34.66.96',
+        port: '8500',
+      },
+      service: {
+        name: 'nest-shop',
+        port: 4443,
+      },
+      health: {
+        route: '/api/health',
+        protocol: 'https',
+      },
+    }),
     TypedConfigModule.forRoot({
       schema: AppConfig,
       load: watchFileLoader({

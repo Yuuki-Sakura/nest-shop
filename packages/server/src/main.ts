@@ -174,8 +174,8 @@ async function bootstrap() {
   spdy
     .createServer(
       {
-        key: fs.readFileSync(path.join(process.cwd(), './localhost.key')),
-        cert: fs.readFileSync(path.join(process.cwd(), './localhost.crt')),
+        key: fs.readFileSync(path.join(process.cwd(), './cert/localhost.key')),
+        cert: fs.readFileSync(path.join(process.cwd(), './cert/localhost.crt')),
       },
       server,
     )

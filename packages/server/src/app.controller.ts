@@ -13,7 +13,7 @@ const { name, version, author } = require('../package.json');
 @Span()
 export class AppController {
   @Get()
-  root(): any {
+  health(): any {
     return {
       name,
       version,
