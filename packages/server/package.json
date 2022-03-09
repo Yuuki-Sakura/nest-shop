@@ -22,7 +22,7 @@
     "test:cov": "cross-env NODE_ENV=test jest --coverage",
     "test:debug": "cross-env NODE_ENV=test node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json",
-    "generate:schema": "typescript-json-schema ./src/app.config.ts --esModuleInterop true --excludePrivate true -o ./nest-shop.config.schema.json AppConfig"
+    "generate:schema": "typescript-json-schema ./src/app.config.ts --required true --esModuleInterop true --excludePrivate true -o ./nest-shop.config.schema.json AppConfig"
   },
   "dependencies": {
     "@adachi-sakura/nest-shop-common": "^1.0.0",
@@ -63,6 +63,7 @@
     "@types/ua-parser-js": "^0.7.36",
     "accept-language-parser": "^1.5.0",
     "ajv": "^8.8.1",
+    "ajv-formats": "^2.1.1",
     "apollo-server-express": "^3.5.0",
     "argon2": "^0.28.2",
     "bull": "^4.1.1",

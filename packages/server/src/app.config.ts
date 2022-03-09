@@ -41,7 +41,7 @@ interface HelmetOptions {
 export class AppConfig {
   database: TypeOrmModuleOptions;
   redis: Omit<RedisModuleOptions, 'config'> & {
-    config: Omit<RedisClientOptions, 'namespace'> & { namespace: string };
+    config?: Omit<RedisClientOptions, 'namespace'> & { namespace?: string };
   };
   swagger: {
     prefix: string;
@@ -50,12 +50,12 @@ export class AppConfig {
     port: number;
     prefix: string;
     name: string;
-    otp: {
-      backupCodeNumber: number;
+    otp?: {
+      backupCodeNumber?: number;
     };
-    nest: NestApplicationOptions;
-    helmet: HelmetOptions;
-    cors: CorsOptions;
+    nest?: NestApplicationOptions;
+    helmet?: HelmetOptions;
+    cors?: CorsOptions;
     allowReferer: string;
     rootAccount: {
       email: string;
@@ -64,7 +64,7 @@ export class AppConfig {
     session: session.SessionOptions;
     validator: ValidationPipeOptions;
   };
-  graphql: GqlModuleOptions;
+  graphql: Omit<GqlModuleOptions, 'modules'>;
   jwt: JwtModuleOptions;
-  elasticsearch: Omit<ElasticsearchModuleOptions, 'name'> & { name: string };
+  elasticsearch: Omit<ElasticsearchModuleOptions, 'name'> & { name?: string };
 }

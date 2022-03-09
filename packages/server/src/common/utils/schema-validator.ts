@@ -1,15 +1,18 @@
 import Ajv, { ErrorObject } from 'ajv';
+import ajvFormats from 'ajv-formats';
 import merge from 'deepmerge';
 import { fileLoader, TypedConfigModule } from 'nest-typed-config/index';
 
 export const schemaValidator = <T>(rawConfig: T): T => {
   const schema = fileLoader({
-    basename: 'nest-shop-config.schema',
+    basename: 'nest-shop.config.schema',
   })();
-  const validate = new Ajv({
-    allowUnionTypes: true,
-    verbose: true,
-  }).compile(schema);
+  const validate = ajvFormats(
+    new Ajv({
+      allowUnionTypes: true,
+      verbose: true,
+    }),
+  ).compile(schema);
   validate(rawConfig);
   if (validate.errors) {
     throw new Error(
