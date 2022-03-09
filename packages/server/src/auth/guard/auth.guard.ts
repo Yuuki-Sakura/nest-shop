@@ -9,7 +9,6 @@ import { defaultOptions } from '@nestjs/passport/dist/options';
 import { Request, Response } from 'express';
 import { Redis } from 'ioredis';
 import passport from 'passport';
-import { TLSSocket } from 'tls';
 
 @Injectable()
 @Span()

@@ -1,6 +1,5 @@
 import { AuthGuard } from '@/auth/guard/auth.guard';
 import { PermissionGuard } from '@/auth/guard/permission.guard';
-import { CommonException } from '@adachi-sakura/nest-shop-common';
 import {
   Permission as PermissionEntity,
   UserEntity,
@@ -10,7 +9,6 @@ import {
   createParamDecorator,
   ExecutionContext,
   SetMetadata,
-  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { Field, GqlExecutionContext, InterfaceType } from '@nestjs/graphql';
@@ -141,4 +139,16 @@ export const Token = () =>
       return ctx.switchToHttp().getRequest();
     })();
     return request.header('authorization')?.replace(/^Bearer\s+/i, '');
+  })();
+
+export const Fingerprint = () =>
+  createParamDecorator((data: unknown, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest() as Request;
+    return request.header('fingerprint');
+  })();
+
+export const Sign = () =>
+  createParamDecorator((data: unknown, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest() as Request;
+    return request.header('sign');
   })();

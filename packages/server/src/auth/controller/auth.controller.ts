@@ -87,7 +87,9 @@ export class AuthController {
   }
 
   @Get('sendVerify')
-  sendVerify(@Query() dto: AuthSendVerifyDto) {}
+  sendVerify(@Query() dto: AuthSendVerifyDto) {
+    // TODO: 发送验证码
+  }
 
   @Post('permission')
   @ApiOperation({
