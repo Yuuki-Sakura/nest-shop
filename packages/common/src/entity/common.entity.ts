@@ -1,4 +1,3 @@
-import { nanoid } from '@/utils/nanoid';
 import {
   Column,
   CreateDateColumn,
@@ -10,6 +9,11 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { Timestamp } from '@/decorator';
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
+import { SnowflakeIdv1 } from 'simple-flakeid';
+
+export const snowflake = new SnowflakeIdv1({
+  workerId: 1,
+});
 
 @Entity()
 @ObjectType()
@@ -19,10 +23,10 @@ export class CommonEntity {
     readOnly: true,
   })
   @PrimaryColumn({
-    type: 'varchar',
-    length: '11',
+    type: 'bigint',
+    unsigned: true,
   })
-  id: string = nanoid(10);
+  id: string = snowflake.NextBigId().toString();
 
   @Field({
     description: '创建时间',
