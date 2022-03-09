@@ -4,7 +4,6 @@ import { ExceptionFilterProvider } from '@/common/filters/exception.filter';
 import { LoggingInterceptorProvider } from '@/common/interceptors/logging.interceptor';
 import { TransformInterceptorProvider } from '@/common/interceptors/transform.interceptor';
 import { TypeOrmLogger } from '@/common/logger/type-orm.logger';
-import { CorsMiddleware } from '@/common/middlewares/cors.middleware';
 import { OriginMiddleware } from '@/common/middlewares/origin.middleware';
 import { redisProxyHandler } from '@/common/utils/redis-proxy-handler';
 import { schemaValidator } from '@/common/utils/schema-validator';
@@ -46,7 +45,7 @@ import path from 'path';
     TypedConfigModule.forRoot({
       schema: AppConfig,
       load: watchFileLoader({
-        basename: 'nest-shop-config',
+        basename: 'nest-shop.config',
       }),
       validate: schemaValidator,
     }),
@@ -112,6 +111,6 @@ import path from 'path';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CorsMiddleware, OriginMiddleware).forRoutes('*');
+    consumer.apply(OriginMiddleware).forRoutes('*');
   }
 }

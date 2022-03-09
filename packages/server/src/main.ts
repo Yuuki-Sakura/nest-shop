@@ -156,6 +156,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(new Reflector()));
   app.useGlobalPipes(new ValidationPipe(config.server.validator));
   app.setGlobalPrefix(config.server.prefix);
+  app.enableCors(config.server.cors);
 
   const document = SwaggerModule.createDocument(
     app,

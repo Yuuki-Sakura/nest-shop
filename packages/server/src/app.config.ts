@@ -1,4 +1,7 @@
-import { RedisModuleOptions } from '@adachi-sakura/nestjs-redis';
+import {
+  RedisClientOptions,
+  RedisModuleOptions,
+} from '@adachi-sakura/nestjs-redis';
 import { NestApplicationOptions, ValidationPipeOptions } from '@nestjs/common';
 import { ElasticsearchModuleOptions } from '@nestjs/elasticsearch';
 import { GqlModuleOptions } from '@nestjs/graphql';
@@ -15,6 +18,7 @@ import { StrictTransportSecurityOptions } from 'helmet/dist/middlewares/strict-t
 import { XDnsPrefetchControlOptions } from 'helmet/dist/middlewares/x-dns-prefetch-control';
 import { XFrameOptionsOptions } from 'helmet/dist/middlewares/x-frame-options';
 import { XPermittedCrossDomainPoliciesOptions } from 'helmet/dist/middlewares/x-permitted-cross-domain-policies';
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
 interface HelmetOptions {
   contentSecurityPolicy?: ContentSecurityPolicyOptions | boolean;
@@ -36,7 +40,9 @@ interface HelmetOptions {
 
 export class AppConfig {
   database: TypeOrmModuleOptions;
-  redis: RedisModuleOptions;
+  redis: Omit<RedisModuleOptions, 'config'> & {
+    config: Omit<RedisClientOptions, 'namespace'> & { namespace: string };
+  };
   swagger: {
     prefix: string;
   } & SwaggerCustomOptions;
@@ -49,7 +55,7 @@ export class AppConfig {
     };
     nest: NestApplicationOptions;
     helmet: HelmetOptions;
-    allowOrigins: string[];
+    cors: CorsOptions;
     allowReferer: string;
     rootAccount: {
       email: string;
@@ -60,5 +66,5 @@ export class AppConfig {
   };
   graphql: GqlModuleOptions;
   jwt: JwtModuleOptions;
-  elasticsearch: ElasticsearchModuleOptions;
+  elasticsearch: Omit<ElasticsearchModuleOptions, 'name'> & { name: string };
 }

@@ -28,10 +28,14 @@ server:
   port: 4000
   prefix: '/api'
   name: 'Nest Shop'
+  cors:
+    origin:
+      - "https://zy.ci"
+      - "https://admin.zy.ci"
+    methods: '*'
+    allowedHeaders: '*'
+    maxAge: 1728000
   allowReferer: 'zy.ci'
-  allowOrigins:
-    - "https://zy.ci"
-    - "https://admin.zy.ci"
   rootAccount:
     email: 'admin@zy.ci'
     nickname: admin
