@@ -14,8 +14,8 @@ import {
   UserPermission,
   UserRole,
 } from '@adachi-sakura/nest-shop-entity';
-import { UserEmailEntity } from '@adachi-sakura/nest-shop-entity/dist/user/entity/user-email.entity';
-import { UserPhoneNumberEntity } from '@adachi-sakura/nest-shop-entity/dist/user/entity/user-phone-number.entity';
+import { UserEmailEntity } from '@adachi-sakura/nest-shop-entity';
+import { UserPhoneNumberEntity } from '@adachi-sakura/nest-shop-entity';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -25,7 +25,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [
     PassportModule,
     JwtModule.registerAsync({
-      useFactory: (config: AppConfig) => config.jwt,
+      useFactory: (config: AppConfig) => config.server.security.jwt,
       inject: [AppConfig],
     }),
     TypeOrmModule.forFeature([

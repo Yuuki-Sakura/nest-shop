@@ -46,6 +46,12 @@ server:
   validator:
     whitelist: true
     transform: true
+  security:
+    jwt:
+      secret: 'nest_shop_jwt_secret'
+      signOptions:
+        expiresIn: '7200s'
+    rejectAfter: 100
 graphql:
   debug: true
   playground: true
@@ -57,10 +63,6 @@ graphql:
   path: '/graphql'
 swagger:
   prefix: '/doc'
-jwt:
-  secret: 'nest_shop_jwt_secret'
-  signOptions:
-    expiresIn: '7200s'
 elasticsearch:
   node:
     - 'http://elasticsearch:9200'

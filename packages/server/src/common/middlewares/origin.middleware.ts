@@ -8,12 +8,15 @@ import { AppConfig } from '@/app.config';
 import { Request, Response } from 'express';
 import { HttpStatus, Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { isProdMode } from '@/app.environment';
+import { CommonException } from '@adachi-sakura/nest-shop-common';
+import { Span } from '@/common/decorator/span.decorator';
 
 /**
  * @class OriginMiddleware
  * @classdesc 用于验证是否为非法来源请求
  */
 @Injectable()
+@Span()
 export class OriginMiddleware implements NestMiddleware {
   @Inject()
   appConfig: AppConfig;
@@ -27,10 +30,13 @@ export class OriginMiddleware implements NestMiddleware {
       const isVerifiedOrigin = checkHeader(origin);
       const isVerifiedReferer = checkHeader(referer);
       if (!isVerifiedOrigin && !isVerifiedReferer) {
-        return response.status(HttpStatus.UNAUTHORIZED).jsonp({
-          code: HttpStatus.UNAUTHORIZED,
-          message: 'Disallowed origin or referer',
-        });
+        throw new CommonException(
+          {
+            key: 'common.security.origin.invalid',
+          },
+          HttpStatus.UNAUTHORIZED,
+          HttpStatus.UNAUTHORIZED,
+        );
       }
     }
 

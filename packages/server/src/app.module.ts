@@ -25,6 +25,7 @@ import { RedisOptions } from 'ioredis';
 import { TypedConfigModule } from 'nest-typed-config';
 import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
 import path from 'path';
+import { SecurityMiddleware } from '@/common/middlewares/security.middleware';
 
 @Module({
   imports: [
@@ -111,6 +112,6 @@ import path from 'path';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(OriginMiddleware).forRoutes('*');
+    consumer.apply(OriginMiddleware, SecurityMiddleware).forRoutes('*');
   }
 }

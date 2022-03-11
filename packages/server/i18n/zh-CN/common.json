@@ -3,5 +3,19 @@
   "fail": {
     "FORBIDDEN": "无权限",
     "unknown": "未知错误"
+  },
+  "security": {
+    "signature": {
+      "missing": "缺少签名",
+      "invalid": "无效签名"
+    },
+    "timestamp": {
+      "missing": "缺少过期时间",
+      "invalid": "请求已过期"
+    },
+    "origin": {
+      "missing": "缺少来源",
+      "invalid": "无效来源"
+    }
   }
 }

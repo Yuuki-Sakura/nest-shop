@@ -8,8 +8,12 @@ export interface CommonResponseMessage {
 export class CommonException extends HttpException {
   code?: number;
   message: string;
-  constructor(response: CommonResponseMessage, code?: number) {
-    super(response, HttpStatus.OK);
+  constructor(
+    response: CommonResponseMessage,
+    code?: number,
+    statusCode?: HttpStatus,
+  ) {
+    super(response, statusCode || HttpStatus.OK);
     this.message = JSON.stringify(response);
     this.code = code;
   }

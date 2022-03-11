@@ -63,8 +63,11 @@ export class AppConfig {
     };
     session: session.SessionOptions;
     validator: ValidationPipeOptions;
+    security: {
+      jwt: JwtModuleOptions;
+      rejectAfter: number;
+    };
   };
   graphql: Omit<GqlModuleOptions, 'modules'>;
-  jwt: JwtModuleOptions;
   elasticsearch: Omit<ElasticsearchModuleOptions, 'name'> & { name?: string };
 }
