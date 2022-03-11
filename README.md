@@ -9,8 +9,7 @@
 ## 安装依赖
 
 ```bash
-$ yarn set version berry
-$ yarn
+$ lerna bootstrap
 ```
 
 ## 启动
